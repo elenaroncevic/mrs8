@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <form action="/fin_register">
+    <form action="/fin_register" method= "post">
     
     	E-mail:
     	<input type="text" name="email">
