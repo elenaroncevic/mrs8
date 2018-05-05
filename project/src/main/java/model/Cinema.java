@@ -7,8 +7,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Cinema")
@@ -30,25 +34,53 @@ public class Cinema {
 	@Column(name="cid")
 	private int id;
 	
-	@Column(name="cactors")
-	private String actors;
 	
 	@OneToMany(mappedBy = "cinema") //nisam sigurna da li i zasto je ovo cinema
 	private Set<Auditorium> auditoriums = new HashSet<Auditorium>();
 	
-	public Cinema(int id,String name, String location, String description, double rating,
-			String actors, Set<Auditorium> auditoriums ) {
-		super();
-		this.name = name;
-		this.location = location;
-		this.description = description;
-		this.rating = rating;
-		this.actors = actors;
-		this.id = id;
-		this.auditoriums = auditoriums;
+	@ManyToOne
+	@JoinColumn (name="caid")
+	@JsonBackReference
+	@Column (name="cadmin")
+	private CinemaAdmin admin;
+	
+	@OneToMany(mappedBy = "cinema")
+	private Set<PromoOfficial> promos = new HashSet<PromoOfficial>();
+	
+	@OneToMany(mappedBy ="cinema")
+	private Set<CinemaRate> rates = new HashSet<CinemaRate>();
+	
+	
+
+
+	public CinemaAdmin getAdmin() {
+		return admin;
 	}
-	
-	
+
+
+
+
+	public void setAdmin(CinemaAdmin admin) {
+		this.admin = admin;
+	}
+
+
+
+
+	public Set<PromoOfficial> getPromos() {
+		return promos;
+	}
+
+
+
+
+	public void setPromos(Set<PromoOfficial> promos) {
+		this.promos = promos;
+	}
+
+
+
+
 	public Set<Auditorium> getAuditoriums() {
 		return auditoriums;
 	}
@@ -59,15 +91,28 @@ public class Cinema {
 	}
 
 
-	public String getActors() {
-		return actors;
-	}
-	public void setActors(String actors) {
-		this.actors = actors;
-	}
 	public Cinema() {
 		super();
 	}
+	
+	
+	public Cinema(String name, String location, String description, double rating, int id, Set<Auditorium> auditoriums,
+			CinemaAdmin admin, Set<PromoOfficial> promos, Set<CinemaRate> rates) {
+		super();
+		this.name = name;
+		this.location = location;
+		this.description = description;
+		this.rating = rating;
+		this.id = id;
+		this.auditoriums = auditoriums;
+		this.admin = admin;
+		this.promos = promos;
+		this.rates = rates;
+	}
+
+
+
+
 	public String getName() {
 		return name;
 	}

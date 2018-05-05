@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+@Entity
 @Table(name="QuickTicket")
 public class QuickTicket {
 	@Id
@@ -25,6 +27,14 @@ public class QuickTicket {
 	@JoinColumn (name="seid")
 	@JsonBackReference
 	private Seat seat;
+	
+	/*ukoliko je ovo okej, treba izmeniti konstuktor i get/set
+	@ManyToOne 
+	@JoinColumn (name="ruid")
+	@JsonBackReference
+	@Column(name="qtbuyer")
+	private RegisteredUser buyer;
+	*/
 	
 	private int discount;
 

@@ -1,43 +1,47 @@
 package model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SystemAdmin")
-public class SystemAdmin{
+@Table(name = "CinemaAdmin")
+public class CinemaAdmin {
+	
 	@Id
 	@GeneratedValue
-	@Column(name="said")
+	@Column(name="caid")
 	private int id;
 	
-	private boolean def;
+	@OneToMany(mappedBy = "cinemaadmin") //???
+	private Set<Cinema> cinemas = new HashSet<Cinema>();
 	
-	@Column(name="saemail")
+	@Column(name="caemail")
 	private String email;
 	
-	@Column(name="sapassword")
+	@Column(name="capassword")
 	private String password;
-
-	public SystemAdmin() {
+	
+	public CinemaAdmin() {
 		super();
 	}
-	
-
 
 	
 
-
-	public SystemAdmin(int id, boolean def, String email, String password) {
+	public CinemaAdmin(int id, Set<Cinema> cinemas, String email, String password) {
 		super();
 		this.id = id;
-		this.def = def;
+		this.cinemas = cinemas;
 		this.email = email;
 		this.password = password;
 	}
+
 
 
 	public int getId() {
@@ -48,17 +52,14 @@ public class SystemAdmin{
 		this.id = id;
 	}
 
-
-
-	public boolean isDef() {
-		return def;
+	public Set<Cinema> getCinemas() {
+		return cinemas;
 	}
 
-
-
-	public void setDef(boolean def) {
-		this.def = def;
+	public void setCinemas(Set<Cinema> cinemas) {
+		this.cinemas = cinemas;
 	}
+
 
 
 	public String getEmail() {
@@ -66,9 +67,11 @@ public class SystemAdmin{
 	}
 
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 
 	public String getPassword() {
@@ -76,9 +79,11 @@ public class SystemAdmin{
 	}
 
 
+
 	public void setPassword(String password) {
 		this.password = password;
-	}
+	}  
+	
 	
 	
 	

@@ -1,15 +1,16 @@
 package model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.imageio.IIOImage;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Movie")
@@ -30,6 +31,12 @@ public class Movie {
 	
 	@Column (name="mdescription")
 	private String description;
+	
+	@OneToMany(mappedBy = "movie")
+	private Set<MovieRate> rates = new HashSet<MovieRate>();
+	
+	@OneToMany(mappedBy = "movie")
+	private Set<Projection> projections = new HashSet<Projection>();
 	
 	
 	public String getTitle() {
@@ -74,8 +81,11 @@ public class Movie {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Movie(int id,String title, double rating, IIOImage poster, String director, String actors, int duration,
-			String description) {
+	
+	
+	public Movie(){}
+	public Movie(int id, String title, double rating, IIOImage poster, String director, String actors, int duration,
+			String description, Set<MovieRate> rates, Set<Projection> projections) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -85,7 +95,9 @@ public class Movie {
 		this.actors = actors;
 		this.duration = duration;
 		this.description = description;
+		this.rates = rates;
+		this.projections = projections;
 	}
 	
-	public Movie(){}
+	
 }

@@ -1,20 +1,23 @@
 package model;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+@Entity
+@Table(name="Sector")
 public class Sector {
-	private ArrayList<Seat> seats;
 
 	@Id
 	@GeneratedValue
@@ -28,13 +31,14 @@ public class Sector {
 	private Auditorium auditorium;
 	
 	@OneToMany(mappedBy = "sector") //nisam sigurna da li i zasto je ovo sector
-	private Set<Seat> sectors = new HashSet<Seat>();
+	private Set<Seat> seats = new HashSet<Seat>();
 
-	public ArrayList<Seat> getSeats() {
+
+	public Set<Seat> getSeats() {
 		return seats;
 	}
 
-	public void setSeats(ArrayList<Seat> seats) {
+	public void setSeats(Set<Seat> seats) {
 		this.seats = seats;
 	}
 
@@ -54,20 +58,14 @@ public class Sector {
 		this.auditorium = auditorium;
 	}
 
-	public Set<Seat> getSectors() {
-		return sectors;
-	}
 
-	public void setSectors(Set<Seat> sectors) {
-		this.sectors = sectors;
-	}
 
-	public Sector(ArrayList<Seat> seats, int id, Auditorium auditorium, Set<Seat> sectors) {
+	public Sector(int id, Auditorium auditorium, Set<Seat> seats) {
 		super();
 		this.seats = seats;
 		this.id = id;
 		this.auditorium = auditorium;
-		this.sectors = sectors;
+		
 	}
 
 	public Sector() {
