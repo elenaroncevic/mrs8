@@ -6,12 +6,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.imageio.IIOImage;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 
 @Entity
@@ -21,7 +27,7 @@ public class PromoUsed{
 	@Id
 	@GeneratedValue
 	@Column(name="puid")
-	private int id;
+	private Long id;
 	
 	@Column(name="puending")
 	private Date ending;
@@ -41,24 +47,18 @@ public class PromoUsed{
 	@Column(name="puprice")
 	private double price;
 	
-	/* dodaj konstruktore i get/set
-	@ManyToOne
-	@JoinColumn (name="ruid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="puowner")
 	private RegisteredUser owner;
 	
-	@ManyToOne
-	@JoinColumn (name="ruid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="pubuyer")
 	private RegisteredUser buyer;
 	
-	
-	*/
-	
-	@OneToMany(mappedBy = "promoused") //nisam sigurna da li i zasto je ovo cinema
-	private Set<Bid> auditoriums = new HashSet<Bid>();
+	@OneToMany(mappedBy = "promo", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	private Set<Bid> bids = new HashSet<Bid>();
 
 	public Date getEnding() {
 		return ending;
@@ -68,11 +68,11 @@ public class PromoUsed{
 		this.ending = ending;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -116,12 +116,47 @@ public class PromoUsed{
 		this.price = price;
 	}
 
-	public Set<Bid> getAuditoriums() {
-		return auditoriums;
+	public Set<Bid> getbids() {
+		return bids;
 	}
 
-	public void setAuditoriums(Set<Bid> auditoriums) {
-		this.auditoriums = auditoriums;
+	public void setbids(Set<Bid> bids) {
+		this.bids = bids;
+	}
+
+	public RegisteredUser getOwner() {
+		return owner;
+	}
+
+	public void setOwner(RegisteredUser owner) {
+		this.owner = owner;
+	}
+
+	public RegisteredUser getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(RegisteredUser buyer) {
+		this.buyer = buyer;
+	}
+
+	public PromoUsed(Long id, Date ending, String name, String description, IIOImage image, String activity,
+			double price, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
+		super();
+		this.id = id;
+		this.ending = ending;
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.activity = activity;
+		this.price = price;
+		this.owner = owner;
+		this.buyer = buyer;
+		this.bids = bids;
+	}
+
+	public PromoUsed() {
+		super();
 	}
 	
 	

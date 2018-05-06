@@ -7,12 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SystemAdmin")
-public class SystemAdmin{
-	@Id
-	@GeneratedValue
-	@Column(name="said")
-	private int id;
+public class SystemAdmin extends User{
 	
 	private boolean def;
 	
@@ -25,30 +20,13 @@ public class SystemAdmin{
 	public SystemAdmin() {
 		super();
 	}
-	
 
-
-	
-
-
-	public SystemAdmin(int id, boolean def, String email, String password) {
+	public SystemAdmin( boolean def, String email, String password) {
 		super();
-		this.id = id;
 		this.def = def;
 		this.email = email;
 		this.password = password;
 	}
-
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-
 
 	public boolean isDef() {
 		return def;

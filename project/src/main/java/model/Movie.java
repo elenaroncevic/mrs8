@@ -4,8 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.imageio.IIOImage;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -18,7 +20,7 @@ public class Movie {
 	@Id
 	@GeneratedValue
 	@Column(name="mid")
-	private int id;
+	private Long id;
 	
 	private String title;
 
@@ -32,13 +34,32 @@ public class Movie {
 	@Column (name="mdescription")
 	private String description;
 	
-	@OneToMany(mappedBy = "movie")
+	@OneToMany(mappedBy = "movie",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<MovieRate> rates = new HashSet<MovieRate>();
 	
 	@OneToMany(mappedBy = "movie")
 	private Set<Projection> projections = new HashSet<Projection>();
 	
 	
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public Set<MovieRate> getRates() {
+		return rates;
+	}
+	public void setRates(Set<MovieRate> rates) {
+		this.rates = rates;
+	}
+	public Set<Projection> getProjections() {
+		return projections;
+	}
+	public void setProjections(Set<Projection> projections) {
+		this.projections = projections;
+	}
 	public String getTitle() {
 		return title;
 	}
@@ -84,7 +105,7 @@ public class Movie {
 	
 	
 	public Movie(){}
-	public Movie(int id, String title, double rating, IIOImage poster, String director, String actors, int duration,
+	public Movie(Long id, String title, double rating, IIOImage poster, String director, String actors, int duration,
 			String description, Set<MovieRate> rates, Set<Projection> projections) {
 		super();
 		this.id = id;

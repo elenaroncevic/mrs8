@@ -4,8 +4,10 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,21 +18,19 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="Sector")
 public class Sector {
 
 	@Id
 	@GeneratedValue
 	@Column(name="sid")
-	private int id;
+	private Long id;
 	
-	@ManyToOne
-	@JoinColumn (name="aid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="sauditorium")
 	private Auditorium auditorium;
 	
-	@OneToMany(mappedBy = "sector") //nisam sigurna da li i zasto je ovo sector
+	@OneToMany(mappedBy = "sector",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)//nisam sigurna da li i zasto je ovo sector
 	private Set<Seat> seats = new HashSet<Seat>();
 
 
@@ -42,11 +42,11 @@ public class Sector {
 		this.seats = seats;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -60,7 +60,7 @@ public class Sector {
 
 
 
-	public Sector(int id, Auditorium auditorium, Set<Seat> seats) {
+	public Sector(Long id, Auditorium auditorium, Set<Seat> seats) {
 		super();
 		this.seats = seats;
 		this.id = id;

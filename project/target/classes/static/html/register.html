@@ -1,12 +1,12 @@
 <div>
-    <form>
+    <form ng-init="initUser()">
     
     	E-mail:
-    	<input type="text" ng-model="email">
+    	<input type="text" ng-model="user.email">
     	</br>
     	
     	Password:
-    	<input type="text" ng-model="pass">
+    	<input type="text" ng-model="user.pass">
     	</br>
     	
     	Password(re-enter):
@@ -14,21 +14,23 @@
     	</br>
     	
     	First name: 
-		<input type="text" ng-model="first_name">
+		<input type="text" ng-model="user.firstName">
 		</br>
 		
 		Last name: 
-		<input type="text" ng-model="last_name">
+		<input type="text" ng-model="user.lastName">
 		</br>
 		
 		City: 
-		<input type="text" ng-model="city">
+		<input type="text" ng-model="user.city">
 		</br>
 		
 		Phone number: 
-		<input type="text" ng-model="phone">
+		<input type="text" ng-model="user.phone">
 		</br>
 		
-		<button ng-click="register()">Make an account</button>
+		<button type="button" ng-click="register()">Make an account</button>
+		
+		<button type="button" ng-click="back()">Back</button>
     </form>
 </div>

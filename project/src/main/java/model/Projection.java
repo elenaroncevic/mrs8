@@ -4,8 +4,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -22,10 +24,9 @@ public class Projection {
 	@Id
 	@GeneratedValue
 	@Column(name="pid")
-	private int id;
+	private Long id;
 	
-	@ManyToOne
-	@JoinColumn (name="mid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Movie movie;
 	
@@ -34,21 +35,20 @@ public class Projection {
 	
 	private double price;
 	
-	@ManyToOne
-	@JoinColumn (name="aid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="pauditorium")
 	private Auditorium auditorium;
 	
-	@OneToMany(mappedBy = "projection") 
+	@OneToMany(mappedBy = "projection", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	private Set<QuickTicket> qtickets = new HashSet<QuickTicket>();
 	
-	public Projection(){}
+	public Projection(){super();}
 	
 	
 	
 	
-	public Projection(int id, Movie movie, Date date, double price, Auditorium auditorium, Set<QuickTicket> qtickets) {
+	public Projection(Long id, Movie movie, Date date, double price, Auditorium auditorium, Set<QuickTicket> qtickets) {
 		super();
 		this.id = id;
 		this.movie = movie;
@@ -61,12 +61,12 @@ public class Projection {
 
 
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

@@ -3,8 +3,10 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -21,23 +23,23 @@ public class Seat {
 	@Id
 	@GeneratedValue
 	@Column(name="seid")
-	private int id;
+	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn (name="sid")
 	@JsonBackReference
 	private Sector sector;
 	
 	@Column(name="snumber")
-	private int number;
+	private Long number;
 	
-	@OneToMany(mappedBy = "seat") 
+	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
 	private Set<QuickTicket> qtickets = new HashSet<QuickTicket>();
 	
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public Sector getSector() {
@@ -46,16 +48,16 @@ public class Seat {
 	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
-	public int getNumber() {
+	public Long getNumber() {
 		return number;
 	}
-	public void setNumber(int number) {
+	public void setNumber(Long number) {
 		this.number = number;
 	}
 	
 	
 	
-	public Seat(int id, Sector sector, int number, Set<QuickTicket> qtickets) {
+	public Seat(Long id, Sector sector, Long number, Set<QuickTicket> qtickets) {
 		super();
 		this.id = id;
 		this.sector = sector;

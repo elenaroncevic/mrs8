@@ -1,7 +1,9 @@
 package model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -16,25 +18,36 @@ public class CinemaRate {
 	@Id
 	@GeneratedValue
 	@Column(name="crid")
-	private int id;
+	private Long id;
 	
-	//kad se odkomentarise treba get/set za ovo polje i konstruktori
-	/*@ManyToOne
-	@JoinColumn (name="ruid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="cvoter")
 	private RegisteredUser voter;
 	
-	*/
 	
-	@ManyToOne
-	@JoinColumn (name="cid")
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="crcinema")
 	private Cinema cinema;
 	
 	@Column(name="crrating")
-	private int rating;
+	private double rating;
+
+
+	public CinemaRate(Long id, RegisteredUser voter, Cinema cinema, double rating) {
+		super();
+		this.id = id;
+		this.voter = voter;
+		this.cinema = cinema;
+		this.rating = rating;
+	}
+
+
+	public CinemaRate() {
+		super();
+	}
 
 
 	public Cinema getCinema() {
@@ -47,23 +60,33 @@ public class CinemaRate {
 	}
 
 
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+
+	public RegisteredUser getVoter() {
+		return voter;
+	}
+
+
+	public void setVoter(RegisteredUser voter) {
+		this.voter = voter;
 	}
 	
 	

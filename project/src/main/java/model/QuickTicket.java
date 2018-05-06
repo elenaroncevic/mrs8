@@ -1,7 +1,9 @@
 package model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -11,38 +13,33 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="QuickTicket")
 public class QuickTicket {
 	@Id
 	@GeneratedValue
 	@Column(name="qid")
-	private int id;
+	private Long id;
 	
-	@ManyToOne
-	@JoinColumn (name="pid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Projection projection;
 	
-	@ManyToOne
-	@JoinColumn (name="seid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Seat seat;
 	
-	/*ukoliko je ovo okej, treba izmeniti konstuktor i get/set
-	@ManyToOne 
-	@JoinColumn (name="ruid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column(name="qtbuyer")
 	private RegisteredUser buyer;
-	*/
 	
-	private int discount;
+	
+	private Long discount;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -62,20 +59,30 @@ public class QuickTicket {
 		this.seat = seat;
 	}
 
-	public int getDiscount() {
+	public Long getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(int discount) {
+	public void setDiscount(Long discount) {
 		this.discount = discount;
 	}
 
-	public QuickTicket(int id, Projection projection, Seat seat, int discount) {
+	
+	public RegisteredUser getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(RegisteredUser buyer) {
+		this.buyer = buyer;
+	}
+
+	public QuickTicket(Long id, Projection projection, Seat seat, Long discount, RegisteredUser buyer) {
 		super();
 		this.id = id;
 		this.projection = projection;
 		this.seat = seat;
 		this.discount = discount;
+		this.buyer = buyer;
 	}
 
 	public QuickTicket() {

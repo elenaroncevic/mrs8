@@ -3,8 +3,10 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -32,22 +34,21 @@ public class Cinema {
 	@Id
 	@GeneratedValue
 	@Column(name="cid")
-	private int id;
+	private Long id;
 	
 	
-	@OneToMany(mappedBy = "cinema") //nisam sigurna da li i zasto je ovo cinema
+	@OneToMany(mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	private Set<Auditorium> auditoriums = new HashSet<Auditorium>();
 	
-	@ManyToOne
-	@JoinColumn (name="caid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="cadmin")
 	private CinemaAdmin admin;
 	
-	@OneToMany(mappedBy = "cinema")
+	@OneToMany(mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<PromoOfficial> promos = new HashSet<PromoOfficial>();
 	
-	@OneToMany(mappedBy ="cinema")
+	@OneToMany(mappedBy ="cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<CinemaRate> rates = new HashSet<CinemaRate>();
 	
 	
@@ -96,7 +97,7 @@ public class Cinema {
 	}
 	
 	
-	public Cinema(String name, String location, String description, double rating, int id, Set<Auditorium> auditoriums,
+	public Cinema(String name, String location, String description, double rating, Long id, Set<Auditorium> auditoriums,
 			CinemaAdmin admin, Set<PromoOfficial> promos, Set<CinemaRate> rates) {
 		super();
 		this.name = name;
@@ -138,10 +139,10 @@ public class Cinema {
 		this.rating = rating;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 }

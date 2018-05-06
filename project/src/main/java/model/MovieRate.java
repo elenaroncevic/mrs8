@@ -1,10 +1,11 @@
 package model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,51 +17,63 @@ public class MovieRate {
 	@Id
 	@GeneratedValue
 	@Column(name="mrid")
-	private int id;
-	//kad se otkomentarise treba dodati set/get i konstruktore
-	/*@ManyToOne
-	@JoinColumn (name="ruid")
+	private Long id;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="mrvoter")
 	private RegisteredUser voter;
-	
-	*/
-	
-	@ManyToOne
-	@JoinColumn (name="mid")
+		
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="mrmovie")
-	private Cinema movie;
+	private Movie movie;
 	
 	@Column(name="mrrating")
-	private int rating;
+	private double rating;
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Cinema getMovie() {
+	public Movie getMovie() {
 		return movie;
 	}
 
-	public void setMovie(Cinema movie) {
+	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
 
-	public int getRating() {
+	public double getRating() {
 		return rating;
 	}
 
-	public void setRating(int rating) {
+	public void setRating(double rating) {
 		this.rating = rating;
 	}
 
-	
-	
-	
-	
+	public RegisteredUser getVoter() {
+		return voter;
+	}
+
+	public void setVoter(RegisteredUser voter) {
+		this.voter = voter;
+	}
+
+	public MovieRate(Long id, RegisteredUser voter, Movie movie, double rating) {
+		super();
+		this.id = id;
+		this.voter = voter;
+		this.movie = movie;
+		this.rating = rating;
+	}
+
+	public MovieRate() {
+		super();
+	}
+
 }

@@ -4,8 +4,10 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -18,22 +20,22 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "Auditorium")
 public class Auditorium {
-	@ManyToOne
-	@JoinColumn (name="cid")
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
-	@Column (name="acinema")
+	@Column (name="acinema")	
 	private Cinema cinema;
 	
-	@OneToMany(mappedBy = "auditorium") //nisam sigurna da li i zasto je ovo cinema
+	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	private Set<Sector> sectors = new HashSet<Sector>();
 	
-	@OneToMany(mappedBy = "auditorium") //nisam sigurna da li i zasto je ovo cinema
+	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	private Set<Projection> projections = new HashSet<Projection>();
 
 	@Id
 	@GeneratedValue
 	@Column(name="aid")
-	private int id;
+	private Long id;
 
 	public Cinema getCinema() {
 		return cinema;
@@ -51,11 +53,11 @@ public class Auditorium {
 		this.sectors = sectors;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -68,7 +70,7 @@ public class Auditorium {
 		this.projections = projections;
 	}
 
-	public Auditorium( int id, Cinema cinema, Set<Sector> sectors, Set<Projection> projections) {
+	public Auditorium( Long id, Cinema cinema, Set<Sector> sectors, Set<Projection> projections) {
 		super();
 		this.cinema = cinema;
 		this.sectors = sectors;

@@ -1,8 +1,10 @@
 package model;
 
 import javax.imageio.IIOImage;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,14 +19,13 @@ public class PromoOfficial{
 	@Id
 	@GeneratedValue
 	@Column(name="poid")
-	private int id;
+	private Long id;
 	
 	
-	@ManyToOne
-	@JoinColumn (name="cid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="pocinema")
-	private CinemaAdmin cinema;
+	private Cinema cinema;
 	
 	@Column(name="poname")
 	private String name;
@@ -42,67 +43,45 @@ public class PromoOfficial{
 	private double price;
 
 	
-	/* dodaj konstuktore i get/set
-	@ManyToOne
-	@JoinColumn (name="ruid")
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	@Column (name="pobuyer")
-	private RegisteredUser buyer;*/
+	private RegisteredUser buyer;
 	
 	public PromoOfficial() {
 		super();
 	}
 
-
-
-
-
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
 
-	public CinemaAdmin getCinema() {
+	public Cinema getCinema() {
 		return cinema;
 	}
 
 
-	public void setCinema(CinemaAdmin cinema) {
+	public void setCinema(Cinema cinema) {
 		this.cinema = cinema;
 	}
-
-
-
-
 
 	public String getName() {
 		return name;
 	}
 
-
-
-
-
 	public void setName(String name) {
 		this.name = name;
 	}
 
-
-
-
-
 	public String getDescription() {
 		return description;
 	}
-
-
-
-
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -111,6 +90,14 @@ public class PromoOfficial{
 
 
 
+
+	public RegisteredUser getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(RegisteredUser buyer) {
+		this.buyer = buyer;
+	}
 
 	public IIOImage getImage() {
 		return image;
@@ -156,11 +143,19 @@ public class PromoOfficial{
 		this.price = price;
 	}
 
+	public PromoOfficial(Long id, Cinema cinema, String name, String description, IIOImage image, String activity,
+			double price, RegisteredUser buyer) {
+		super();
+		this.id = id;
+		this.cinema = cinema;
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.activity = activity;
+		this.price = price;
+		this.buyer = buyer;
+	}
 
-	
-
-	
-	
 	
 	
 }
