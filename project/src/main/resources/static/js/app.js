@@ -15,6 +15,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/signup', {
 				templateUrl : 'html/register.html',
 				controller : 'RegisterController'
+			}).when('/profile', {
+				templateUrl : 'html/profile.html',
+				controller : 'HomeController'
 			}).otherwise({
 				redirectTo : '/home'
 			});

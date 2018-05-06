@@ -1,11 +1,11 @@
 <div>
-	<form>
+	<form ng-init="initUser()">
 		E-mail:
-    	<input type="text" ng-model="email">
+    	<input type="text" ng-model="user.email">
     	</br>
     	
     	Password:
-    	<input type="text" ng-model="pass">
+    	<input type="text" ng-model="user.pass">
     	</br>
 		
 		<button ng-click="login()">Login</button>

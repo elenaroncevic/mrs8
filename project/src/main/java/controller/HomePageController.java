@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api")
 public class HomePageController {
 
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ResponseEntity<String> home() {
-		return new ResponseEntity<String>("moze", HttpStatus.OK);
+		return new ResponseEntity<String>("Ikija slaying", HttpStatus.OK);
 	}
 	
 	@RequestMapping("/register")

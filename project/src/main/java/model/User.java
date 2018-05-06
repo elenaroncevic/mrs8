@@ -2,18 +2,21 @@ package model;
 
 public abstract class User {
 
-	private String username;
-	private String password;
 	private String email;
+	private String password;
 	
-	public String getUsername() {
-		return username;
+	public User() {
+		super();
 	}
 	
-	public void setUsername(String username) {
-		this.username = username;
+	public User(String email, String password) {
+		super();
+		this.email = email;
+		this.password = password;
 	}
-	
+
+
+
 	public String getPassword() {
 		return password;
 	}
