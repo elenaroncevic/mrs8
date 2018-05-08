@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name="RegUsers")
 public class RegisteredUser extends User {
 	
-	
 	@Column(name="ruFirstName")
 	private String firstName;
 	@Column(name="ruLastName")
@@ -57,6 +56,56 @@ public class RegisteredUser extends User {
 	}
 
 
+	public Set<MovieRate> getMovieRates() {
+		return movieRates;
+	}
+
+
+	public void setMovieRates(Set<MovieRate> movieRates) {
+		this.movieRates = movieRates;
+	}
+
+
+	public Set<Bid> getBids() {
+		return bids;
+	}
+
+
+	public void setBids(Set<Bid> bids) {
+		this.bids = bids;
+	}
+
+
+	public Set<PromoOfficial> getPromoOfficials() {
+		return promoOfficials;
+	}
+
+
+	public void setPromoOfficials(Set<PromoOfficial> promoOfficials) {
+		this.promoOfficials = promoOfficials;
+	}
+
+
+	public Set<PromoUsed> getPromoUsed() {
+		return promoUsed;
+	}
+
+
+	public void setPromoUsed(Set<PromoUsed> promoUsed) {
+		this.promoUsed = promoUsed;
+	}
+
+
+	public String getActivated() {
+		return activated;
+	}
+
+
+	public void setActivated(String activated) {
+		this.activated = activated;
+	}
+
+
 	public RegisteredUser(String email, String pass, String firstName, String lastName, String city, String phone,
 			Set<CinemaRate> cinemaRates, Set<MovieRate> movieRates, Set<QuickTicket> quickTickets, Set<Bid> bids,
 			Set<PromoOfficial> promoOfficials, Set<PromoUsed> promoUsed, String activated) {
@@ -73,8 +122,6 @@ public class RegisteredUser extends User {
 		this.promoUsed = promoUsed;
 		this.activated = activated;
 	}
-
-
 
 
 	public Set<QuickTicket> getQuickTickets() {

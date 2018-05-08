@@ -18,6 +18,8 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/profile', {
 				templateUrl : 'html/profile.html',
 				controller : 'HomeController'
+			}).when('/error', {
+				templateUrl : 'html/error.html'
 			}).otherwise({
 				redirectTo : '/home'
 			});

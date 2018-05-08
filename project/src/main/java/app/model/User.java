@@ -9,8 +9,7 @@ import javax.persistence.Id;
 public  class User {
 
 	@Id
-	@GeneratedValue
-	private Long id;
+	@Column(name= "email", nullable=false, unique=true)
 	private String email;
 	private String password;
 	

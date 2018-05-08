@@ -8,27 +8,20 @@ angular.module('Application').controller(
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
 				$scope.initUser = function(){
-					$scope.user={};		
-					$scope.helpy={};		
+					$scope.user={};				
 				};
-				$scope.register = function() {
-					if($scope.user.pass==$scope.pass2){
-						$http.post('api/register/', $scope.helpy).success(function(data){
-							$location.path('/profile').replace();
-						}).error(function(data){
-							alert("There is already an account signed-up with that e-mail address! Try signing-in or use different address!");
-							$rootScope.currentUser = "ptikaz";
-							$location.path('/profile').replace();
+				$scope.register = function(){
+					if($scope.user.password==$scope.pass2){
+						$http.post('http://localhost:8080/register/' + $scope.user.email+'/'+$scope.user.password+'/'+$scope.user.firstName+'/'+$scope.user.lastName+'/'+$scope.user.city+'/'+$scope.user.phone).success(function(data, status){
+							$location.path('/home').replace();
+						}).error(function(){
+							alert("User with the given email already exists!");
 						});
 					}else{
-						alert("Passwords don't match, try again!");
+						alert("Passwords don't match! Try again!");
 					}
 				};
-				$scope.help = function(){
-					$http.post('help/', $scope.helpy).success(function(data,status){
-						$rootScope.currentUser=data.ime;
-					});
-				};
+				
 			}
 		]
 );
