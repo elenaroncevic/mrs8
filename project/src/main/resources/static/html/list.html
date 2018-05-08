@@ -1,0 +1,22 @@
+<div>
+	<table ng-init= "list_cinemas()">
+	<thead class="thead-inverse">
+		<tr>
+			<th>ID</th>
+			<th>DEscription</th>
+			<th>Name</th>	
+			<th>Location</th>
+			<th>rating</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="cinema in cinemaList">
+			<td>{{ cinema.cid }}</td>
+			<td>{{ cinema.cdescription }}</td>
+			<td>{{ cinema.cname }}</td>
+			<td>{{ cinema.clocation }}</td>			
+			<td>{{ cinema.crating }}</td>
+		</tr>		
+	</tbody>
+</table>
+</div>
