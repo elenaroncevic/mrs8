@@ -12,7 +12,6 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "CinemaAdmin")
 public class CinemaAdmin extends User{
 	
 	@OneToMany(mappedBy = "admin",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 

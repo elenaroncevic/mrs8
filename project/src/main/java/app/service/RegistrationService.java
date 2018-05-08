@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+//import org.springframework.mail.SimpleMailMessage;
+//import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
@@ -27,8 +27,8 @@ public class RegistrationService {
     @Autowired
     private MessageSource messages;
   
-    @Autowired
-    private JavaMailSender mailSender;
+    //@Autowired
+    //private JavaMailSender mailSender;
 	
 	
 	public boolean registration(String email, String pass, String firstName, String lastName, String city, String phone, WebRequest request) {
@@ -48,14 +48,16 @@ public class RegistrationService {
         String subject = "Registration Confirmation";
         String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;
         String message = messages.getMessage("message.regSucc", null, request.getLocale());
+        /*
         SimpleMailMessage eMail = new SimpleMailMessage();
         eMail.setTo(email);
         eMail.setSubject(subject);
         eMail.setText(message + " rn" + "http://localhost:8080" + confirmationUrl);
         mailSender.send(eMail);
-        
-        
+        */
+        System.out.println("sad cu da sacuvam "+ru.getEmail());
 		userRepository.save(ru);
+		System.out.println("sacuvan");
 		return true;
 	}
      

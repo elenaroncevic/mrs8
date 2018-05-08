@@ -7,13 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name="RegUsers")
 public class RegisteredUser extends User {
 	
 	@Column(name="ruFirstName")
@@ -48,6 +49,7 @@ public class RegisteredUser extends User {
 	@OneToMany (mappedBy = "buyer",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
 	private Set<PromoUsed> promoUsed = new HashSet<PromoUsed>();
+	
 	
 	private String activated;
 	

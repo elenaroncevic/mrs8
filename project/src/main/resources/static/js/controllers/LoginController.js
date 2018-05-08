@@ -8,7 +8,7 @@ angular.module('Application').controller(
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
 				$scope.login = function() {
-					$http.post('http://localhost:8080/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
+					$http.post('http://localhost:8181/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
 							$rootScope.currentUser=data;
 							$rootScope.ru=false;
 							$rootScope.admin=false;

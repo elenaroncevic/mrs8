@@ -12,7 +12,7 @@ angular.module('Application').controller(
 				};
 				$scope.register = function(){
 					if($scope.user.password==$scope.pass2){
-						$http.post('http://localhost:8080/register/' + $scope.user.email+'/'+$scope.user.password+'/'+$scope.user.firstName+'/'+$scope.user.lastName+'/'+$scope.user.city+'/'+$scope.user.phone).success(function(data, status){
+						$http.post('http://localhost:8181/register/' + $scope.user.email+'/'+$scope.user.password+'/'+$scope.user.firstName+'/'+$scope.user.lastName+'/'+$scope.user.city+'/'+$scope.user.phone).success(function(data, status){
 							$location.path('/home').replace();
 						}).error(function(){
 							alert("User with the given email already exists!");

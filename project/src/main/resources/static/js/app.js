@@ -17,7 +17,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 				controller : 'RegisterController'
 			}).when('/profile', {
 				templateUrl : 'html/profile.html',
-				controller : 'HomeController'
+			}).when('/list_cinemas', {
+				templateUrl : 'html/list.html',
+				controller : 'CinemaListController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
 			}).otherwise({

@@ -7,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "FanZoneAdmin")
 public class FanZoneAdmin extends User{
 	
 		
