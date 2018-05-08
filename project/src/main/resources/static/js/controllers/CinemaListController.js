@@ -7,9 +7,11 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+				$scope.poy="cao"
 				$scope.list_cinemas = function() {
 					$http.get('http://localhost:8181/cinemas').success(function(data, status){
-							$scope.cinemaList=[{"name":"ime","location":"negde","description":"caocaocao","rating":4.2,"id":1,"auditoriums":[],"promos":[],"rates":[]},{"name":"ime","location":"negde","description":"caocaocao","rating":4.2,"id":2,"auditoriums":[],"promos":[],"rates":[]}];
+							$scope.cinemaList=data;
+							//alert(cinemaList);
 							if(cinemaList.isEmpty()=="yes"){
 								alert("There is no cinemas yet");
 							}
