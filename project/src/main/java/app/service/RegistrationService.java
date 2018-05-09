@@ -1,9 +1,14 @@
 package app.service;
 
+import java.util.Calendar;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 //import org.springframework.mail.SimpleMailMessage;
 //import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -23,17 +28,16 @@ public class RegistrationService {
 	
     @Autowired
     private VerificationTokenRepository tokenRepository;
-	
-    @Autowired
-    private MessageSource messages;
   
-    //@Autowired
-    //private JavaMailSender mailSender;
+    @Autowired
+    private JavaMailSender mailSender;
 	
 	
 	public boolean registration(String email, String pass, String firstName, String lastName, String city, String phone, WebRequest request) {
         String appUrl = request.getContextPath();
-
+        if(userRepository.findOne(email)!=null) {
+        	return false;
+        }
         RegisteredUser ru = new RegisteredUser();
         ru.setEmail(email);
         ru.setPassword(pass);
@@ -42,40 +46,34 @@ public class RegistrationService {
         ru.setCity(city);
         ru.setPhone(phone);
         ru.setActivated("no");
+        userRepository.save(ru);
         
         String token = UUID.randomUUID().toString();
-        createVerificationToken(ru, token);
+        VerificationToken myToken = new VerificationToken(token, ru);
+        tokenRepository.save(myToken);
         String subject = "Registration Confirmation";
         String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;
-        String message = messages.getMessage("message.regSucc", null, request.getLocale());
-        /*
+        
         SimpleMailMessage eMail = new SimpleMailMessage();
         eMail.setTo(email);
         eMail.setSubject(subject);
-        eMail.setText(message + " rn" + "http://localhost:8080" + confirmationUrl);
+        eMail.setText("http://localhost:8181" + confirmationUrl);
         mailSender.send(eMail);
-        */
-        System.out.println("sad cu da sacuvam "+ru.getEmail());
-		userRepository.save(ru);
-		System.out.println("sacuvan");
+        
 		return true;
 	}
-     
-    public RegisteredUser getUser(String verificationToken) {
-        RegisteredUser user = tokenRepository.findByToken(verificationToken).getUser();
-        return user;
-    }
-     
-    public VerificationToken getVerificationToken(String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
-    }
-     
-    public void saveRegisteredUser(User user) {
-        userRepository.save(user);
-    }
-     
-    public void createVerificationToken(RegisteredUser user, String token) {
-        VerificationToken myToken = new VerificationToken(token, user);
-        tokenRepository.save(myToken);
-    }
+	
+	public boolean confirmRegistration(String token) {
+	    VerificationToken verificationToken = tokenRepository.findByToken(token);
+	    User user = tokenRepository.findByToken(token).getUser();
+	    Calendar cal = Calendar.getInstance();
+	    if(verificationToken==null || (verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+	    	tokenRepository.delete(verificationToken.getId());
+	    	return false;
+	    }
+	    user.setActivated("yes"); 
+	    userRepository.save(user);
+	    tokenRepository.delete(verificationToken.getId());
+	    return true;
+	}
 }

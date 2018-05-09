@@ -1,9 +1,18 @@
  <div>
  <form>
+ 		<form>
+			E-mail:
+    		<input type="text" ng-model="email">
+    		</br>
+    	
+    		Password:
+    		<input type="password" ng-model="pass">
+    		</br>
+		
+			<button ng-click="login()">Login</button>
+		</form>
     	<p>Don't have an account? Sign up!</p> 
     	<button type="button" ng-click="signup()">Register</button>
-    	<p>Or sign in!</p>
-    	<button type="button" ng-click="signin()">Sign in</button>
     	<p>Or view cinemas!</p>
     	<button type="button" ng-click="list_cinemas()">List</button>
 </form>

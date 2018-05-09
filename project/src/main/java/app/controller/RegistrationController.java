@@ -36,15 +36,11 @@ public class RegistrationController {
 	}
 	 
 	@RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
-	public ResponseEntity<Void> confirmRegistration(WebRequest request, Model model, @RequestParam("token") String token) {
-	    VerificationToken verificationToken = registrationService.getVerificationToken(token);
-	    RegisteredUser user = verificationToken.getUser();
-	    Calendar cal = Calendar.getInstance();
-	    if(verificationToken==null || (verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-	    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	    user.setActivated("yes"); 
-	    registrationService.saveRegisteredUser(user); 
-	    return new ResponseEntity<>(HttpStatus.OK); 
+	public ResponseEntity<Void> confirmRegistration(@RequestParam("token") String token) {
+		if(registrationService.confirmRegistration(token)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 }

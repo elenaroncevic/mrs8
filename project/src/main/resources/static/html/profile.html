@@ -1,8 +1,46 @@
 <div ng-show="ru">
-	<p>{{currentUser.email}}</p>
+	<div class="tab">
+		<button type="button" ng-click="home()">Home</button>
+		<button type="button" ng-click="theaters()">Theaters</button>
+		<button type="button" ng-click="cinemas()">Cinemas</button>
+		<button type="button" ng-click="friends()">Friends</button>
+		<button type="button" ng-click="reservations()">Reservations</button>
+		<button type="button" ng-click="settings()">Settings</button>
+		<button type="button" ng-click="fanzone()">Fanzone</button>
+	</div>
+	
+	<div class="tabcontent" ng-show="homeTab">
+					<h3><b>{{currentUser.firstName}} {{currentUser.lastName}}</b></h3>
+	
+					</br></br></br>
+					<p><b>E-mail:  </b>{{currentUser.email}}</p>
+					<p><b>City:  </b>{{currentUser.city}}</p>
+					<p><b>Phone:  </b>{{currentUser.phone}}</p>
+	</div>
+	<div class="tabcontent" ng-show="theatersTab">
+		<p>samo probavam></p>
+	</div>
+	<div class = "tabcontent" ng-show="cinemasTab">
+		<p>prikaz</p>
+	</div>
+	<div class = "tabcontent" ng-show="friendsTab">
+		<p>novo</p>
+	</div>
+	<div class = "tabcontent" ng-show="reservationsTab">
+		
+	</div>
+	<div class = "tabcontent" ng-show="settingsTab">
+		<p>novo</p>
+	</div>
+	<div class = tabcontent" ng-show="fanzoneTab">
+	
+	</div>
+	
+	
+
 </div>
 
 
 <div ng-show="admin">
-
+	<p>yas</p>
 </div>
