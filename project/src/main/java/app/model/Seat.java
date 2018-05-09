@@ -34,7 +34,7 @@ public class Seat {
 	
 	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
 	@JsonManagedReference
-	private Set<Reservation> reservations = new HashSet<Reservation>();
+	private Set<Ticket> tickets = new HashSet<Ticket>();
 	
 	public Long getId() {
 		return id;
@@ -56,18 +56,18 @@ public class Seat {
 	}
 	
 	
-	public Set<Reservation> getReservations() {
-		return reservations;
+	public Set<Ticket> getTickets() {
+		return tickets;
 	}
-	public void setReservations(Set<Reservation> reservations) {
-		this.reservations = reservations;
+	public void setReservations(Set<Ticket> tickets) {
+		this.tickets = tickets;
 	}
-	public Seat(Long id, Sector sector, Long number, Set<Reservation> reservations) {
+	public Seat(Long id, Sector sector, Long number, Set<Ticket> tickets) {
 		super();
 		this.id = id;
 		this.sector = sector;
 		this.number = number;
-		this.reservations = reservations;
+		this.tickets = tickets;
 	}
 	public Seat(){}
 }

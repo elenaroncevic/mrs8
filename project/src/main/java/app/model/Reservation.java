@@ -1,51 +1,52 @@
 package app.model;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Reservation {
 	
+	public enum ReservationState{
+		Active,
+		Cancelled,
+		Inactive
+	}
+
 	@Id
 	@GeneratedValue
-	@Column(name="qid")
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-	@JsonBackReference
-	private Projection projection;
-	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-	@JsonBackReference
-	private Seat seat;
-	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@ManyToOne
 	@JsonBackReference
 	private RegisteredUser buyer;
 	
-	private int numOfTickets;
+	@OneToMany
+	@JsonManagedReference
+	private Set<Ticket> tickets;
+	
+	private ReservationState state;
 	
 	public Reservation() {
-		
+		this.state = ReservationState.Active;
+		this.tickets=new HashSet<Ticket>();
 	}
 
-	public Reservation(Long id, Projection projection, Seat seat, RegisteredUser buyer, int numOfTickets) {
+	public Reservation(Long id, RegisteredUser buyer, Set<Ticket> tickets, ReservationState rState) {
 		super();
 		this.id = id;
-		this.projection = projection;
-		this.seat = seat;
 		this.buyer = buyer;
-		this.numOfTickets = numOfTickets;
+		this.tickets = tickets;
+		this.state = rState;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -53,22 +54,6 @@ public class Reservation {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Projection getProjection() {
-		return projection;
-	}
-
-	public void setProjection(Projection projection) {
-		this.projection = projection;
-	}
-
-	public Seat getSeat() {
-		return seat;
-	}
-
-	public void setSeat(Seat seat) {
-		this.seat = seat;
 	}
 
 	public RegisteredUser getBuyer() {
@@ -79,12 +64,20 @@ public class Reservation {
 		this.buyer = buyer;
 	}
 
-	public int getNumOfTickets() {
-		return numOfTickets;
+	public Set<Ticket> getTickets() {
+		return tickets;
 	}
 
-	public void setNumOfTickets(int numOfTickets) {
-		this.numOfTickets = numOfTickets;
+	public void setTickets(Set<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+	public ReservationState getState() {
+		return state;
+	}
+
+	public void setState(ReservationState state) {
+		this.state = state;
 	}
 	
 	

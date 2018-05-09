@@ -26,6 +26,9 @@ public class RegisteredUser extends User {
 	@Column(name="ruPhone")
 	private String phone;
 	
+
+	
+	
 	@OneToMany(mappedBy = "voter",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
 	private Set<CinemaRate> cinemaRates = new HashSet<CinemaRate>();
@@ -99,7 +102,7 @@ public class RegisteredUser extends User {
 
 
 	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<CinemaRate> cinemaRates,
-			Set<MovieRate> movieRates, Set<Reservation> quickTickets, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
+			Set<MovieRate> movieRates, Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
 			Set<PromoUsed> promoUsed) {
 		super();
 		this.firstName = firstName;
@@ -108,7 +111,7 @@ public class RegisteredUser extends User {
 		this.phone = phone;
 		this.cinemaRates = cinemaRates;
 		this.movieRates = movieRates;
-		this.reservations = quickTickets;
+		this.reservations = reservations;
 		this.bids = bids;
 		this.promoOfficials = promoOfficials;
 		this.promoUsed = promoUsed;
