@@ -12,16 +12,22 @@ public  class User {
 	@Column(name= "email", nullable=false, unique=true)
 	private String email;
 	private String password;
+	private String activated;
 	
 	public User() {
 		super();
 	}
 	
-	public User(String email, String password) {
+	
+
+	public User(String email, String password, String activated) {
 		super();
 		this.email = email;
 		this.password = password;
+		this.activated = activated;
 	}
+
+
 
 	public String getPassword() {
 		return password;
@@ -38,5 +44,19 @@ public  class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+
+
+	public String getActivated() {
+		return activated;
+	}
+
+
+
+	public void setActivated(String activated) {
+		this.activated = activated;
+	}
+	
+	
 	
 }

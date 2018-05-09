@@ -19,18 +19,21 @@ public class CinemaAdmin extends User{
 	private Set<Cinema> cinemas = new HashSet<Cinema>();
 	
 	
-	
 	public CinemaAdmin() {
 		super();
 	}
 
 	
-
-	public CinemaAdmin(int id, Set<Cinema> cinemas) {
+	
+	
+	public CinemaAdmin(Set<Cinema> cinemas) {
 		super();
 		this.cinemas = cinemas;
-
 	}
+
+
+
+
 	public Set<Cinema> getCinemas() {
 		return cinemas;
 	}
@@ -39,4 +42,6 @@ public class CinemaAdmin extends User{
 		this.cinemas = cinemas;
 	}
 
+
+	
 }

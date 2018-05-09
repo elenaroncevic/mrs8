@@ -8,16 +8,13 @@ import javax.persistence.Table;
 
 @Entity
 public class FanZoneAdmin extends User{
-	
 		
 	public FanZoneAdmin() {
 		super();
 	}
+
 	
 	
 	
-	public FanZoneAdmin(int id, String email, String password) {
-		super();
-		
-	}	
+	
 }

@@ -25,7 +25,7 @@ public class VerificationToken {
    
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    private RegisteredUser user;
+    private User user;
      
     private Date expiryDate;
     
@@ -36,7 +36,7 @@ public class VerificationToken {
         return new Date(cal.getTime().getTime());
     }
 
-	public VerificationToken(Long id, String token, RegisteredUser user, Date expiryDate) {
+	public VerificationToken(Long id, String token, User user, Date expiryDate) {
 		super();
 		this.id = id;
 		this.token = token;
@@ -44,7 +44,7 @@ public class VerificationToken {
 		this.expiryDate = expiryDate;
 	}
 	
-	public VerificationToken(String token, RegisteredUser user) {
+	public VerificationToken(String token, User user) {
 		this.id=12345678910L;
 		this.token=token;
 		this.user=user;
@@ -72,11 +72,11 @@ public class VerificationToken {
 		this.token = token;
 	}
 
-	public RegisteredUser getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(RegisteredUser user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 

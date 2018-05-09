@@ -51,7 +51,7 @@ public class RegisteredUser extends User {
 	private Set<PromoUsed> promoUsed = new HashSet<PromoUsed>();
 	
 	
-	private String activated;
+	
 	
 	public RegisteredUser(){
 		super();
@@ -98,20 +98,10 @@ public class RegisteredUser extends User {
 	}
 
 
-	public String getActivated() {
-		return activated;
-	}
-
-
-	public void setActivated(String activated) {
-		this.activated = activated;
-	}
-
-
-	public RegisteredUser(String email, String pass, String firstName, String lastName, String city, String phone,
-			Set<CinemaRate> cinemaRates, Set<MovieRate> movieRates, Set<QuickTicket> quickTickets, Set<Bid> bids,
-			Set<PromoOfficial> promoOfficials, Set<PromoUsed> promoUsed, String activated) {
-		super(email, pass);
+	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<CinemaRate> cinemaRates,
+			Set<MovieRate> movieRates, Set<QuickTicket> quickTickets, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
+			Set<PromoUsed> promoUsed) {
+		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.city = city;
@@ -122,7 +112,6 @@ public class RegisteredUser extends User {
 		this.bids = bids;
 		this.promoOfficials = promoOfficials;
 		this.promoUsed = promoUsed;
-		this.activated = activated;
 	}
 
 
