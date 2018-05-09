@@ -1,0 +1,19 @@
+ <div id="register_admins_card">
+    <form>
+      <input ng-model="adm-email" id="adm-email" name="adm_email" type="email" placeholder="email" maxlength="50">
+      <input ng-model="adm-pass1" id="adm-pass1" name="adm_pass1" type="password" placeholder="password">
+      <input ng-model="adm-pass2" id="adm-pass2" name="adm_pass2" type="password" placeholder="repeat password">
+      <div class="izbor">
+        admin type:
+        <select ng-model="adm-type">
+          <option value="system">system</option>
+          <option value="fan-zone">fan zone</option>
+          <option value="cinema">cinema/theatre</option>
+        </select>
+      </div>
+      <div align="right">
+        <input type="button" name="register_btn" value="Register" ng-click=register()>
+      </div>
+     
+    </form>
+  </div>
