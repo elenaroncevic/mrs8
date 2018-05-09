@@ -32,8 +32,18 @@
 		<dependency>
 		    <groupId>mysql</groupId>
 		    <artifactId>mysql-connector-java</artifactId>
-		    <version>8.0.9-rc</version>
-		</dependency>
+		    <version>5.1.46</version>
+		</dependency>		
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.0.1.RELEASE</version>
+        </dependency>
+        <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+    <version>1.5.12.RELEASE</version>
+</dependency>
 	</dependencies>
 
 	<properties>
