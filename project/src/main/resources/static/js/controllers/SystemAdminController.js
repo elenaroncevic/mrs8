@@ -7,9 +7,11 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
-				$scope.register = function() {
-					if($scope.adm-pass1==$scope.adm-pass2){
-						$http.post('http://localhost:8181/register_new_admin/'+ $scope.adm-email+'/'+ $scope.adm-pass1+'/'+($scope.adm-type).options[($scope.adm-type).selectedIndex].value).success(function(){
+				$scope.registerAdmin = function() {
+					if($scope.admPass1==$scope.admPass2){
+						var e = document.getElementById("type");
+						var strUser = e.options[e.selectedIndex].value;
+						$http.post('http://localhost:8181/register_new_admin/'+ $scope.admEmail+'/'+ $scope.admPass1+'/'+strUser).success(function(){
 							$location.path('/register_new_user').replace();
 						}).error(function(){
 							alert("User with the same email already exists");
@@ -20,9 +22,17 @@ angular.module('Application').controller(
 
 				};
 				
-				if ($rootScope.currentUser.def=="false"){
-					($scope.adm-type).options[0].disabled=true;
+				if ($rootScope.currentUser.def==false){
+					var op = document.getElementById("type").getElementsByTagName("option");
+					for (var i = 0; i < op.length; i++) {
+					  (op[i].value.toLowerCase() == "system") 
+					    ? op[i].disabled = true 
+					    : op[i].disabled = false ;
+					}
 				}
+				
+				
+				
 
 			}
 		]
