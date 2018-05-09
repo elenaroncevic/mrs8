@@ -26,7 +26,13 @@ public class RegisteredUser extends User {
 	@Column(name="ruPhone")
 	private String phone;
 	
-
+	@OneToMany
+	@JsonManagedReference
+	private Set<Friendship> friendsAdded=new HashSet<Friendship>();
+	
+	@OneToMany
+	@JsonManagedReference
+	private Set<Friendship> friendsAccepted = new HashSet<Friendship>();
 	
 	
 	@OneToMany(mappedBy = "voter",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
@@ -101,14 +107,16 @@ public class RegisteredUser extends User {
 	}
 
 
-	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<CinemaRate> cinemaRates,
-			Set<MovieRate> movieRates, Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
-			Set<PromoUsed> promoUsed) {
+	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<Friendship> friendsAdded,
+			Set<Friendship> friendsAccepted, Set<CinemaRate> cinemaRates, Set<MovieRate> movieRates,
+			Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials, Set<PromoUsed> promoUsed) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.city = city;
 		this.phone = phone;
+		this.friendsAdded = friendsAdded;
+		this.friendsAccepted = friendsAccepted;
 		this.cinemaRates = cinemaRates;
 		this.movieRates = movieRates;
 		this.reservations = reservations;
@@ -172,6 +180,26 @@ public class RegisteredUser extends User {
 
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+
+
+	public Set<Friendship> getFriendsAdded() {
+		return friendsAdded;
+	}
+
+
+	public void setFriendsAdded(Set<Friendship> friendsAdded) {
+		this.friendsAdded = friendsAdded;
+	}
+
+
+	public Set<Friendship> getFriendsAccepted() {
+		return friendsAccepted;
+	}
+
+
+	public void setFriendsAccepted(Set<Friendship> friendsAccepted) {
+		this.friendsAccepted = friendsAccepted;
 	}
 	
 	

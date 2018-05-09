@@ -36,7 +36,6 @@ public class Reservation {
 	private ReservationState state;
 	
 	public Reservation() {
-		this.state = ReservationState.Active;
 		this.tickets=new HashSet<Ticket>();
 	}
 
