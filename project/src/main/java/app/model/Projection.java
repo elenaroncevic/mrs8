@@ -41,22 +41,31 @@ public class Projection {
 	
 	@OneToMany(mappedBy = "projection", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	@JsonManagedReference
-	private Set<QuickTicket> qtickets = new HashSet<QuickTicket>();
+	private Set<Reservation> reservations = new HashSet<Reservation>();
 	
 	public Projection(){super();}
 	
 	
 	
 	
-	public Projection(Long id, Movie movie, Date date, double price, Auditorium auditorium, Set<QuickTicket> qtickets) {
+
+
+
+
+	public Projection(Long id, Movie movie, Date date, double price, Auditorium auditorium,
+			Set<Reservation> reservations) {
 		super();
 		this.id = id;
 		this.movie = movie;
 		this.date = date;
 		this.price = price;
 		this.auditorium = auditorium;
-		this.qtickets = qtickets;
+		this.reservations = reservations;
 	}
+
+
+
+
 
 
 
@@ -99,16 +108,29 @@ public class Projection {
 
 
 
-	public Set<QuickTicket> getQtickets() {
-		return qtickets;
+
+
+
+
+	public Set<Reservation> getReservations() {
+		return reservations;
 	}
 
 
 
 
-	public void setQtickets(Set<QuickTicket> qtickets) {
-		this.qtickets = qtickets;
+
+
+
+
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
+
+
+
+
+	
 	
 	
 	

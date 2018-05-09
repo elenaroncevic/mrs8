@@ -36,7 +36,7 @@ public class RegisteredUser extends User {
 	
 	@OneToMany(mappedBy = "buyer",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
-	private Set<QuickTicket> quickTickets = new HashSet<QuickTicket>();
+	private Set<Reservation> reservations = new HashSet<Reservation>();
 	
 	@OneToMany (mappedBy = "bidder",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
@@ -99,7 +99,7 @@ public class RegisteredUser extends User {
 
 
 	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<CinemaRate> cinemaRates,
-			Set<MovieRate> movieRates, Set<QuickTicket> quickTickets, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
+			Set<MovieRate> movieRates, Set<Reservation> quickTickets, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
 			Set<PromoUsed> promoUsed) {
 		super();
 		this.firstName = firstName;
@@ -108,19 +108,19 @@ public class RegisteredUser extends User {
 		this.phone = phone;
 		this.cinemaRates = cinemaRates;
 		this.movieRates = movieRates;
-		this.quickTickets = quickTickets;
+		this.reservations = quickTickets;
 		this.bids = bids;
 		this.promoOfficials = promoOfficials;
 		this.promoUsed = promoUsed;
 	}
 
 
-	public Set<QuickTicket> getQuickTickets() {
-		return quickTickets;
+	public Set<Reservation> getReservations() {
+		return reservations;
 	}
 
-	public void setQuickTickets(Set<QuickTicket> quickTickets) {
-		this.quickTickets = quickTickets;
+	public void setReservations(Set<Reservation> reservations) {
+		this.reservations = reservations;
 	}
 
 
