@@ -26,11 +26,11 @@ public class RegisteredUser extends User {
 	@Column(name="ruPhone")
 	private String phone;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "sender",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
 	private Set<Friendship> friendsAdded=new HashSet<Friendship>();
 	
-	@OneToMany
+	@OneToMany(mappedBy = "friend",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
 	private Set<Friendship> friendsAccepted = new HashSet<Friendship>();
 	

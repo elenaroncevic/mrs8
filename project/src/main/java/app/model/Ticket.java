@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Ticket {
@@ -25,19 +26,25 @@ public class Ticket {
 	@JsonBackReference
 	private Seat seat;
 	
-	private int numOfTickets;
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JsonBackReference
+	private Reservation reservation;
 	
 	public Ticket() {
 		
 	}
 
-	public Ticket(Long id, Projection projection, Seat seat, int numOfTickets) {
+
+
+	public Ticket(Long id, Projection projection, Seat seat, Reservation reservation) {
 		super();
 		this.id = id;
 		this.projection = projection;
 		this.seat = seat;
-		this.numOfTickets = numOfTickets;
+		this.reservation = reservation;
 	}
+
+
 
 
 
@@ -65,11 +72,17 @@ public class Ticket {
 		this.seat = seat;
 	}
 
-	public int getNumOfTickets() {
-		return numOfTickets;
+
+
+	public Reservation getReservation() {
+		return reservation;
 	}
 
-	public void setNumOfTickets(int numOfTickets) {
-		this.numOfTickets = numOfTickets;
+
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
 	}
+	
+	
 }

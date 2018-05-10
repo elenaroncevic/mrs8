@@ -3,7 +3,9 @@ package app.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -25,18 +27,18 @@ public class Reservation {
 	@GeneratedValue
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private RegisteredUser buyer;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "reservation",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
-	private Set<Ticket> tickets;
+	private Set<Ticket> tickets = new HashSet<Ticket>();
 	
 	private ReservationState state;
 	
 	public Reservation() {
-		this.tickets=new HashSet<Ticket>();
+		
 	}
 
 	public Reservation(Long id, RegisteredUser buyer, Set<Ticket> tickets, ReservationState rState) {
