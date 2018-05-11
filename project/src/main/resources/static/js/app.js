@@ -18,6 +18,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/list_cinemas', {
 				templateUrl : 'html/list.html',
 				controller : 'CinemaListController'
+			}).when('/cinema_profile', {
+				templateUrl : 'html/cinema_profile.html',
+				controller : 'CinemaProfileController'
 			}).when('/register_new_admin', {
 				templateUrl : 'html/register_new_admin.html',
 				controller : 'SystemAdminController'

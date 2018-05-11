@@ -7,6 +7,12 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+				$scope.showCinema = function(data){
+					$rootScope.currentCinema=data;
+					alert(data.name);
+					$location.path('/cinema_profile').replace();
+
+				};
 				$scope.homeTab=true;
 				$scope.theatersTab = false;
 				$scope.cinemasTab = false;

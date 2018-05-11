@@ -11,7 +11,7 @@ angular.module('Application').controller(
 				$scope.list_cinemas = function() {
 					$http.get('http://localhost:8181/cinemas').success(function(data, status){
 							$scope.cinemaList=data;
-							if(cinemaList.isEmpty()=="yes"){
+							if(data.length==0){
 								alert("There is no cinemas yet");
 							}
 					}).error(function(){
