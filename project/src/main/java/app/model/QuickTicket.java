@@ -5,15 +5,15 @@ import javax.persistence.Entity;
 @Entity
 public class QuickTicket extends Ticket{
 	
-	private int discount;
+	private Integer discount;
 
-	public QuickTicket(Long id, Projection projection, Seat seat, Reservation reservation, int discount) {
+	public QuickTicket(Long id, Projection projection, Seat seat, Reservation reservation, Integer discount) {
 		super(id, projection, seat, reservation);
 		this.discount=discount;
 	}
 
 
-	public QuickTicket(int discount) {
+	public QuickTicket(Integer discount) {
 		super();
 		this.discount = discount;
 	}
@@ -27,13 +27,13 @@ public class QuickTicket extends Ticket{
 
 
 
-	public int getDiscount() {
+	public Integer getDiscount() {
 		return discount;
 	}
 
 
 
-	public void setDiscount(int discount) {
+	public void setDiscount(Integer discount) {
 		this.discount = discount;
 	}
 	

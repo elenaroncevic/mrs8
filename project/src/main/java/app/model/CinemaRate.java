@@ -31,10 +31,10 @@ public class CinemaRate {
 	private Cinema cinema;
 	
 	@Column(name="crrating")
-	private double rating;
+	private Double rating;
 
 
-	public CinemaRate(Long id, RegisteredUser voter, Cinema cinema, double rating) {
+	public CinemaRate(Long id, RegisteredUser voter, Cinema cinema, Double rating) {
 		super();
 		this.id = id;
 		this.voter = voter;
@@ -58,12 +58,12 @@ public class CinemaRate {
 	}
 
 
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
 
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 

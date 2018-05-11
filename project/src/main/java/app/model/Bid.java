@@ -24,7 +24,7 @@ public class Bid {
 	private PromoUsed promo;
 
 	@Column (name = "bprice")
-	private double price;
+	private Double price;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
@@ -44,11 +44,11 @@ public class Bid {
 		return id;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -64,7 +64,7 @@ public class Bid {
 		this.promo = promo;
 	}
 
-	public Bid(Long id, PromoUsed promo, double price, RegisteredUser bidder) {
+	public Bid(Long id, PromoUsed promo, Double price, RegisteredUser bidder) {
 		super();
 		this.id = id;
 		this.promo = promo;

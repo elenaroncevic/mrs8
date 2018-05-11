@@ -29,7 +29,7 @@ public class Cinema {
 	private String description;
 	
 	@Column(name="crating")
-	private double rating;
+	private Double rating;
 	
 	@Id
 	@GeneratedValue
@@ -99,7 +99,7 @@ public class Cinema {
 	}
 	
 	
-	public Cinema(String name, String location, String description, double rating, Long id, Set<Auditorium> auditoriums,
+	public Cinema(String name, String location, String description, Double rating, Long id, Set<Auditorium> auditoriums,
 			CinemaAdmin admin, Set<PromoOfficial> promos, Set<CinemaRate> rates) {
 		super();
 		this.name = name;
@@ -134,10 +134,10 @@ public class Cinema {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public double getRating() {
+	public Double getRating() {
 		return rating;
 	}
-	public void setRating(double rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 

@@ -33,7 +33,7 @@ public class Projection {
 	@Column(name="ptime")
 	private Date date;
 	
-	private double price;
+	private Double price;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
@@ -52,7 +52,7 @@ public class Projection {
 
 
 
-	public Projection(Long id, Movie movie, Date date, double price, Auditorium auditorium,
+	public Projection(Long id, Movie movie, Date date, Double price, Auditorium auditorium,
 			Set<Ticket> tickets) {
 		super();
 		this.id = id;
@@ -92,10 +92,10 @@ public class Projection {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	public Auditorium getAuditorium() {

@@ -42,7 +42,7 @@ public class PromoUsed{
 	private String activity;
 	
 	@Column(name="puprice")
-	private double price;
+	private Double price;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
@@ -95,11 +95,11 @@ public class PromoUsed{
 		this.activity = activity;
 	}
 
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -128,7 +128,7 @@ public class PromoUsed{
 	}
 
 	public PromoUsed(Long id, Date ending, String name, String description, String activity,
-			double price, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
+			Double price, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
 		super();
 		this.id = id;
 		this.ending = ending;

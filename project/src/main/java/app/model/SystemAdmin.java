@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Entity
 public class SystemAdmin extends User{
 	
-	private boolean def;
+	private Boolean def;
 	
 
 	public SystemAdmin() {
@@ -18,20 +18,20 @@ public class SystemAdmin extends User{
 
 
 
-	public SystemAdmin(boolean def) {
+	public SystemAdmin(Boolean def) {
 		super();
 		this.def = def;
 	}
 
 
 
-	public boolean isDef() {
+	public Boolean isDef() {
 		return def;
 	}
 
 
 
-	public void setDef(boolean def) {
+	public void setDef(Boolean def) {
 		this.def = def;
 	}
 
