@@ -7,8 +7,17 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
-				alert("Radi1");
-				$scope.cinemaAdmin=true;
+				$scope.projections=[];
+				var auditorium = {};
+				var projection = {};
+				for(var a in $rootScope.currentCinema.auditoriums ){
+					auditorium = $rootScope.currentCinema.auditoriums[a].projections;
+					for (var p in auditorium){
+						projection = auditorium[p];
+						$scope.projections.push(projection);
+						//alert(projection.movie);
+					}
+				}
 			}
 		]
 	);
