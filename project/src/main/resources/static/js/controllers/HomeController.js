@@ -11,7 +11,7 @@ angular.module('Application').controller(
 				$scope.signup = function(){
 					$location.path('/signup').replace();
 				};
-				$scope.list_cinemas = function() {
+				$scope.list_cinemas = function(){
 					$location.path('/list_cinemas').replace();
 				};
 				$scope.login = function() {

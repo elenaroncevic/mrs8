@@ -11,7 +11,7 @@ angular.module('Application').controller(
 				$scope.theaterList = [];
 				var all = $rootScope.currentUser.cinemas;
 				for(var i in all){
-					if(all[i].type=="Cinema" ){
+					if(all[i].type=="Cinema"){
 						$scope.cinemaList.push(all[i]);
 					}
 					else{

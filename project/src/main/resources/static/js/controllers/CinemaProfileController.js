@@ -12,7 +12,7 @@ angular.module('Application').controller(
 				var projection = {};
 				for(var a in $rootScope.currentCinema.auditoriums ){
 					auditorium = $rootScope.currentCinema.auditoriums[a].projections;
-					for (var p in auditorium ){
+					for (var p in auditorium){
 						projection = auditorium[p];
 						$scope.projections.push(projection);
 						//alert(projection.movie);
