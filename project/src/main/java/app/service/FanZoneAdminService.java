@@ -16,7 +16,7 @@ import app.repository.PromoOfficialRepository;
 public class FanZoneAdminService {
 
 	@Autowired
-	private PromoOfficialRepository promoOfficialRepository;
+	private PromoOfficialRepository promoOfficialRepository;//
 	
 	@Autowired
 	private CinemaRepository cinemaRepository;

@@ -27,7 +27,7 @@ angular.module('Application').controller(
 							}
 					}).error(function(){
 						alert("ima neki error");
-					});
+					});//
 				};
 			
 				$scope.add_promo_official = function() {

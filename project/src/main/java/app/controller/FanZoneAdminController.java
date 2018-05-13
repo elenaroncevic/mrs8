@@ -16,7 +16,7 @@ import app.service.RegistrationService;
 @RestController
 public class FanZoneAdminController {
 	@Autowired
-	private FanZoneAdminService fanZoneAdminService;
+	private FanZoneAdminService fanZoneAdminService;//
 	
 	@RequestMapping(value="/add_promo_official/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}", method=RequestMethod.GET)
 	public ResponseEntity<Void> addNewPromoOfficial(@PathVariable("poName") String poName, @PathVariable("poDescription") String poDescription, @PathVariable("poImage") String poImage, @PathVariable("poPrice") Double poPrice, @PathVariable("cId") Long cId, WebRequest req){
