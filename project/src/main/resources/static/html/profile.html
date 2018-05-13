@@ -20,9 +20,7 @@
 	</div>
 	<div class="tabcontent" ng-show="tabs.theaters">
 		<p>{{cinemasShow}}></p>
-	</div>
-	
-	
+	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
 	
 		<div ng-show="regular">
@@ -48,17 +46,21 @@
 		</div>
 		
 		<div ng-show="reserve">
-			Search cinemas:
+			Search cinemas(name or part of it):
 			<input type="textfield" ng-model="searchCinemaText">
 			<button type="button" ng-click="searchCinemas()">Search</button>
 			</br>
-			<select ng-model="kombo" ng-options="cinema.name for cinema in kombo" ng-change="cinemaChanged()">
+			<select id="cinemaCombo"> 
+				<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
 			</select>
+			<button type="button" ng-click="continueReservation()">Select this cinema</button>
 			<div ng-show="everythingElse">
+				<select id="movieCombo"> 
+					<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
+				</select>
 				
 			</div>
 		</div>
-		
 		
 	</div>
 	<div class = "tabcontent" ng-show="tabs.friends">
