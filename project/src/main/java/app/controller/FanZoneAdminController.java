@@ -21,7 +21,7 @@ public class FanZoneAdminController {
 	@RequestMapping(value="/fan_zone_admin/add_promo_official/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}", method=RequestMethod.GET)
 	public ResponseEntity<Void> addNewPromoOfficial(@PathVariable("poName") String poName, @PathVariable("poDescription") String poDescription, @PathVariable("poImage") String poImage, @PathVariable("poPrice") Double poPrice, @PathVariable("cId") Long cId, WebRequest req){
 		if (fanZoneAdminService.addNewPromoOfficial(poName, poDescription, poImage, poPrice, cId, req)) {
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.OK);//
 		}else {      
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

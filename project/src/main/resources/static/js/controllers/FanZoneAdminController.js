@@ -13,7 +13,7 @@ angular.module('Application').controller(
 							if($scope.cinemaList.length==0){
 							
 								alert("You can't add official promo because there is no cinema");
-								//redirekt na pocetnu str fan zone admina
+								//redirekt na pocetnu str fan zone admina dd
 							}
 							else{
 								document.getElementById("adding_promo_official").style.display="block";

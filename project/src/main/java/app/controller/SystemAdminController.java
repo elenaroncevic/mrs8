@@ -25,7 +25,7 @@ public class SystemAdminController {
 		if (registrationService.registrationAdmins(email, pass1, type, req)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
 		}
 
 	}
