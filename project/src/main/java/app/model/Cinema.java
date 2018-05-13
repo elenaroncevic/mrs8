@@ -25,7 +25,7 @@ public class Cinema {
 		Cinema
 	}
 	
-	@Column
+	@Column(name="btype")
 	private BuildingType type;
 	
 	@Column(name="cname")

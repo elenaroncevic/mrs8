@@ -7,10 +7,22 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+				$scope.cinemaList = [];
+				$scope.theaterList = [];
+				var all = $rootScope.currentUser.cinemas;
+				for(var i in all){
+					if(all[i].type=="Cinema"){
+						$scope.cinemaList.push(all[i]);
+					}
+					else{
+						$scope.theaterList.push(all[i]);
+						
+					}
+				}
+				
 				$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
-					alert(data.name);
 					$location.path('/cinema_profile').replace();
 				};
 				$scope.loadReservations = function(){

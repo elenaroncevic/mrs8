@@ -97,15 +97,29 @@
 
 
 <div ng-show="cinemaAdmin">
+
 	<table title="YOUR CINEMAS">
 		<th>Name</th>
 		<th>Location</th>
 		<th>Rating</th>
-		<tr ng-repeat="cinema in currentUser.cinemas">
-			<td>{{cinema.name}}</td>
-			<td>{{cinema.location}}</td>
-			<td>{{cinema.rating}}</td>
-			<td><button type="button" ng-click="showCinema(cinema)">View</button></td>
+		<tr ng-repeat="cinema in cinemaList">
+				<td>{{cinema.name}}</td>
+				<td>{{cinema.location}}</td>
+				<td>{{cinema.rating}}</td>
+				<td><button type="button" ng-click="showCinema(cinema)">View</button></td>
+			
+		</tr>
+	</table>
+	<br><br>
+	<table title="YOUR THEATERS">
+		<th>Name</th>
+		<th>Location</th>
+		<th>Rating</th>
+		<tr ng-repeat="cinema in theaterList">
+				<td>{{cinema.name}}</td>
+				<td>{{cinema.location}}</td>
+				<td>{{cinema.rating}}</td>
+				<td><button type="button" ng-click="showCinema(cinema)">View</button></td>
 		</tr>
 	</table>
 </div>

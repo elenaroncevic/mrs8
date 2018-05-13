@@ -28,6 +28,9 @@ angular.module('Application').controller(
 								$location.path('/home').replace();
 							}
 						}	
+						if($rootScope.cinemaAdmin){
+							
+						}
 						$location.path('/profile').replace();
 				}).error(function(){
 					alert("Error with input data! Check your email address and password!");
