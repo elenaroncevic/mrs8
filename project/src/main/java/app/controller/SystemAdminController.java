@@ -20,7 +20,7 @@ public class SystemAdminController {
 	
 	
 	
-	@RequestMapping(value="/register_new_admin/{admEmail}/{admPass1}/{admType}", method=RequestMethod.POST)
+	@RequestMapping(value="/system_admin/register_new_admin/{admEmail}/{admPass1}/{admType}", method=RequestMethod.POST)
 	public ResponseEntity<Void> checkData(@PathVariable("admEmail") String email, @PathVariable("admPass1") String pass1, @PathVariable("admType") String type,  WebRequest req){
 		if (registrationService.registrationAdmins(email, pass1, type, req)) {
 			return new ResponseEntity<>(HttpStatus.OK);
