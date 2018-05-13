@@ -17,15 +17,17 @@ public class FanZoneAdminService {
 
 	@Autowired
 	private PromoOfficialRepository promoOfficialRepository;
+	
+	@Autowired
 	private CinemaRepository cinemaRepository;
 	
 	//name, description, image, cinema
 	public boolean addNewPromoOfficial(String poName, String poDescription, String poImage, Double poPrice, Long cId, WebRequest req){
-		String appUrl = req.getContextPath();
-		
+		//String appUrl = req.getContextPath();
+	
 		//bice jedan bioskop
 		Cinema cinema = cinemaRepository.findOne(cId);
-	
+		
 		PromoOfficial newPromo = new PromoOfficial();
 		newPromo.setActivity("created");
 		newPromo.setBuyer(null);

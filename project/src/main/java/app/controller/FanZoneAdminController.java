@@ -18,7 +18,7 @@ public class FanZoneAdminController {
 	@Autowired
 	private FanZoneAdminService fanZoneAdminService;
 	
-	@RequestMapping(value="/add_official_promo/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}", method=RequestMethod.GET)
+	@RequestMapping(value="/add_promo_official/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}", method=RequestMethod.GET)
 	public ResponseEntity<Void> addNewPromoOfficial(@PathVariable("poName") String poName, @PathVariable("poDescription") String poDescription, @PathVariable("poImage") String poImage, @PathVariable("poPrice") Double poPrice, @PathVariable("cId") Long cId, WebRequest req){
 		if (fanZoneAdminService.addNewPromoOfficial(poName, poDescription, poImage, poPrice, cId, req)) {
 			return new ResponseEntity<>(HttpStatus.OK);
