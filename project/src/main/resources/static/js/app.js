@@ -24,6 +24,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/register_new_admin', {
 				templateUrl : 'html/register_new_admin.html',
 				controller : 'SystemAdminController'
+			}).when('/add_promo_official', {
+				templateUrl : 'html/add_promo_official.html',
+				controller : 'FanZoneAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
 			}).otherwise({
