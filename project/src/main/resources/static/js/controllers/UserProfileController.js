@@ -44,27 +44,29 @@ angular.module('Application').controller(
 						}
 					};
 				};
-				
+								
 				$scope.reservationView=function(){
 					$scope.reserve=true;
 					$scope.regular=false;
 					$scope.everythingElse=false;
-					$scope.cinemaSelected="";
 				}
-				$scope.cinemaChanged=function(){
-					$scope.everythingElse=true;
-					$scope.kombo=$scope.cinemasShow;
-				};
-				$scope.mozhe="as";
 				$scope.searchCinemas=function(){
-					for(var x in $scope.cinemasShow){
-						if($scope.cinemasShow[x].name.includes($scope.searchCinemaText)){
-							$scope.mozhe=$scope.cinemasShow[x].name;
+					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
+					for(var i =0;i<op.length;i++){
+						if(op[i].value.toLowerCase().includes($scope.searchCinemaText.toLowerCase())){
+							op[i].selected=true;
 							break;
 						}
 					};
 				};
-				
+				$scope.continueReservation=function(){
+					$scope.everythingElse=true;
+					var selCinema = document.getElementById("cinemaCombo").selectedIndex;
+					$scope.cinemaSelected = $scope.cinemasShow[selCinema];
+					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
+						$scope.moviesShow=data;
+					});
+				};
 				
 				$scope.home=function(){
 					$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
@@ -79,7 +81,6 @@ angular.module('Application').controller(
 					$scope.cinemasShow={};
 					$http.get('/cinemas').success(function(data, status){
 							$scope.cinemasShow=data;
-							$scope.kombo=data;
 					});
 					$scope.reserve=false;
 					$scope.regular=true;
