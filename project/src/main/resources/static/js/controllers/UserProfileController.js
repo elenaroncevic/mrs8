@@ -7,81 +7,82 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+				$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
 					alert(data.name);
 					$location.path('/cinema_profile').replace();
-
 				};
-				$scope.homeTab=true;
-				$scope.theatersTab = false;
-				$scope.cinemasTab = false;
-				$scope.friendsTab = false;
-				$scope.reservationsTab = false;
-				$scope.settingsTab = false;
-				$scope.fanzoneTab = false;
+				$scope.loadReservations = function(){
+					$scope.reservationsShow={};
+					var rez = $rootScope.currentUser.reservations;
+					for (var x in rez){
+						var resShow = {};
+						if(rez[x].state=="Active"){
+							$http.get('http://localhost:8181/reguser/projection/'+rez[x].tickets[0].id).success(function(data,status){
+								resShow["price"]=data.price;
+								resShow["date"]=data.date;
+								resShow["num"]=data.tickets.length;
+								resShow["seats"] = "seats";
+							});
+							$http.get('http://localhost:8181/reguser/movie/'+rez[x].tickets[0].id).success(function(data,status){
+								resShow["title"]=data.title;
+							});
+							$scope.reservationsShow[rez[x].id]=resShow;
+						}
+					};
+				};
+				
+				$scope.reservationView=function(){
+					$scope.reserve=true;
+					$scope.regular=false;
+					$scope.everythingElse=false;
+					$scope.cinemaSelected="";
+				}
+				$scope.cinemaChanged=function(){
+					$scope.everythingElse=true;
+					$scope.kombo=$scope.cinemasShow;
+				};
+				$scope.mozhe="as";
+				$scope.searchCinemas=function(){
+					for(var x in $scope.cinemasShow){
+						if($scope.cinemasShow[x].name.includes($scope.searchCinemaText)){
+							$scope.mozhe=$scope.cinemasShow[x].name;
+							break;
+						}
+					};
+				};
+				
+				
 				$scope.home=function(){
-					$scope.homeTab=true;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				};
 				$scope.theaters=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = true;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":false, "theaters":true, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
+					$scope.reserve=false;
+					$scope.regular=true;
 				};
 				$scope.cinemas=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = true;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":false, "theaters":false, "cinemas":true, "friends":false, "reservations":false, "settings":false, "fanzone":false};
+					$scope.cinemasShow={};
+					$http.get('/cinemas').success(function(data, status){
+							$scope.cinemasShow=data;
+							$scope.kombo=data;
+					});
+					$scope.reserve=false;
+					$scope.regular=true;
 				};
 				$scope.friends=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = true;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":true, "reservations":false, "settings":false, "fanzone":false};
 				};
 				$scope.reservations=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = true;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":false, "reservations":true, "settings":false, "fanzone":false};
 				};
 				$scope.settings=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = true;
-					$scope.fanzoneTab = false;
+					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":true, "fanzone":false};
 				};
 				$scope.fanzone=function(){
-					$scope.homeTab=false;
-					$scope.theatersTab = false;
-					$scope.cinemasTab = false;
-					$scope.friendsTab = false;
-					$scope.reservationsTab = false;
-					$scope.settingsTab = false;
-					$scope.fanzoneTab = true;
+					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":true};
 				};
 			}
 		]

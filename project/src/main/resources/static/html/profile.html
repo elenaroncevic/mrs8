@@ -10,7 +10,7 @@
 		<button type="button" ng-click="fanzone()">Fanzone</button>
 	</div>
 	
-	<div class="tabcontent" ng-show="homeTab">
+	<div class="tabcontent" ng-show="tabs.home">
 					<h3><b>{{currentUser.firstName}} {{currentUser.lastName}}</b></h3>
 	
 					</br></br></br>
@@ -18,23 +18,77 @@
 					<p><b>City:  </b>{{currentUser.city}}</p>
 					<p><b>Phone:  </b>{{currentUser.phone}}</p>
 	</div>
-	<div class="tabcontent" ng-show="theatersTab">
-		<p>samo probavam></p>
+	<div class="tabcontent" ng-show="tabs.theaters">
+		<p>{{cinemasShow}}></p>
 	</div>
-	<div class = "tabcontent" ng-show="cinemasTab">
-		<p>prikaz</p>
-	</div>
-	<div class = "tabcontent" ng-show="friendsTab">
-		<p>novo</p>
-	</div>
-	<div class = "tabcontent" ng-show="reservationsTab">
+	
+	
+	<div class = "tabcontent" ng-show="tabs.cinemas">
+	
+		<div ng-show="regular">
+			<button type="button" ng-click="reservationView()">Make a reservation</button>
+			<table ng-init="loadCinemas()" class="table table-bordered">
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Location</th>
+				<th>Rating</th>
+				<th>Profile</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="cinema in cinemasShow">
+					<td>{{cinema.name}}</td>
+					<td>{{cinema.description}}</td>
+					<td>{{cinema.location}}</td>
+					<td>{{cinema.rating}}</td>
+					<td><button type="button" ng-click="showCinema(cinema)">View Profile</button></td>
+				</tr>
+			</tbody>		
+			</table>
+		</div>
+		
+		<div ng-show="reserve">
+			Search cinemas:
+			<input type="textfield" ng-model="searchCinemaText">
+			<button type="button" ng-click="searchCinemas()">Search</button>
+			</br>
+			<select ng-model="kombo" ng-options="cinema.name for cinema in kombo" ng-change="cinemaChanged()">
+			</select>
+			<div ng-show="everythingElse">
+				
+			</div>
+		</div>
+		
 		
 	</div>
-	<div class = "tabcontent" ng-show="settingsTab">
-		<p>novo</p>
+	<div class = "tabcontent" ng-show="tabs.friends">
 	</div>
-	<div class = tabcontent" ng-show="fanzoneTab">
-	
+	<div class = "tabcontent" ng-show="tabs.reservations">
+		<table ng-init="loadReservations()" class="table table-bordered">
+			<thead>
+				<th>Movie</th>
+				<th>Date</th>
+				<th>Number of seats</th>
+				<th>Seats</th>
+				<th>Price</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="reservation in reservationsShow">
+					<td>{{reservation.title}}</td>
+					<td>{{reservation.date}}</td>
+					<td>{{reservation.num}}</td>
+					<td>{{reservatino.seats}}</td>
+					<td>{{reservation.price*reservation.num}}</td>
+				</tr>
+			
+			</tbody>
+		
+		</table>
+	</div>
+	<div class = "tabcontent" ng-show="tabs.settings">
+		<p>{{mozhe}}</p>
+	</div>
+	<div class = tabcontent" ng-show="tabs.fanzone">
 	</div>
 	
 	

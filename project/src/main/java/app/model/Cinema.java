@@ -19,6 +19,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "Cinema")
 public class Cinema {
+	
+	public enum BuildingType{
+		Theater,
+		Cinema
+	}
+	
+	@Column
+	private BuildingType type;
+	
 	@Column(name="cname")
 	private String name;
 	
@@ -97,11 +106,11 @@ public class Cinema {
 	public Cinema() {
 		super();
 	}
-	
-	
-	public Cinema(String name, String location, String description, Double rating, Long id, Set<Auditorium> auditoriums,
-			CinemaAdmin admin, Set<PromoOfficial> promos, Set<CinemaRate> rates) {
+
+	public Cinema(BuildingType type, String name, String location, String description, Double rating, Long id,
+			Set<Auditorium> auditoriums, CinemaAdmin admin, Set<PromoOfficial> promos, Set<CinemaRate> rates) {
 		super();
+		this.type = type;
 		this.name = name;
 		this.location = location;
 		this.description = description;
@@ -147,4 +156,34 @@ public class Cinema {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+
+
+
+	public BuildingType getType() {
+		return type;
+	}
+
+
+
+
+	public void setType(BuildingType type) {
+		this.type = type;
+	}
+
+
+
+
+	public Set<CinemaRate> getRates() {
+		return rates;
+	}
+
+
+
+
+	public void setRates(Set<CinemaRate> rates) {
+		this.rates = rates;
+	}
+	
+	
 }
