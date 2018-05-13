@@ -36,8 +36,9 @@ public class PromoOfficial{
 	private String activity;
 	
 	@Column(name="poprice")
-	private double price;
+	private Double price;
 
+	private String image;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
@@ -46,6 +47,25 @@ public class PromoOfficial{
 	public PromoOfficial() {
 		super();
 	}
+	
+	
+	
+
+	public PromoOfficial(Long id, Cinema cinema, String name, String description, String activity, Double price,
+			String image, RegisteredUser buyer) {
+		super();
+		this.id = id;
+		this.cinema = cinema;
+		this.name = name;
+		this.description = description;
+		this.activity = activity;
+		this.price = price;
+		this.image = image;
+		this.buyer = buyer;
+	}
+
+
+
 
 	public Long getId() {
 		return id;
@@ -126,17 +146,21 @@ public class PromoOfficial{
 		this.price = price;
 	}
 
-	public PromoOfficial(Long id, Cinema cinema, String name, String description, String activity,
-			double price, RegisteredUser buyer) {
-		super();
-		this.id = id;
-		this.cinema = cinema;
-		this.name = name;
-		this.description = description;
-		this.activity = activity;
-		this.price = price;
-		this.buyer = buyer;
+
+
+
+	public String getImage() {
+		return image;
 	}
+
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	
 
 	
 	

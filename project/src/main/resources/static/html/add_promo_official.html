@@ -1,0 +1,13 @@
+<div ng-init="list_cinemas()">
+	<div id="adding_promo_official" style="display:none">
+	  	<form>
+		    <input ng-model="poName" type="text" placeholder="product name" maxlength="30">
+		    <textarea ng-model="poDescription" placeholder="product description" maxlength="1000"></textarea>
+		    <input ng-model="poImage" type="text" placeholder="image url">
+		    <input ng-model="poPrice" type="text" placeholder="product price">
+		    <select id="cinemas"></select>
+		    <input type="button" name="add_official_promo_btn" value="add product" ng-click=add_promo_official()>
+	    	<p> {{cinemaList}}</p>
+	    </form>
+	</div>
+  </div>
