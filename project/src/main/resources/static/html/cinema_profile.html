@@ -1,4 +1,21 @@
 <div >
-	{{currentCinema}}
+	{{currentCinema.name}}<br>
+	{{currentCinema.location}} <br>
+	{{currentCinema.description}} <br>
+	
+	<table init=getProjections title="PROJECTIONS">
+		<th>Movie</th>
+		<th>date</th>
+		<th>auditorium</th>
+		<th>price</th>
+		<tr ng-repeat="projection in projections">
+				<td>{{ projection.movie.title}}</td>
+				<td>{{projection.date}}</td>
+				<td>{{projection.auditorium.id}}</td>
+				<td>{{projection.price}}</td>
+				<td>random</td>
+		</tr>
+	</table>
+	
+	{{projections}}
 </div>
-van diva
