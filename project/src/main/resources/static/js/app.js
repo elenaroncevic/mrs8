@@ -30,6 +30,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/fan_zone_admin/add_promo_official', {
 				templateUrl : 'html/add_promo_official.html',
 				controller : 'FanZoneAdminController'
+			}).when('/fan_zone_admin', {
+				templateUrl : 'html/fan_zone_admin.html',
+				controller : 'FanZoneAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
 			}).otherwise({
