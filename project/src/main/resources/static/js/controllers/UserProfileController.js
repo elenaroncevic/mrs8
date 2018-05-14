@@ -80,13 +80,19 @@ angular.module('Application').controller(
 					var num=0;
 					for(var x in $scope.chosenMovie.projections){
 						if($scope.chosenMovie.projections[x].date==$scope.chosenDate){
-							$scope.timeShow[num]=$scope.chosenMovie.projections[x].time;
 							$http.get('http://localhost:8181/reguser/auditorium/'+$scope.chosenMovie.projections[x].id).success(function(data,status){
 								$scope.audShow[num]=data;
+								$scope.timeShow[num]=$scope.chosenMovie.projections[x].time;
+								num=num+1;
 							});
-							num=num+1;
 						}
 					};
+				};
+				$scope.audChanged=function(ac){
+					$scope.tc=$scope.timeShow[document.getElementById("audCombo").selectedIndex];
+				};
+				$scope.timeChanged=function(tc){
+					$scope.ac=$scope.audShow[document.getElementById("timeCombo").selectedIndex];
 				};
 				
 				$scope.home=function(){

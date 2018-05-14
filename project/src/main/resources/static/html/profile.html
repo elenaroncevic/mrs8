@@ -63,13 +63,15 @@
 			</div>
 			
 			<div ng-show="timeSeats">
-				<select id="timeCombo">
+				<select id="timeCombo" ng-model="tc" ng-change="timeChanged(tc)">
 					<option ng-repeat="time in timeShow" value="{{time}}">{{time}}</option>
 				</select>
 				
-				<select id="audCombo">
+				<select id="audCombo" ng-model="ac" ng-change="audChanged(ac)">
 					<option ng-repeat="aud in audShow" value="{{aud}}">{{aud}}</option>
 				</select>
+				<p>{{audShow}}</p>
+				<p>{{timeShow}}</p>
 			</div>
 		</div>
 		
