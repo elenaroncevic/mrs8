@@ -1,4 +1,3 @@
-
 <div ng-show="ru">
 	<div class="tab">
 		<button type="button" ng-click="home()">Home</button>
@@ -20,14 +19,12 @@
 	</div>
 	<div class="tabcontent" ng-show="tabs.theaters">
 		<p>{{cinemasShow}}></p>
-	</div>
-	
-	
+	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
 	
 		<div ng-show="regular">
 			<button type="button" ng-click="reservationView()">Make a reservation</button>
-			<table ng-init="loadCinemas()" class="table table-bordered">
+			<table class="table table-bordered">
 			<thead>
 				<th>Name</th>
 				<th>Description</th>
@@ -48,20 +45,38 @@
 		</div>
 		
 		<div ng-show="reserve">
-			Search cinemas:
+			Search cinemas(name or part of it):
 			<input type="textfield" ng-model="searchCinemaText">
 			<button type="button" ng-click="searchCinemas()">Search</button>
 			</br>
-			<select ng-model="kombo" ng-options="cinema.name for cinema in kombo" ng-change="cinemaChanged()">
+			<select id="cinemaCombo"> 
+				<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
 			</select>
-			<div ng-show="everythingElse">
+			<button type="button" ng-click="projectionAndDate()">Select this cinema</button>
+			
+			<div ng-show="projectionDate">
+				<select id="movieCombo"> 
+					<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
+				</select>
+				<div id="datepicker"></div>
+				<button type="button" ng-click="timeAndSeats()">See available time and seats</button>
+			</div>
+			
+			<div ng-show="timeSeats">
+				<select id="timeCombo">
+					<option ng-repeat="time in timeShow" value="{{time}}">{{time}}</option>
+				</select>
 				
+				<select id="audCombo">
+					<option ng-repeat="aud in audShow" value="{{aud}}">{{aud}}</option>
+				</select>
 			</div>
 		</div>
 		
-		
 	</div>
 	<div class = "tabcontent" ng-show="tabs.friends">
+		<p> hhh</p>
+		<p>{{hm}}</p>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.reservations">
 		<table ng-init="loadReservations()" class="table table-bordered">

@@ -13,7 +13,7 @@ angular.module('Application').controller(
 							if($scope.cinemaList.length==0){
 							
 								alert("You can't add official promo because there is no cinema");
-								//redirekt na pocetnu str fan zone admina
+								//redirekt na pocetnu str fan zone admina dd
 							}
 							else{
 								document.getElementById("adding_promo_official").style.display="block";
@@ -44,7 +44,7 @@ angular.module('Application').controller(
 						
 						var e = document.getElementById("cinemas");
 						var cId = e.options[e.selectedIndex].value;
-						$http.get('http://localhost:8181/add_promo_official/'+ $scope.poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId).success(function(){
+						$http.get('http://localhost:8181/fan_zone_admin/add_promo_official/'+ $scope.poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId).success(function(){
 							//ovde ce se zameniti da ode na stranicu koja javlja uspesno dodavanje
 							$location.path('/register_new_user').replace();
 						}).error(function(){
