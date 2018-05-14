@@ -21,86 +21,14 @@
 		<p>{{cinemasShow}}></p>
 	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
-	
-		<div ng-show="regular">
-			<button type="button" ng-click="reservationView()">Make a reservation</button>
-			<table class="table table-bordered">
-			<thead>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Location</th>
-				<th>Rating</th>
-				<th>Profile</th>
-			</thead>
-			<tbody>
-				<tr ng-repeat="cinema in cinemasShow">
-					<td>{{cinema.name}}</td>
-					<td>{{cinema.description}}</td>
-					<td>{{cinema.location}}</td>
-					<td>{{cinema.rating}}</td>
-					<td><button type="button" ng-click="showCinema(cinema)">View Profile</button></td>
-				</tr>
-			</tbody>		
-			</table>
-		</div>
-		
-		<div ng-show="reserve">
-			Search cinemas(name or part of it):
-			<input type="textfield" ng-model="searchCinemaText">
-			<button type="button" ng-click="searchCinemas()">Search</button>
-			</br>
-			<select id="cinemaCombo"> 
-				<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
-			</select>
-			<button type="button" ng-click="projectionAndDate()">Select this cinema</button>
-			
-			<div ng-show="projectionDate">
-				<select id="movieCombo"> 
-					<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
-				</select>
-				<div id="datepicker"></div>
-				<button type="button" ng-click="timeAndSeats()">See available time and seats</button>
-			</div>
-			
-			<div ng-show="timeSeats">
-				<select id="timeCombo" ng-model="tc" ng-change="timeChanged(tc)">
-					<option ng-repeat="time in timeShow" value="{{time}}">{{time}}</option>
-				</select>
-				
-				<select id="audCombo" ng-model="ac" ng-change="audChanged(ac)">
-					<option ng-repeat="aud in audShow" value="{{aud}}">{{aud}}</option>
-				</select>
-				<p>{{audShow}}</p>
-				<p>{{timeShow}}</p>
-			</div>
-		</div>
-		
+		<div data-ng-include src="'/html/reserveTicket.html'"></div>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.friends">
 		<p> hhh</p>
 		<p>{{hm}}</p>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.reservations">
-		<table ng-init="loadReservations()" class="table table-bordered">
-			<thead>
-				<th>Movie</th>
-				<th>Date</th>
-				<th>Number of seats</th>
-				<th>Seats</th>
-				<th>Price</th>
-			</thead>
-			<tbody>
-				<tr ng-repeat="reservation in reservationsShow">
-					<td>{{reservation.title}}</td>
-					<td>{{reservation.date}}</td>
-					<td>{{reservation.num}}</td>
-					<td>{{reservatino.seats}}</td>
-					<td>{{reservation.price*reservation.num}}</td>
-				</tr>
-			
-			</tbody>
-		
-		</table>
+		<div data-ng-include src="'/html/reservationTab.html'"></div>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.settings">
 		<p>{{mozhe}}</p>

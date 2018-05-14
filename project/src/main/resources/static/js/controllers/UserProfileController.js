@@ -7,9 +7,6 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
-				$( function() {
-    				$( "#datepicker" ).datepicker();
-				} );
 			
 				$scope.cinemaList = [];
 				$scope.theaterList = [];
@@ -28,72 +25,10 @@ angular.module('Application').controller(
 					$rootScope.currentCinema=data;
 					$location.path('/cinema_profile').replace();
 				};
-				$scope.loadReservations = function(){
-					$scope.reservationsShow={};
-					var rez = $rootScope.currentUser.reservations;
-					for (var x in rez){
-						var resShow = {};
-						if(rez[x].state=="Active"){
-							$http.get('http://localhost:8181/reguser/projection/'+rez[x].tickets[0].id).success(function(data,status){
-								resShow["price"]=data.price;
-								resShow["date"]=data.date;
-								resShow["num"]=data.tickets.length;
-								resShow["seats"] = "seats";
-							});
-							$http.get('http://localhost:8181/reguser/movie/'+rez[x].tickets[0].id).success(function(data,status){
-								resShow["title"]=data.title;
-							});
-							$scope.reservationsShow[rez[x].id]=resShow;
-						}
-					};
-				};
-								
 				$scope.reservationView=function(){
 					$scope.reserve=true;
 					$scope.regular=false;
-					$scope.projectionDate=false;
-					$scope.timeSeats=false;
 				}
-				$scope.searchCinemas=function(){
-					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
-					for(var i =0;i<op.length;i++){
-						if(op[i].value.toLowerCase().includes($scope.searchCinemaText.toLowerCase())){
-							op[i].selected=true;
-							break;
-						}
-					};
-				};
-				$scope.projectionAndDate=function(){
-					$scope.projectionDate=true;
-					var selCinema = document.getElementById("cinemaCombo").selectedIndex;
-					$scope.cinemaSelected = $scope.cinemasShow[selCinema];
-					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
-						$scope.moviesShow=data;
-					});
-				};
-				$scope.timeAndSeats=function(){
-					$scope.timeSeats=true;
-					$scope.chosenDate=$("#datepicker").datepicker().val();
-					$scope.chosenMovie = $scope.moviesShow[document.getElementById("movieCombo").selectedIndex];
-					$scope.timeShow={};
-					$scope.audShow={};
-					var num=0;
-					for(var x in $scope.chosenMovie.projections){
-						if($scope.chosenMovie.projections[x].date==$scope.chosenDate){
-							$http.get('http://localhost:8181/reguser/auditorium/'+$scope.chosenMovie.projections[x].id).success(function(data,status){
-								$scope.audShow[num]=data;
-								$scope.timeShow[num]=$scope.chosenMovie.projections[x].time;
-								num=num+1;
-							});
-						}
-					};
-				};
-				$scope.audChanged=function(ac){
-					$scope.tc=$scope.timeShow[document.getElementById("audCombo").selectedIndex];
-				};
-				$scope.timeChanged=function(tc){
-					$scope.ac=$scope.audShow[document.getElementById("timeCombo").selectedIndex];
-				};
 				
 				$scope.home=function(){
 					$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
@@ -105,15 +40,14 @@ angular.module('Application').controller(
 				};
 				$scope.cinemas=function(){
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":true, "friends":false, "reservations":false, "settings":false, "fanzone":false};
-					$scope.cinemasShow={};
+					$rootScope.cinemasShow={};
 					$http.get('/cinemas').success(function(data, status){
-							$scope.cinemasShow=data;
+							$rootScope.cinemasShow=data;
 					});
 					$scope.reserve=false;
 					$scope.regular=true;
 				};
 				$scope.friends=function(){
-					alert(dateval+' heh');
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":true, "reservations":false, "settings":false, "fanzone":false};
 				};
 				$scope.reservations=function(){
