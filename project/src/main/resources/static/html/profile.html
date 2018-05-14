@@ -21,6 +21,27 @@
 		<p>{{cinemasShow}}></p>
 	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
+		<div ng-show="regular">
+			<button type="button" ng-click="reservationView()">Make a reservation</button>
+			<table class="table table-bordered">
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Location</th>
+				<th>Rating</th>
+				<th>Profile</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="cinema in cinemasShow">
+					<td>{{cinema.name}}</td>
+					<td>{{cinema.description}}</td>
+					<td>{{cinema.location}}</td>
+					<td>{{cinema.rating}}</td>
+					<td><button type="button" ng-click="showCinema(cinema)">View Profile</button></td>
+				</tr>
+			</tbody>		
+			</table>
+		</div>
 		<div data-ng-include src="'/html/reserveTicket.html'"></div>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.friends">
