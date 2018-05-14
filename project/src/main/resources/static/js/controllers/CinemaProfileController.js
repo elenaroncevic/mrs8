@@ -18,6 +18,10 @@ angular.module('Application').controller(
 						//alert(projection.movie);
 					}
 				}
+				
+				$scope.editBasicInformations=function(){
+					$location.path("/edit_cinema_basic").replace();
+				};
 			}
 		]
 	);

@@ -15,6 +15,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/profile', {
 				templateUrl : 'html/profile.html',
 				controller : 'UserProfileController'
+			}).when('/edit_cinema_basic', {
+				templateUrl : 'html/edit_cinema_basic.html',
+				controller : 'EditCinemaController'
 			}).when('/list_cinemas', {
 				templateUrl : 'html/list.html',
 				controller : 'CinemaListController'
