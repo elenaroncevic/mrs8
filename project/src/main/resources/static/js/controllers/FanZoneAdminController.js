@@ -29,6 +29,15 @@ angular.module('Application').controller(
 						alert("ima neki error");
 					});//
 				};
+				
+				$scope.btn_change_po = function(){
+					//kako da upamtim id za izabrani red????
+					$location.path('/fan_zone_admin/change_po').replace();
+				};
+				
+				$scope.btn_add_promo_official = function(){
+					$location.path('/fan_zone_admin/add_po').replace();
+				};
 			
 				$scope.add_promo_official = function() {
 					var poPrice = parseFloat($scope.poPrice);
@@ -41,14 +50,16 @@ angular.module('Application').controller(
 						if (poImage==null){
 							poImage="https//blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png";
 						}
-						
+						poImage = poImage.replace(/\//g, "+");
+						poImage = poImage.replace(/\?/g, "*");
 						var e = document.getElementById("cinemas");
 						var cId = e.options[e.selectedIndex].value;
 						$http.get('http://localhost:8181/fan_zone_admin/add_promo_official/'+ $scope.poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId).success(function(){
-							//ovde ce se zameniti da ode na stranicu koja javlja uspesno dodavanje
-							$location.path('/register_new_user').replace();
+							alert("you've successfuly added a product");
+							$location.path('/fan_zone_admin').replace();
 						}).error(function(){
 							alert("Couldn't create this promo official");
+							
 						});
 					}else{
 						alert("Wrong input in fields!");
@@ -57,17 +68,23 @@ angular.module('Application').controller(
 				};
 				
 				
-				$scope.list_promos_official() = function(){
-					$http.get('http://localhost:8181/fan_zone_admin/list_promos_official/').success(function(data, status){
-						$scope.listPromosOfficial = data;
-						if ($scope.listPromosOfficial.length==0){
-							alert("No official promo added yet");
-							//mozda neki redirekt
+				$scope.btn_list_promos_official = function(){
+					$location.path('/fan_zone_admin/list_po').replace();
+				};
+				
+				$scope.list_promos_official = function(){
+					$http.get('http://localhost:8181/fan_zone_admin/list_promos_official').success(function(data, status){
+						$scope.listOfPromosOfficial=data;
+						if ($scope.listOfPromosOfficial.length!=0){
+							document.getElementById("list_po_fz").style.display="block";
+						}else{
+							alert("There is no official product in database");
+							$location.path('/fan_zone_admin').replace();
 						}
 					}).error(function(){
-						alert("Unsuccessful list promos official");
+						alert("Couldn't list official promos");
 					});
-				}
+				};
 
 			}
 		]

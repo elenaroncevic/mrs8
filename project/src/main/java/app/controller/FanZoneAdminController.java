@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import app.dto.PromoOfficialDTO;
 import app.model.PromoOfficial;
 import app.service.FanZoneAdminService;
 
@@ -30,9 +31,9 @@ public class FanZoneAdminController {
 	}
 	
 	@RequestMapping(value = "/fan_zone_admin/list_promos_official", method = RequestMethod.GET)
-	public ResponseEntity<List<PromoOfficial>> listPromosOfficial() {
-		List<PromoOfficial> listOfPromosOfficial = fanZoneAdminService.listPromosOfficial();
-		return new ResponseEntity<>(listOfPromosOfficial,HttpStatus.OK);	
+	public ResponseEntity<List<PromoOfficialDTO>> listPromosOfficial() {
+		List<PromoOfficialDTO> listOfPromosOfficialDTO = fanZoneAdminService.listPromosOfficial();
+		return new ResponseEntity<>(listOfPromosOfficialDTO,HttpStatus.OK);	
 	}
 	
 }

@@ -27,11 +27,14 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/system_admin/register_new_admin', {
 				templateUrl : 'html/register_new_admin.html',
 				controller : 'SystemAdminController'
-			}).when('/fan_zone_admin/add_promo_official', {
+			}).when('/fan_zone_admin/add_po', {
 				templateUrl : 'html/add_promo_official.html',
 				controller : 'FanZoneAdminController'
 			}).when('/fan_zone_admin', {
 				templateUrl : 'html/fan_zone_admin.html',
+				controller : 'FanZoneAdminController'
+			}).when('/fan_zone_admin/list_po', {
+				templateUrl : 'html/list_promos_official_fz.html',
 				controller : 'FanZoneAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
