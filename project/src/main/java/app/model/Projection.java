@@ -30,8 +30,11 @@ public class Projection {
 	@JsonBackReference
 	private Movie movie;
 	
+	@Column(name="pdate")
+	private String date;
+	
 	@Column(name="ptime")
-	private Date date;
+	private String time;
 	
 	private Double price;
 	
@@ -46,27 +49,18 @@ public class Projection {
 	public Projection(){super();}
 	
 	
-	
-	
 
-
-
-
-	public Projection(Long id, Movie movie, Date date, Double price, Auditorium auditorium,
+	public Projection(Long id, Movie movie, String date, String time, Double price, Auditorium auditorium,
 			Set<Ticket> tickets) {
 		super();
 		this.id = id;
 		this.movie = movie;
 		this.date = date;
+		this.time = time;
 		this.price = price;
 		this.auditorium = auditorium;
 		this.tickets = tickets;
 	}
-
-
-
-
-
 
 
 
@@ -86,12 +80,37 @@ public class Projection {
 	public void setMovie(Movie movie) {
 		this.movie = movie;
 	}
-	public Date getDate() {
+
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+
+
+
+	public void setDate(String date) {
 		this.date = date;
 	}
+
+
+
+	public String getTime() {
+		return time;
+	}
+
+
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+
+
+	public void setTickets(Set<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+
+
+
 	public Double getPrice() {
 		return price;
 	}

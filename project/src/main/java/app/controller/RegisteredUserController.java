@@ -38,5 +38,10 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(projs, HttpStatus.OK);
 	}
 	
+	@RequestMapping("/auditorium/{id}")
+	public ResponseEntity<String> getAudFromProjection(@PathVariable Long id){
+		String projs = regUserService.getAudFromProjection(id);
+		return new ResponseEntity<>(projs, HttpStatus.OK);
+	}
 
 }

@@ -57,6 +57,10 @@ public class RegisteredUserService {
 		}
 		return retValue;
 	}
+	
+	public String getAudFromProjection(Long id){		
+		return "Room:"+projRep.findOne(id).getAuditorium().getId();
+	}
 
 
 }

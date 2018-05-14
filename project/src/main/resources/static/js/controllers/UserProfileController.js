@@ -7,6 +7,10 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+				$( function() {
+    				$( "#datepicker" ).datepicker();
+				} );
+			
 				$scope.cinemaList = [];
 				$scope.theaterList = [];
 				var all = $rootScope.currentUser.cinemas;
@@ -18,8 +22,7 @@ angular.module('Application').controller(
 						$scope.theaterList.push(all[i]);
 						
 					}
-				}
-				
+				};
 				$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
@@ -48,7 +51,8 @@ angular.module('Application').controller(
 				$scope.reservationView=function(){
 					$scope.reserve=true;
 					$scope.regular=false;
-					$scope.everythingElse=false;
+					$scope.projectionDate=false;
+					$scope.timeSeats=false;
 				}
 				$scope.searchCinemas=function(){
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
@@ -59,13 +63,30 @@ angular.module('Application').controller(
 						}
 					};
 				};
-				$scope.continueReservation=function(){
-					$scope.everythingElse=true;
+				$scope.projectionAndDate=function(){
+					$scope.projectionDate=true;
 					var selCinema = document.getElementById("cinemaCombo").selectedIndex;
 					$scope.cinemaSelected = $scope.cinemasShow[selCinema];
 					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						$scope.moviesShow=data;
 					});
+				};
+				$scope.timeAndSeats=function(){
+					$scope.timeSeats=true;
+					$scope.chosenDate=$("#datepicker").datepicker().val();
+					$scope.chosenMovie = $scope.moviesShow[document.getElementById("movieCombo").selectedIndex];
+					$scope.timeShow={};
+					$scope.audShow={};
+					var num=0;
+					for(var x in $scope.chosenMovie.projections){
+						if($scope.chosenMovie.projections[x].date==$scope.chosenDate){
+							$scope.timeShow[num]=$scope.chosenMovie.projections[x].time;
+							$http.get('http://localhost:8181/reguser/auditorium/'+$scope.chosenMovie.projections[x].id).success(function(data,status){
+								$scope.audShow[num]=data;
+							});
+							num=num+1;
+						}
+					};
 				};
 				
 				$scope.home=function(){
@@ -86,6 +107,7 @@ angular.module('Application').controller(
 					$scope.regular=true;
 				};
 				$scope.friends=function(){
+					alert(dateval+' heh');
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":true, "reservations":false, "settings":false, "fanzone":false};
 				};
 				$scope.reservations=function(){
