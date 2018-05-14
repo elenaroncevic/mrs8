@@ -19,7 +19,7 @@ angular.module('Application').controller(
 					else{
 						alert("pogresan password!");
 					}
-					$location.path("cinema_profile.html").replace();
+					$location.path("/cinema_profile").replace();
 				};
 			}
 		]

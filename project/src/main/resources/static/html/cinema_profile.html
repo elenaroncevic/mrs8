@@ -1,23 +1,25 @@
 <div >
-	{{currentCinema.name}}<br>
-	{{currentCinema.location}} <br>
-	{{currentCinema.description}} <br>
+	{{currentCinema.name}}
+	<br>
+	{{currentCinema.location}} 
+	<br>
+	{{currentCinema.description}} 
+	<br>
 	
 	<button ng-click=editBasicInformations()>Edit basic informations</button>
-	
-	<table init=getProjections title="PROJECTIONS">
-		<th>Movie</th>
-		<th>date</th>
-		<th>auditorium</th>
-		<th>price</th>
+	<br>
+	<br>
+	<table rules="cols" cellpadding="10" cellspacing="10" ng-init=getProjections() title="PROJECTIONS">
+		<th >Movie</th>
+		<th >date</th>
+		<th >Auditorium</th>
+		<th >price</th>
 		<tr ng-repeat="projection in projections">
-				<td>{{projection.movie.title}}</td>
-				<td>{{projection.date}}</td>
-				<td>{{projection.auditorium.id}}</td>
-				<td>{{projection.price}}</td>
-				<td>random</td>
+				<td >{{projection.movie.title}}</td>
+				<td >{{projection.time}}</td>
+				<td> {{projection.auditorium}}</td>
+				<td >{{projection.price}}</td>				
 		</tr>
 	</table>
-	
-	
+	<br>
 </div>
