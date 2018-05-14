@@ -24,11 +24,14 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/cinema_profile', {
 				templateUrl : 'html/cinema_profile.html',
 				controller : 'CinemaProfileController'
-			}).when('/register_new_admin', {
+			}).when('/system_admin/register_new_admin', {
 				templateUrl : 'html/register_new_admin.html',
 				controller : 'SystemAdminController'
-			}).when('/add_promo_official', {
+			}).when('/fan_zone_admin/add_promo_official', {
 				templateUrl : 'html/add_promo_official.html',
+				controller : 'FanZoneAdminController'
+			}).when('/fan_zone_admin', {
+				templateUrl : 'html/fan_zone_admin.html',
 				controller : 'FanZoneAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
