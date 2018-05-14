@@ -40,6 +40,12 @@ public class FanZoneAdminService {
 		
 		return true;
 	}
+
+	public List<PromoOfficial> listPromosOfficial() {
+		List<PromoOfficial> listOfPromosOfficial = promoOfficialRepository.findAll();
+		return listOfPromosOfficial;
+		
+	}
 	
 	
 	

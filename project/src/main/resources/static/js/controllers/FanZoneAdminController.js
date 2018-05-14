@@ -55,6 +55,19 @@ angular.module('Application').controller(
 					}
 
 				};
+				
+				
+				$scope.list_promos_official() = function(){
+					$http.get('http://localhost:8181/fan_zone_admin/list_promos_official/').success(function(data, status){
+						$scope.listPromosOfficial = data;
+						if ($scope.listPromosOfficial.length==0){
+							alert("No official promo added yet");
+							//mozda neki redirekt
+						}
+					}).error(function(){
+						alert("Unsuccessful list promos official");
+					});
+				}
 
 			}
 		]
