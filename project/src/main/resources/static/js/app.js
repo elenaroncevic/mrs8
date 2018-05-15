@@ -36,6 +36,12 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/fan_zone_admin/list_po', {
 				templateUrl : 'html/list_promos_official_fz.html',
 				controller : 'FanZoneAdminController'
+			}).when('/system_admin', {
+				templateUrl: 'html/system_admin.html',
+				controller : 'SystemAdminController'
+			}).when('/cinema_admin', {
+				templateUrl : 'html/cinema_admin.html',
+				controller : 'CinemaAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'
 			}).otherwise({

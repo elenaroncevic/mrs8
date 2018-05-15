@@ -10,35 +10,6 @@ angular.module('Application').controller(
 				$( function() {
     				$( "#datepicker" ).datepicker();
 				} );
-				
-				
-				if($rootScope.cinemaAdmin){
-					$scope.cinemaList = [];
-					$scope.theaterList = [];
-					var all = $rootScope.currentUser.cinemas;
-					for(var i in all){
-						if(all[i].type=="Cinema"){
-							$scope.cinemaList.push(all[i]);
-						}
-						else{
-							$scope.theaterList.push(all[i]);
-							
-						}
-					};
-				}
-			
-				$scope.cinemaList = [];
-				$scope.theaterList = [];
-				var all = $rootScope.currentUser.cinemas;
-				for(var i in all){
-					if(all[i].type=="Cinema"){
-						$scope.cinemaList.push(all[i]);
-					}
-					else{
-						$scope.theaterList.push(all[i]);
-						
-					}
-				};
 				$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
