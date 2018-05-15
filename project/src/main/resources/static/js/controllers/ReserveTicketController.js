@@ -7,8 +7,12 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
+  				$( function() {
+    				$( "#datepicker" ).datepicker();
+				} );
 				$scope.projectionDate=false;
-				$scope.timeSeats=false;
+				$scope.timeAud=false;
+				$scope.showSeatsPreview=false;
 				$scope.searchCinemas=function(){
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
 					for(var i =0;i<op.length;i++){
@@ -26,8 +30,8 @@ angular.module('Application').controller(
 						$scope.moviesShow=data;
 					});
 				};
-				$scope.timeAndSeats=function(){
-					$scope.timeSeats=true;
+				$scope.timeAndAud=function(){
+					$scope.timeAud=true;
 					$scope.chosenDate=$("#datepicker").datepicker().val();
 					$scope.chosenMovie = $scope.moviesShow[document.getElementById("movieCombo").selectedIndex];
 					$scope.timeShow={};
@@ -43,12 +47,72 @@ angular.module('Application').controller(
 						}
 					};
 				};
+				$scope.seatsView=function(){
+					$scope.showSeatsPreview=true;
+				};
 				$scope.audChanged=function(ac){
 					$scope.tc=$scope.timeShow[document.getElementById("audCombo").selectedIndex];
 				};
 				$scope.timeChanged=function(tc){
 					$scope.ac=$scope.audShow[document.getElementById("timeCombo").selectedIndex];
-				};
+				};		
+				
+				$(document).ready(function() {
+					var ho = [  
+							'aaaaaaaaaa',
+							'aaaaaaaaaa',
+							'__________',
+							'aaaaaaaa__',
+							'aaaaaaaaaa',
+							'aaaaaaaaaa',
+							'aaaaaaaaaa',
+							'aaaaaaaaaa',
+							'aaaaaaaaaa',
+							'__aaaaaa__'
+						];
+					var $cart = $('#selected-seats');
+					var sc = $('#seat-map').seatCharts({
+						map: ho,
+						naming : {
+							top : false,
+							getLabel : function (character, row, column) {
+								return column;
+							}
+						},
+						legend : { //Definition legend
+							node : $('#legend'),
+							items : [
+								[ 'a', 'available',   'Available' ],
+								[ 'a', 'unavailable', 'Sold'],
+								[ 'a', 'selected', 'Selected']
+							]					
+						},
+						click: function () { //Click event
+							if (this.status() == 'available') { //optional seat
+								$('<li>Row'+(this.settings.row+1)+' Seat'+this.settings.label+'</li>')
+									.attr('id', 'cart-item-'+this.settings.id)
+									.data('seatId', this.settings.id)
+									.appendTo($cart);
+											
+								return 'selected';
+							} else if (this.status() == 'selected') { //Checked
+
+										
+									//Delete reservation
+									$('#cart-item-'+this.settings.id).remove();
+									//optional
+									return 'available';
+							} else if (this.status() == 'unavailable') { //sold
+								return 'unavailable';
+							} else {
+								return this.style();
+							}
+						}
+					});
+						
+				});
+	
+
 			}
 		]
 );
