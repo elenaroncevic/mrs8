@@ -1,0 +1,14 @@
+<div ng-init="get_po()">
+	<div id="changing_promo_official" style="display:none">
+	  	<form>
+	  		<input id="poName" ng-model="poName" type="text" maxlength="30">
+		    <textarea id="poDescription" ng-model="poDescription" maxlength="1000"></textarea>
+		    <input id="poImage" ng-model="poImage" type="text">
+		    <input id="poPrice" ng-model="poPrice" type="text">
+		    <select id="cinemas"></select>
+		    <input type="button" name="change_official_promo_btn" value="save changes" ng-click=change_promo_official()>
+	    	<input type="button" name="cancel_changing_po_btn" value="cancel" ng-click=btn_cancel_changing_promo_official()>	    	
+		   	
+	    </form>
+	</div>
+</div>
