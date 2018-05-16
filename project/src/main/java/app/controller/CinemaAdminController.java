@@ -56,13 +56,11 @@ public class CinemaAdminController {
 	@RequestMapping(value="/refreshUser/{id}", method=RequestMethod.GET)
 	public ResponseEntity<User> refreshUser(@PathVariable("id") String id) {
 		User user =cinemaAdminService.getUser(id);
-		System.out.println(user.getEmail()+"\n"+user.getPassword());
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 	@RequestMapping(value="/refreshCinema/{id}", method=RequestMethod.GET)
 	public ResponseEntity<Cinema> refreshCinema(@PathVariable("id") Long id) {
 		Cinema cinema =cinemaAdminService.getCinema(id);
-		System.out.println(cinema.getAuditoriums());
 		return new ResponseEntity<>(cinema, HttpStatus.OK);
 	}
 	

@@ -9,28 +9,33 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $http, $location) {
 				$rootScope.currentCinema = JSON.parse(localStorage.getItem("currentCinema"));
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-				alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
+				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
-					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data,status){
-						$rootScope.currentCinema=data;
-						localStorage.setItem("currentCinema",angular.toJson(data));
+					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+						$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
+							$rootScope.currentUser=data2;
+							localStorage.setItem("currentUser",angular.toJson(data2));
+							$rootScope.currentCinema=data1;
+							//alert(data1.auditoriums[0].projections.length);
+							localStorage.setItem("currentCinema",angular.toJson(data1));
+							$scope.getProjections();
+							//alert("ovo je bio u refreshy");
+						}).error(function(){
+							alert("error refreshUser");
+						});
 					}).error(function(){
 						alert("error refreshCinema");
 					});	
-					$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data,status){
-						$rootScope.currentUser=data;
-						localStorage.setItem("currentUser",angular.toJson(data));
-					}).error(function(){
-						alert("error refreshUser");
-					});
+					
+					
 				}
 				$scope.getProjections= function(){
-					alert("getP");
+					//alert("getP");
 					$scope.projections = [];
 					for ( let i in $rootScope.currentCinema.auditoriums) { 
 						for (let p in $rootScope.currentCinema.auditoriums[i].projections){
-							alert(i+" "+p);
+							//alert(i+" "+p);
 							let projection = $rootScope.currentCinema.auditoriums[i].projections[p];
 							$http.get('http://localhost:8181/getProjectionMovie/'+ projection.id).success(function( data,status){
 								projection.auditorium = $rootScope.currentCinema.auditoriums[i].id;
@@ -41,9 +46,6 @@ angular.module('Application').controller(
 							});
 						}
 					}
-				};
-				$scope.editBasicInformations=function(){
-					$location.path("/edit_cinema_basic").replace();
 				};
 				
 				$scope.removeProjection= function(projection){
@@ -56,7 +58,8 @@ angular.module('Application').controller(
 								}								
 							}
 							$scope.projections=newProjections;*/
-							
+							$scope.refreshUser();
+
 						}).error(function(){
 							alert("error remove");
 						});	
@@ -64,9 +67,8 @@ angular.module('Application').controller(
 					else{
 						alert("Ne moze, ma rezervacija!");
 					}
-					$scope.refreshUser();
 
-					$location.path("/cinema_profile").replace();
+					//$location.path("/cinema_profile").replace();
 				};
 				$scope.drugo= function(){
 					$location.path("/add_projection").replace();
@@ -78,16 +80,20 @@ angular.module('Application').controller(
 					if($scope.password == $rootScope.currentUser.password){
 						$http.post('http://localhost:8181/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(function( data,status){
 							//$rootScope.currentCinema=data;
+							$scope.refreshUser();
+							$location.path("/cinema_profile").replace();
+
 						}).error(function(){
 							alert("Error in change basic");
+							$location.path("/cinema_profile").replace();
+
 						});
 					}
 					else{
 						alert("pogresan password basic!");
 					}
-					$scope.refreshUser();
 
-					$location.path("/cinema_profile").replace();
+					//$location.path("/cinema_profile").replace();
 				};
 				$scope.getMovies = function(){
 					$http.get('http://localhost:8181/getMovies/').success(function( data,status){
@@ -114,16 +120,20 @@ angular.module('Application').controller(
 							/*let projection = data;
 							projection.movie = movie;
 							aid.projections.push(data);*/
+							$scope.refreshUser();
+							$location.path("/cinema_profile").replace();
+
 						}).error(function(){
 							alert("Error in change basic");
+							$location.path("/cinema_profile").replace();
+
 						});
 					}
 					else{
 						alert("pogresan password projection ne znam kako!");
 					}
-					$scope.refreshUser();
+					//$scope.refreshUser();
 
-					$location.path("/cinema_profile").replace();
 				};
 				
 			}

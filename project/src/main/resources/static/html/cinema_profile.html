@@ -1,5 +1,4 @@
 <div >
-novonajnajnajnajnaj
 	<h1>{{currentCinema.name}}</h1>
 	<br>
 	<h2>{{currentCinema.location}}</h2> 
@@ -10,29 +9,24 @@ novonajnajnajnajnaj
 	<button ng-click=editBasicInformations()>Edit basic informations</button>
 	<br>
 	<br>
-	<table rules="cols" cellpadding="10" cellspacing="10" ng-init=getProjections() title="PROJECTIONS">
-		<th >Movie</th>
-		<th >date</th>
-		<th >Auditorium</th>
-		<th >price</th>
-		<tr ng-repeat="projection in projections">
-				<td >{{projection.movie.title}}</td>
-				<td >{{projection.time}}</td>
-				<td >{{projection.auditorium}}</td>
-				<td >{{projection.price}}</td>	
-				<td ><button type="button" ng-click="removeProjection(projection)" >X</button></td>		
-		</tr>
-		<tr align="center" rules="none">
-			<td ><button type="button" ng-click="drugo()" >Add</button></td>		
-		</tr>
+	<table class="table table-bordered" ng-init=refreshUser()>
+		<thead>
+			<th >Movie</th>
+			<th >date</th>
+			<th >Auditorium</th>
+			<th >price</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="projection in projections">
+					<td >{{projection.movie.title}}</td>
+					<td >{{projection.time}}</td>
+					<td >{{projection.auditorium}}</td>
+					<td >{{projection.price}}</td>	
+					<td ><button type="button" ng-click="removeProjection(projection)" >X</button></td>		
+			</tr>
+		</tbody>
 	</table>
+	<button type="button" ng-click="drugo()" >Add</button>
 	<br>
-	<br>
-	{{projections}}
-	<br>
-	<br>
-	{{currentUser.cinemas[0].auditoriums[0].projections}}
-	<br>
-	<br>
-		{{currentUser.cinemas[0].auditoriums[1].projections}}
+	
 </div>

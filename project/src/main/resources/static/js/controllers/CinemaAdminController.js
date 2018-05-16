@@ -7,7 +7,7 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
-				if($rootScope.cinemaAdmin){
+				/*if($rootScope.cinemaAdmin){
 					$scope.cinemaList = [];
 					$scope.theaterList = [];
 					var all = $rootScope.currentUser.cinemas;
@@ -20,11 +20,13 @@ angular.module('Application').controller(
 							
 						}
 					};
-				}
+				}*/
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
+					localStorage.setItem("currentCinema",angular.toJson(data));
 					$location.path('/cinema_profile').replace();
 				};
+				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				$scope.cinemaList = [];
 				$scope.theaterList = [];
 				var all = $rootScope.currentUser.cinemas;

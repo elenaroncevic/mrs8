@@ -1,5 +1,6 @@
 package app.service;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -81,15 +82,26 @@ public class CinemaAdminService {
 		
 	}
 	public Projection addProjection(Long id, Long aid, Calendar calendar, Double price, Long movieId) {
-		Projection p = new Projection( calendar.getTimeInMillis(), price);
+		Calendar now = Calendar.getInstance();
+		Date date = new Date(calendar.getTimeInMillis());
+		Projection p = new Projection( date, price);
+		Movie movie = movieRepository.findOne(movieId);
+		p.setMovie(movie);
 		Cinema cinema= cinemaRepository.findOne(id);
 		for(Auditorium auditorium : cinema.getAuditoriums()){
 			if (auditorium.getId()==aid){
+				/*for(Projection proj : auditorium.getProjections()){
+					Calendar pc = Calendar.getInstance();
+					pc.setTime(proj.getDate());
+					pc.mi
+					if (proj.getDate().before(now.s)){
+						
+					}
+				}*/
 				p.setAuditorium(auditorium);
 			}
 		}
-		Movie movie = movieRepository.findOne(movieId);
-		p.setMovie(movie);
+		
 		p.setTime("2018-05-18 15:15:00");
 		projectionRepository.save(p);
 		return p;
