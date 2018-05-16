@@ -4,11 +4,12 @@ import app.model.Movie;
 
 public class MovieDTO {
 	private String title;
-	private double rating;
+	private Double rating;
 	private String director;
 	private String actors;
-	private int duration;
+	private Integer duration;
 	private String description;
+	private Long id;
 	
 	public MovieDTO(Movie movie){
 		this.title = movie.getTitle();
@@ -17,9 +18,10 @@ public class MovieDTO {
 		this.actors = movie.getActors();
 		this.duration = movie.getDuration();
 		this.description = movie.getDescription();	
+		this.id = movie.getId();
 	}
 	
-	public MovieDTO(String title, double rating, String director, String actors, int duration, String description) {
+	public MovieDTO(String title, Double rating, String director, String actors, Integer duration, String description, Long id) {
 		super();
 		this.title = title;
 		this.rating = rating;
@@ -27,6 +29,7 @@ public class MovieDTO {
 		this.actors = actors;
 		this.duration = duration;
 		this.description = description;
+		this.id=id;
 	}
 	public String getTitle() {
 		return title;
@@ -63,6 +66,22 @@ public class MovieDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setRating(Double rating) {
+		this.rating = rating;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 	
 	

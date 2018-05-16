@@ -1,6 +1,5 @@
 package app.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 public class Projection {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="pid")
 	private Long id;
 	
@@ -31,7 +31,7 @@ public class Projection {
 	private Movie movie;
 	
 	@Column(name="pdate")
-	private String date;
+	private Long date;
 	
 	@Column(name="ptime")
 	private String time;
@@ -50,7 +50,7 @@ public class Projection {
 	
 	
 
-	public Projection(Long id, Movie movie, String date, String time, Double price, Auditorium auditorium,
+	public Projection(Long id, Movie movie, Long date, String time, Double price, Auditorium auditorium,
 			Set<Ticket> tickets) {
 		super();
 		this.id = id;
@@ -60,6 +60,20 @@ public class Projection {
 		this.price = price;
 		this.auditorium = auditorium;
 		this.tickets = tickets;
+	}
+	public Projection(Long id, Movie movie, Long date,  Double price, Auditorium auditorium) {
+		super();
+		this.id = id;
+		this.movie = movie;
+		this.date = date;
+		this.price = price;
+		this.auditorium = auditorium;
+	}
+	public Projection( Long date,  Double price) {
+		super();
+		
+		this.date = date;
+		this.price = price;
 	}
 
 
@@ -81,13 +95,13 @@ public class Projection {
 		this.movie = movie;
 	}
 
-	public String getDate() {
+	public Long getDate() {
 		return date;
 	}
 
 
 
-	public void setDate(String date) {
+	public void setDate(Long date) {
 		this.date = date;
 	}
 

@@ -1,7 +1,8 @@
 <div >
-	{{currentCinema.name}}
+novonajnajnajnajnaj
+	<h1>{{currentCinema.name}}</h1>
 	<br>
-	{{currentCinema.location}} 
+	<h2>{{currentCinema.location}}</h2> 
 	<br>
 	{{currentCinema.description}} 
 	<br>
@@ -17,9 +18,21 @@
 		<tr ng-repeat="projection in projections">
 				<td >{{projection.movie.title}}</td>
 				<td >{{projection.time}}</td>
-				<td> {{projection.auditorium}}</td>
-				<td >{{projection.price}}</td>				
+				<td >{{projection.auditorium}}</td>
+				<td >{{projection.price}}</td>	
+				<td ><button type="button" ng-click="removeProjection(projection)" >X</button></td>		
+		</tr>
+		<tr align="center" rules="none">
+			<td ><button type="button" ng-click="drugo()" >Add</button></td>		
 		</tr>
 	</table>
 	<br>
+	<br>
+	{{projections}}
+	<br>
+	<br>
+	{{currentUser.cinemas[0].auditoriums[0].projections}}
+	<br>
+	<br>
+		{{currentUser.cinemas[0].auditoriums[1].projections}}
 </div>

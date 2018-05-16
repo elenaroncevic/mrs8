@@ -1,8 +1,7 @@
 package app.service;
 
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +10,9 @@ import app.model.Auditorium;
 import app.model.Cinema;
 import app.model.Movie;
 import app.model.Projection;
+import app.model.User;
 import app.repository.CinemaRepository;
+import app.repository.MovieRepository;
 import app.repository.ProjectionRepository;
 import app.repository.UserRepository;
 
@@ -21,10 +22,14 @@ public class CinemaAdminService {
 	private UserRepository userRepository;
 	
 	@Autowired
+	private MovieRepository movieRepository;
+	
+	@Autowired
 	private CinemaRepository cinemaRepository;
 	
 	@Autowired
 	private ProjectionRepository projectionRepository;
+	
 	
 	public Cinema editCinemaBasic(Long id, String name, String location, String description){
 		Cinema cinema = cinemaRepository.findOne(id);
@@ -53,8 +58,41 @@ public class CinemaAdminService {
 	}
 */
 	public Movie getProjectionMovie(Long id) {
-		System.out.println("getMovie Service");
 		return projectionRepository.findOne(id).getMovie();
 		 
 	}
+	
+	
+	
+	public User getUser(String id) {
+		return userRepository.findOne(id);
+		 
+	}
+	
+	public Cinema getCinema(Long id) {
+		return cinemaRepository.findOne(id);
+		 
+	}
+	public void removeProjection(Long id) {
+		projectionRepository.delete(id);		 
+	}
+	public List<Movie> getMovies() {
+		return movieRepository.findAll();
+		
+	}
+	public Projection addProjection(Long id, Long aid, Calendar calendar, Double price, Long movieId) {
+		Projection p = new Projection( calendar.getTimeInMillis(), price);
+		Cinema cinema= cinemaRepository.findOne(id);
+		for(Auditorium auditorium : cinema.getAuditoriums()){
+			if (auditorium.getId()==aid){
+				p.setAuditorium(auditorium);
+			}
+		}
+		Movie movie = movieRepository.findOne(movieId);
+		p.setMovie(movie);
+		p.setTime("2018-05-18 15:15:00");
+		projectionRepository.save(p);
+		return p;
+	}
+	
 }

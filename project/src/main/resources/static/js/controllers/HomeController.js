@@ -16,6 +16,8 @@ angular.module('Application').controller(
 				};
 				$scope.login = function() {
 					$http.post('http://localhost:8181/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
+						localStorage.setItem("currentUser",angular.toJson(data));
+						//alert(JSON.parse(localStorage.getItem("currentUser"))
 						$rootScope.currentUser=data;
 						$rootScope.ru=data.hasOwnProperty("firstName");
 						$rootScope.cinemaAdmin=data.hasOwnProperty("cinemas");

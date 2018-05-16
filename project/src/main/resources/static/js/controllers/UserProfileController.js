@@ -42,6 +42,7 @@ angular.module('Application').controller(
 				$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
+					localStorage.setItem("currentCinema",angular.toJson(data));
 					$location.path('/cinema_profile').replace();
 				};
 				$scope.reservationView=function(){
