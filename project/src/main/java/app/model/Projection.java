@@ -32,7 +32,7 @@ public class Projection {
 	private Movie movie;
 	
 	@Column(name="pdate")
-	private Date date;
+	private String date;
 	
 	
 	@Column(name="ptime")
@@ -52,7 +52,7 @@ public class Projection {
 	
 	
 
-	public Projection(Long id, Movie movie, Date date, String time, Double price, Auditorium auditorium,
+	public Projection(Long id, Movie movie, String date, String time, Double price, Auditorium auditorium,
 			Set<Ticket> tickets) {
 		super();
 		this.id = id;
@@ -63,7 +63,8 @@ public class Projection {
 		this.auditorium = auditorium;
 		this.tickets = tickets;
 	}
-	public Projection(Long id, Movie movie, Date date,  Double price, Auditorium auditorium) {
+
+	public Projection(Long id, Movie movie, String date,  Double price, Auditorium auditorium) {
 		super();
 		this.id = id;
 		this.movie = movie;
@@ -71,12 +72,13 @@ public class Projection {
 		this.price = price;
 		this.auditorium = auditorium;
 	}
-	public Projection( Date date,  Double price) {
+	public Projection( String date,  Double price) {
 		super();
 		
 		this.date = date;
 		this.price = price;
 	}
+
 
 
 
@@ -97,13 +99,13 @@ public class Projection {
 		this.movie = movie;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
 
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 

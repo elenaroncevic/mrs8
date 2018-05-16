@@ -24,10 +24,6 @@ public class Sector {
 	@Column(name="sid")
 	private Long id;
 	
-	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-	@JsonBackReference
-	private Auditorium auditorium;
-	
 	@OneToMany(mappedBy = "sector",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)//nisam sigurna da li i zasto je ovo sector
 	@JsonManagedReference
 	private Set<Seat> seats = new HashSet<Seat>();
@@ -49,21 +45,10 @@ public class Sector {
 		this.id = id;
 	}
 
-	public Auditorium getAuditorium() {
-		return auditorium;
-	}
-
-	public void setAuditorium(Auditorium auditorium) {
-		this.auditorium = auditorium;
-	}
-
-
-
-	public Sector(Long id, Auditorium auditorium, Set<Seat> seats) {
+	public Sector(Long id, Set<Seat> seats) {
 		super();
 		this.seats = seats;
 		this.id = id;
-		this.auditorium = auditorium;
 		
 	}
 

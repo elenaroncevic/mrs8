@@ -19,20 +19,20 @@
 			
 			<div ng-show="timeAud">
 				Time:
-				<select id="timeCombo" ng-model="tc" ng-change="timeChanged(tc)">
-					<option ng-repeat="time in timeShow" value="{{time}}">{{time}}</option>
+				<select id="projCombo" ng-model="tc" ng-change="projChanged(tc)">
+					<option ng-repeat="proj in projShow" value="{{proj.time}}">{{proj.time}}</option>
 				</select>
 				
 				Auditorium:
 				<select id="audCombo" ng-model="ac" ng-change="audChanged(ac)">
-					<option ng-repeat="aud in audShow" value="{{aud}}">{{aud}}</option>
+					<option ng-repeat="aud in audShow" value="Room {{aud.id}}">Room {{aud.id}}</option>
 				</select>
-				<button type="button" ng-click="seatsView()">Choose your seats</button>
+				<button type="button" ng-click="loadSeats()">Choose your seats</button>
 				
 			</div>
 
 	<div class="main" ng-show="showSeatsPreview">
-		<div class="demo">
+		<div class="demo" ng-show="passed">
 			<div id="seat-map">				
 			</div>
 			<div class="booking-details">

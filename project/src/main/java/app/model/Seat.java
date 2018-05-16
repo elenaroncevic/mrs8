@@ -27,14 +27,18 @@ public class Seat {
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
-	private Sector sector;
+	private Auditorium auditorium;
 	
 	@Column(name="snumber")
-	private Long number;
+	private String number;
 	
 	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
 	@JsonManagedReference
 	private Set<Ticket> tickets = new HashSet<Ticket>();
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JsonBackReference
+	private Sector sector=null;
 	
 	public Long getId() {
 		return id;
@@ -42,16 +46,25 @@ public class Seat {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	public Auditorium getAuditorium() {
+		return auditorium;
+	}
+	public void setAuditorium(Auditorium auditorium) {
+		this.auditorium = auditorium;
+	}
 	public Sector getSector() {
 		return sector;
 	}
 	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
-	public Long getNumber() {
+	public void setTickets(Set<Ticket> tickets) {
+		this.tickets = tickets;
+	}
+	public String getNumber() {
 		return number;
 	}
-	public void setNumber(Long number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 	
@@ -62,12 +75,15 @@ public class Seat {
 	public void setReservations(Set<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	public Seat(Long id, Sector sector, Long number, Set<Ticket> tickets) {
+
+	public Seat(){}
+	public Seat(Long id, Auditorium auditorium, String number, Set<Ticket> tickets, Sector sector) {
 		super();
 		this.id = id;
-		this.sector = sector;
+		this.auditorium = auditorium;
 		this.number = number;
 		this.tickets = tickets;
+		this.sector = sector;
 	}
-	public Seat(){}
+	
 }

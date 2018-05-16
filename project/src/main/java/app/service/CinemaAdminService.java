@@ -84,7 +84,7 @@ public class CinemaAdminService {
 	public Projection addProjection(Long id, Long aid, Calendar calendar, Double price, Long movieId) {
 		Calendar now = Calendar.getInstance();
 		Date date = new Date(calendar.getTimeInMillis());
-		Projection p = new Projection( date, price);
+		Projection p = new Projection( "", price);
 		Movie movie = movieRepository.findOne(movieId);
 		p.setMovie(movie);
 		Cinema cinema= cinemaRepository.findOne(id);
