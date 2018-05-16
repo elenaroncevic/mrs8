@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import app.dto.PromoOfficialDTO;
 import app.model.PromoOfficial;
 import app.service.FanZoneAdminService;
 
@@ -29,10 +30,36 @@ public class FanZoneAdminController {
 
 	}
 	
-	@RequestMapping(value = "/fan_zone_admin/list_promos_official", method = RequestMethod.GET)
-	public ResponseEntity<List<PromoOfficial>> listPromosOfficial() {
-		List<PromoOfficial> listOfPromosOfficial = fanZoneAdminService.listPromosOfficial();
-		return new ResponseEntity<>(listOfPromosOfficial,HttpStatus.OK);	
+	@RequestMapping(value="/fan_zone_admin/update_promo_official/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}/{poId}", method=RequestMethod.GET)
+	public ResponseEntity<Void> updatePromoOfficial(@PathVariable("poName") String poName, @PathVariable("poDescription") String poDescription, @PathVariable("poImage") String poImage, @PathVariable("poPrice") Double poPrice, @PathVariable("cId") Long cId, @PathVariable("poId") Long poId){
+		if (fanZoneAdminService.updatePromoOfficial(poName, poDescription, poImage, poPrice, cId, poId)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {      
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
 	}
+	
+	
+	@RequestMapping(value = "/fan_zone_admin/delete_promo_official/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> deletePromoOfficial(@PathVariable("id") Long id) {
+		if (fanZoneAdminService.deletePromoOfficial(id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {      
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@RequestMapping(value = "/fan_zone_admin/list_promos_official", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoOfficialDTO>> listPromosOfficial() {
+		List<PromoOfficialDTO> listOfPromosOfficialDTO = fanZoneAdminService.listPromosOfficial();
+		return new ResponseEntity<>(listOfPromosOfficialDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/fan_zone_admin/get_promo_official/{id}", method = RequestMethod.GET)
+	public ResponseEntity<PromoOfficialDTO> getPromoOfficial(@PathVariable("id") Long id) {
+		PromoOfficialDTO promoOfficialDTO = fanZoneAdminService.getPromoOfficial(id);
+		return new ResponseEntity<>(promoOfficialDTO,HttpStatus.OK);	
+	}	
 	
 }
