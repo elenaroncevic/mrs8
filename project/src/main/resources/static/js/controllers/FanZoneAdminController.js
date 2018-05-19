@@ -26,7 +26,7 @@ angular.module('Application').controller(
 								}
 							}
 					}).error(function(){
-						alert("ima neki error");
+						alert("error finding cinemas");
 					});//
 				};
 				
@@ -66,6 +66,24 @@ angular.module('Application').controller(
 				
 				$scope.btn_list_promos_official = function(){
 					$location.path('/fan_zone_admin/list_po').replace();
+				};
+				
+				$scope.btn_list_promos_unapproved = function(){
+					$location.path('/fan_zone_admin/list_pu_unapproved').replace();
+				}
+				
+				$scope.list_promos_unapproved=function(){
+					$http.get('http://localhost:8181/fan_zone_admin/list_promos_unapproved').success(function(data, status){
+						$scope.listOfPromosUnapproved=data;
+						if ($scope.listOfPromosUnapproved.length!=0){
+							document.getElementById("list_pu_unapproved_fz").style.display="block";
+						}else{
+							alert("There is no unapproved promo");
+							$location.path('/fan_zone_admin').replace();
+						}
+					}).error(function(){
+						alert("Couldn't list unapproved promos");
+					});
 				};
 				
 				$scope.list_promos_official = function(){
@@ -135,6 +153,28 @@ angular.module('Application').controller(
 					}).error(function(){
 						alert("Couldn't find official promo");
 					});
+					
+				};
+				
+				$scope.btn_approve_pu = function(id){
+					$http.get('http://localhost:8181/fan_zone_admin/approve_promo_used/'+id).success(function(){
+						alert("successfuly approved a product");
+						$location.path('/fan_zone_admin').replace();
+						//kako ovde da napravim da mi se refresh prikaz liste
+					}).error(function(){
+						alert("can't approve a product");
+					});						
+					
+				};
+				
+				$scope.btn_disapprove_pu = function(id){
+					$http.get('http://localhost:8181/fan_zone_admin/delete_promo_used/'+id).success(function(){
+						alert("successfuly disapproved a product");
+						$location.path('/fan_zone_admin').replace();
+						//kako ovde da napravim da mi se refresh prikaz liste
+					}).error(function(){
+						alert("can't disaprove a product");
+					});						
 					
 				};
 				

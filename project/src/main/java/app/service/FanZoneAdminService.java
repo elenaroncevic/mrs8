@@ -48,6 +48,9 @@ public class FanZoneAdminService {
 		List<PromoOfficial> listOfPromosOfficial = promoOfficialRepository.findAll();
 		List<PromoOfficialDTO> listOfPromosOfficialDTO = new ArrayList<PromoOfficialDTO>();
 		for (PromoOfficial po : listOfPromosOfficial){
+			if (po.getActivity().equals("deleted")){
+				continue;
+			}
 			PromoOfficialDTO po_dto=new PromoOfficialDTO();
 			po_dto.setActivity(po.getActivity());
 			
@@ -74,6 +77,9 @@ public class FanZoneAdminService {
 
 	public PromoOfficialDTO getPromoOfficial(Long id) {
 		PromoOfficial po = promoOfficialRepository.findOne(id);
+		if (po.getActivity().equals("deleted")){
+			return null;
+		}
 		PromoOfficialDTO po_dto=new PromoOfficialDTO();
 		po_dto.setActivity(po.getActivity());
 		
@@ -117,7 +123,9 @@ public class FanZoneAdminService {
 	}
 
 	public boolean deletePromoOfficial(Long id) {
-		promoOfficialRepository.delete(id);
+		PromoOfficial po = promoOfficialRepository.findOne(id);
+		po.setActivity("deleted");
+		promoOfficialRepository.save(po);
 		return true;
 	}
 	

@@ -12,13 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import app.dto.PromoOfficialDTO;
+import app.dto.PromoUsedDTO;
 import app.model.PromoOfficial;
 import app.service.FanZoneAdminService;
+import app.service.PromoUsedService;
 
 @RestController
 public class FanZoneAdminController {
 	@Autowired
 	private FanZoneAdminService fanZoneAdminService;//
+	
+	@Autowired
+	private PromoUsedService promoUsedService;//
 	
 	@RequestMapping(value="/fan_zone_admin/add_promo_official/{poName}/{poDescription}/{poImage}/{poPrice}/{cId}", method=RequestMethod.GET)
 	public ResponseEntity<Void> addNewPromoOfficial(@PathVariable("poName") String poName, @PathVariable("poDescription") String poDescription, @PathVariable("poImage") String poImage, @PathVariable("poPrice") Double poPrice, @PathVariable("cId") Long cId, WebRequest req){
@@ -62,4 +67,28 @@ public class FanZoneAdminController {
 		return new ResponseEntity<>(promoOfficialDTO,HttpStatus.OK);	
 	}	
 	
+	
+	@RequestMapping(value = "/fan_zone_admin/list_promos_unapproved", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoUsedDTO>> listPromosUnapproved() {
+		List<PromoUsedDTO> listOfPromosUnapprovedDTO = promoUsedService.listPromosUsedUnapproved();
+		return new ResponseEntity<>(listOfPromosUnapprovedDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/fan_zone_admin/approve_promo_used/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> approvePromoUsed(@PathVariable("id") Long id) {
+		if (promoUsedService.approvePromoUsed(id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {      
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@RequestMapping(value = "/fan_zone_admin/delete_promo_used/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Void> deletePromoUsed(@PathVariable("id") Long id) {
+		if (promoUsedService.deletePromoUsed(id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {      
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

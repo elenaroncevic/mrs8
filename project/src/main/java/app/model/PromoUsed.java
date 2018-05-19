@@ -1,6 +1,8 @@
 package app.model;
 
 
+
+
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,8 +31,11 @@ public class PromoUsed{
 	@Column(name="puid")
 	private Long id;
 	
-	@Column(name="puending")
-	private Date ending;
+	@Column(name="puendingdate")
+	private String endingDate;
+	
+	@Column(name="puendingtime")
+	private String endingTime;
 	
 	@Column(name="puname")
 	private String name;
@@ -44,6 +49,8 @@ public class PromoUsed{
 	@Column(name="puprice")
 	private Double price;
 	
+	private String image;
+	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private RegisteredUser owner;
@@ -55,12 +62,23 @@ public class PromoUsed{
 	@OneToMany(mappedBy = "promo", fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	private Set<Bid> bids = new HashSet<Bid>();
 
-	public Date getEnding() {
-		return ending;
+	
+	
+
+	public String getEndingDate() {
+		return endingDate;
 	}
 
-	public void setEnding(Date ending) {
-		this.ending = ending;
+	public void setEndingDate(String endingDate) {
+		this.endingDate = endingDate;
+	}
+
+	public String getEndingTime() {
+		return endingTime;
+	}
+
+	public void setEndingTime(String endingTime) {
+		this.endingTime = endingTime;
 	}
 
 	public Long getId() {
@@ -126,21 +144,45 @@ public class PromoUsed{
 	public void setBuyer(RegisteredUser buyer) {
 		this.buyer = buyer;
 	}
+	
+	
+	
 
-	public PromoUsed(Long id, Date ending, String name, String description, String activity,
-			Double price, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public Set<Bid> getBids() {
+		return bids;
+	}
+
+	public void setBids(Set<Bid> bids) {
+		this.bids = bids;
+	}
+
+	
+
+	public PromoUsed(Long id, String endingDate, String endingTime, String name, String description, String activity,
+			Double price, String image, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
 		super();
 		this.id = id;
-		this.ending = ending;
+		this.endingDate = endingDate;
+		this.endingTime = endingTime;
 		this.name = name;
 		this.description = description;
 		this.activity = activity;
 		this.price = price;
+		this.image = image;
 		this.owner = owner;
 		this.buyer = buyer;
 		this.bids = bids;
 	}
 
+	
 	public PromoUsed() {
 		super();
 	}
