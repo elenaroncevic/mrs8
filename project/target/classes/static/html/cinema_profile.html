@@ -1,0 +1,32 @@
+<div >
+	<h1>{{currentCinema.name}}</h1>
+	<br>
+	<h2>{{currentCinema.location}}</h2> 
+	<br>
+	{{currentCinema.description}} 
+	<br>
+	
+	<button ng-click=editBasicInformations()>Edit basic informations</button>
+	<br>
+	<br>
+	<table class="table table-bordered" ng-init=refreshUser()>
+		<thead>
+			<th >Movie</th>
+			<th >date</th>
+			<th >Auditorium</th>
+			<th >price</th>
+		</thead>
+		<tbody>
+			<tr ng-repeat="projection in projections">
+					<td >{{projection.movie.title}}</td>
+					<td >{{projection.time}}</td>
+					<td >{{projection.auditorium}}</td>
+					<td >{{projection.price}}</td>	
+					<td ><button type="button" ng-click="removeProjection(projection)" >X</button></td>		
+			</tr>
+		</tbody>
+	</table>
+	<button type="button" ng-click="drugo()" >Add</button>
+	<br>
+	
+</div>

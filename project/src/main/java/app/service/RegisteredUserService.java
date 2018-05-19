@@ -82,6 +82,7 @@ public class RegisteredUserService {
 		
 		for(Seat s : setSeats) {
 			listSeats.add(s);
+			System.out.println(s.getId());
 			if(s.getSector()!=null) {
 				unavailableSeats.add(s);
 			}

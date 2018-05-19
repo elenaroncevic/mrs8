@@ -1,0 +1,37 @@
+<form>
+	<table>
+		<tr>
+			<td>Movie</td>
+			<td>
+				<select id="proj_movie" ng-init="getMovies()"> 
+					<option ng-repeat="movie in movies" value="{{movie}}">{{movie.title}}</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Date</td>
+			<td><input type="date" ng-model="proj_date"></td>
+		</tr>
+		<tr>
+			<td>Time</td>
+			<td><input type="time" ng-model="proj_time"></td>
+		</tr>
+		<tr>
+			<td>Auditorium</td>
+			<td><select id="proj_auditorium" > 
+					<option ng-repeat="auditorium in currentCinema.auditoriums" value="{{auditorium}}">{{auditorium.id}}</option>
+				</select></td>
+		</tr>
+		<tr>
+			<td>Price</td>
+			<td><input type="number" ng-model="proj_price"></td>
+		</tr>
+		
+		<tr>
+			<td>Confirm password</td>
+			<td><input type="text" ng-model="proj_password"></td>
+		</tr>
+		<button type="button" ng-click="addProjection()">Change</button>
+
+	</table>
+</form>

@@ -1,0 +1,56 @@
+
+		<div ng-show="reserve" ng-controller="ReserveTicketController">
+			Search cinemas(name or part of it):
+			<input type="textfield" ng-model="searchCinemaText">
+			<button type="button" ng-click="searchCinemas()">Search</button>
+			</br>
+			<select id="cinemaCombo"> 
+				<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
+			</select>
+			<button type="button" ng-click="projectionAndDate()">Select this cinema</button>
+			
+			<div ng-show="projectionDate">
+				<select id="movieCombo"> 
+					<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
+				</select>
+				<div id="datepicker"></div>
+				<button type="button" ng-click="timeAndAud()">See available time and seats</button>
+			</div>
+			
+			<div ng-show="timeAud">
+				Time:
+				<select id="projCombo" ng-model="tc" ng-change="projChanged(tc)">
+					<option ng-repeat="proj in projShow" value="{{proj.time}}">{{proj.time}}</option>
+				</select>
+				
+				Auditorium:
+				<select id="audCombo" ng-model="ac" ng-change="audChanged(ac)">
+					<option ng-repeat="aud in audShow" value="Room {{aud.id}}">Room {{aud.id}}</option>
+				</select>
+				<button type="button" ng-click="loadSeats()">Choose your seats</button>
+				
+			</div>
+
+	<div class="main" ng-show="showSeatsPreview">
+		<div class="demo" ng-show="passed">
+			<div id="seat-map">				
+			</div>
+			<div class="booking-details">
+				<div class="clear"></div>
+				<ul id="selected-seats" class="scrollbar scrollbar1"></ul>
+			
+						
+				<button class="checkout-button">Book Now</button>	
+				<div id="legend"></div>
+			</div>
+			<div style="clear:both"></div>
+	    </div>
+
+
+
+
+
+
+			
+			
+		</div>

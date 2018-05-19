@@ -18,7 +18,7 @@ angular.module('Application').controller(
 					$http.post('http://localhost:8181/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
 						localStorage.setItem("currentUser",angular.toJson(data));
 						//alert(JSON.parse(localStorage.getItem("currentUser"))
-						$rootScope.currentUser=data;
+						
 						$rootScope.ru=data.hasOwnProperty("firstName");
 						$rootScope.cinemaAdmin=data.hasOwnProperty("cinemas");
 						$rootScope.systemAdmin=data.hasOwnProperty("def");
@@ -29,16 +29,12 @@ angular.module('Application').controller(
 						}
 						else{
 							if($rootScope.ru){
-								alert('otkud');
 								$location.path('/profile').replace();
 							}else if($rootScope.systemAdmin){
-								alert("system");
 								$location.path('/system_admin').replace();
 							}else if($rootScope.cinemaAdmin){
-								alert('dobroe');
 								$location.path('/cinema_admin').replace();
 							}else{
-								alert("fza");
 								$location.path('/fan_zone_admin').replace();
 							};
 						}

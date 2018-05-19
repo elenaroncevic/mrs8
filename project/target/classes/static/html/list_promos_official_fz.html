@@ -1,0 +1,31 @@
+<div>
+	<div id="list_po_fz" style="display:none" ng-init=list_promos_official()>
+	 	<table class="table table-bordered">
+			<thead class="thead-inverse">
+				<tr>
+					<th>Cinema name</th>
+					<th>Cinema location</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Price</th>	
+					<th>Image</th>
+					<th>Buyer id</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="promo in listOfPromosOfficial">
+					<td>{{ promo.cinema_name }}</td>
+					<td>{{ promo.cinema_location }}</td>
+					<td>{{ promo.name }}</td>
+					<td>{{ promo.description }}</td>			
+					<td>{{ promo.price }}</td>
+					<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+					<td>{{ promo.buyer_email }}</td>
+					<td><input type="button" value="change" ng-click="btn_change_po( promo.id )"></td>
+					<td><input type="button" value="delete" ng-click="btn_delete_po( promo.id )"></td>
+				</tr>		
+			</tbody>		
+		</table>
+	</div>
+</div>
