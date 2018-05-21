@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import app.dto.PromoUsedDTO;
 import app.model.Bid;
 import app.model.PromoUsed;
+import app.model.RegisteredUser;
 import app.repository.BidRepository;
 import app.repository.PromoUsedRepository;
+import app.repository.UserRepository;
 
 @Service
 public class PromoUsedService {
@@ -20,6 +22,9 @@ public class PromoUsedService {
 	
 	@Autowired
 	private BidRepository bidRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	public List<PromoUsedDTO> listPromosUsedUnapproved() { //koji treba tek da se potvrde
 		List<PromoUsed> listOfPromosUsed = promoUsedRepository.findAll();
@@ -84,6 +89,28 @@ public class PromoUsedService {
 		promoUsedRepository.save(pu);
 		return true;
 		
+	}
+
+
+	public boolean createPromoUsed(String name, String description, String image, String date, String time, String owner) {
+		PromoUsed pu = new PromoUsed();
+		pu.setActivity("unapproved");
+		pu.setDescription(description);
+		pu.setEndingDate(date);
+		pu.setEndingTime(time);
+		
+		image = image.replace('+','/');
+		image = image.replace('*','?');
+		
+		pu.setImage(image);
+		pu.setName(name);
+		
+		//nadji ownera
+		RegisteredUser ru = (RegisteredUser) userRepository.findOne(owner);
+		pu.setOwner(ru);
+		
+		promoUsedRepository.save(pu);
+		return true;
 	}
 	
 }
