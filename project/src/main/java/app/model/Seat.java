@@ -29,8 +29,14 @@ public class Seat {
 	@JsonBackReference
 	private Auditorium auditorium;
 	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JsonBackReference
+	private Row row;
+	 
 	@Column(name="snumber")
 	private String number;
+	
+
 	
 	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
 	@JsonManagedReference
@@ -67,23 +73,23 @@ public class Seat {
 	public void setNumber(String number) {
 		this.number = number;
 	}
-	
-	
+
 	public Set<Ticket> getTickets() {
 		return tickets;
 	}
-	public void setReservations(Set<Ticket> tickets) {
-		this.tickets = tickets;
-	}
+	
 
 	public Seat(){}
-	public Seat(Long id, Auditorium auditorium, String number, Set<Ticket> tickets, Sector sector) {
+	public Seat(Long id, Auditorium auditorium, Row row,String number, Set<Ticket> tickets, Sector sector) {
 		super();
 		this.id = id;
 		this.auditorium = auditorium;
 		this.number = number;
 		this.tickets = tickets;
+		this.row = row;
 		this.sector = sector;
 	}
+	
+	
 	
 }

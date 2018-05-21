@@ -1,7 +1,9 @@
 package app.service;
 
 import java.sql.Date;
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Calendar;  
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,27 +83,45 @@ public class CinemaAdminService {
 		return movieRepository.findAll();
 		
 	}
-	public Projection addProjection(Long id, Long aid, Calendar calendar, Double price, Long movieId) {
+	public Projection addProjection(Long id, Long aid, Calendar projCalendar, Double price, Long movieId) {
 		Calendar now = Calendar.getInstance();
-		Date date = new Date(calendar.getTimeInMillis());
-		Projection p = new Projection( "", price);
+		now.add(Calendar.DAY_OF_MONTH, 5);
+		if (now.getTime().after(projCalendar.getTime())){
+			System.out.println("nasao");
+			return null;
+		}
+		Date date = new Date(projCalendar.getTimeInMillis());
+		DateFormat df = DateFormat.getInstance();
+		String s = df.format(date);
+		String time = df.format(date.getTime());
+		String d = date.toString();
+		System.out.println("s: "+s);
+		System.out.println("d: "+d);
+
+		Projection p = new Projection( s, price);
 		Movie movie = movieRepository.findOne(movieId);
 		p.setMovie(movie);
 		Cinema cinema= cinemaRepository.findOne(id);
+		System.out.println(id);
 		for(Auditorium auditorium : cinema.getAuditoriums()){
+			System.out.println(id+" "+aid+" " +auditorium.getId());
+
 			if (auditorium.getId()==aid){
-				/*for(Projection proj : auditorium.getProjections()){
+				for(Projection proj : auditorium.getProjections()){
+					System.out.println("proj: "+proj.getId());
 					Calendar pc = Calendar.getInstance();
-					pc.setTime(proj.getDate());
-					pc.mi
-					if (proj.getDate().before(now.s)){
-						
+					try {
+						pc.setTime(df.parse(proj.getDate()));
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				}*/
+					System.out.println(d+"\n"+proj.getDate()+"\n"+pc);
+				}
 				p.setAuditorium(auditorium);
 			}
 		}
-		
+
 		p.setTime("2018-05-18 15:15:00");
 		projectionRepository.save(p);
 		return p;

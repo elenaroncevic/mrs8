@@ -24,25 +24,69 @@ public class Auditorium {
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JsonBackReference	
 	private Cinema cinema;
-	
+	 
 	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	@JsonManagedReference
 	private Set<Seat> seats = new HashSet<Seat>();
 	
 	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	@JsonManagedReference
+	private Set<Row> rows = new HashSet<Row>();
+	
+	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
+	@JsonManagedReference
 	private Set<Projection> projections = new HashSet<Projection>();
+	
+	@OneToMany(mappedBy = "auditorium",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
+	@JsonManagedReference
+	private Set<Sector> sectors = new HashSet<Sector>();
+
 
 	@Id
 	@GeneratedValue
 	@Column(name="aid")
 	private Long id;
-	
+
 	@Column(name="a_number")
 	private Integer number;
 	
-	@Column(name="r_number")
-	private Integer rNumber;
+	
+
+	public Auditorium(Cinema cinema, Set<Seat> seats, Set<Row> rows, Set<Projection> projections, Set<Sector> sectors,
+			Long id, Integer number) {
+		super();
+		this.cinema = cinema;
+		this.seats = seats;
+		this.rows = rows;
+		this.projections = projections;
+		this.sectors = sectors;
+		this.id = id;
+		this.number = number;
+	}
+
+	public Set<Seat> getSeats() {
+		return seats;
+	}
+
+	public void setSeats(Set<Seat> seats) {
+		this.seats = seats;
+	}
+
+	public Set<Row> getRows() {
+		return rows;
+	}
+
+	public void setRows(Set<Row> rows) {
+		this.rows = rows;
+	}
+
+	public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
 
 	public Cinema getCinema() {
 		return cinema;
@@ -50,6 +94,14 @@ public class Auditorium {
 
 	public void setCinema(Cinema cinema) {
 		this.cinema = cinema;
+	}
+
+	public Set<Sector> getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(Set<Sector> sectors) {
+		this.sectors = sectors;
 	}
 
 	public Long getId() {
@@ -69,46 +121,19 @@ public class Auditorium {
 		this.projections = projections;
 	}
 
+	public Auditorium( Long id,Integer number, Cinema cinema, Set<Sector> sectors,Set<Row> rows, Set<Projection> projections) {
+		super();
+		this.cinema = cinema;
+		this.sectors = sectors;
+		this.id = id;
+		this.projections = projections;
+		this.rows = rows;
+		this.number=number;
+	}
 
 	public Auditorium() {
 		super();
 	}
 
-	public Set<Seat> getSeats() {
-		return seats;
-	}
-
-	public void setSeats(Set<Seat> seats) {
-		this.seats = seats;
-	}
-
-	public Integer getNumber() {
-		return number;
-	}
-
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-
-	public Integer getRowNumber() {
-		return rNumber;
-	}
-
-	public void setRowNumber(Integer rowNumber) {
-		this.rNumber = rowNumber;
-	}
-
-	public Auditorium(Cinema cinema, Set<Seat> seats, Set<Projection> projections, Long id, Integer number,
-			Integer rowNumber) {
-		super();
-		this.cinema = cinema;
-		this.seats = seats;
-		this.projections = projections;
-		this.id = id;
-		this.number = number;
-		this.rNumber = rowNumber;
-	}
-
-	
 	
 }

@@ -38,12 +38,12 @@ angular.module('Application').controller(
 							//alert(i+" "+p);
 							let projection = $rootScope.currentCinema.auditoriums[i].projections[p];
 							$http.get('http://localhost:8181/getProjectionMovie/'+ projection.id).success(function( data,status){
-								projection.auditorium = $rootScope.currentCinema.auditoriums[i].id;
+								projection.auditorium = $rootScope.currentCinema.auditoriums[i].number;
 								projection.movie = data;
 								$scope.projections.push(projection);
 							}).error(function(){
 								alert("error movie");
-							});
+							});  
 						}
 					}
 				};
@@ -110,13 +110,14 @@ angular.module('Application').controller(
 						let aid= JSON.parse(aidEl.options[aidEl.selectedIndex].value);
 						
 						let date =$scope.proj_date;
+				
 						let time = $scope.proj_time;
 						let price = $scope.proj_price;
 						
-						let movieEl = document.getElementById("proj_movie")
+						let movieEl = document.getElementById("proj_movie");
 						movie = JSON.parse(movieEl.options[movieEl.selectedIndex].value);
-						
-						$http.post('http://localhost:8181/addProjection/'+ id + '/' +aid.id+'/'+ date.getYear() +'/'+ date.getMonth() +'/'+date.getDay() +'/'+time.getHours() +'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
+						alert(date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes());
+						$http.post('http://localhost:8181/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
 							/*let projection = data;
 							projection.movie = movie;
 							aid.projections.push(data);*/

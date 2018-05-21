@@ -21,13 +21,29 @@ public class Sector {
 
 	@Id
 	@GeneratedValue
-	@Column(name="sid")
+	@Column(name="sid") 
 	private Long id;
+	 
+	@Column(name="snumber")
+	private Long number;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JsonBackReference
+	private Auditorium auditorium;
 	
 	@OneToMany(mappedBy = "sector",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)//nisam sigurna da li i zasto je ovo sector
 	@JsonManagedReference
 	private Set<Seat> seats = new HashSet<Seat>();
 
+	
+
+	public Long getNumber() {
+		return number;
+	}
+
+	public void setNumber(Long number) {
+		this.number = number;
+	}
 
 	public Set<Seat> getSeats() {
 		return seats;
@@ -45,10 +61,22 @@ public class Sector {
 		this.id = id;
 	}
 
-	public Sector(Long id, Set<Seat> seats) {
+	public Auditorium getAuditorium() {
+		return auditorium;
+	}
+
+	public void setAuditorium(Auditorium auditorium) {
+		this.auditorium = auditorium;
+	}
+
+
+
+	public Sector(Long id, Auditorium auditorium, Set<Seat> seats, Long number) {
 		super();
 		this.seats = seats;
 		this.id = id;
+		this.auditorium = auditorium;
+		this.number = number;
 		
 	}
 
