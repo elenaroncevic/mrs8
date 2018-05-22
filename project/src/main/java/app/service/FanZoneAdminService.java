@@ -32,7 +32,7 @@ public class FanZoneAdminService {
 		Cinema cinema = cinemaRepository.findOne(cId);
 		
 		PromoOfficial newPromo = new PromoOfficial();
-		newPromo.setActivity("created");
+		newPromo.setActivity("unreserved");
 		newPromo.setBuyer(null);
 		newPromo.setDescription(poDescription);
 		newPromo.setImage(poImage);

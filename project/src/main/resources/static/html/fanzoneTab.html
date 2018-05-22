@@ -1,0 +1,176 @@
+<div ng-controller="FanZoneTabController">	
+		<div class="tab">	
+			<button type="button" id="new_product" ng-click=show_div1()>New product</button>
+			<button type="button" id="official_products" ng-click=show_div2()>Official products</button>
+			<button type="button" id="my_reservations" ng-click=show_div3()>My reservations</button>
+			<button type="button" id="used_products" ng-click=show_div4()>Used products</button>
+			<button type="button" id="my_bids" ng-click=show_div5()>My bids</button>
+			<button type="button" id="products_i_sell" ng-click=show_div6()>Products i sell</button>
+			<button type="button" id="bids_i_won" ng-click=show_div7()>Bids i won</button>
+		</div>
+		
+		<!-- div za dodavanje novog proizvoda -->
+		<div id="add_pu_div" ng-show="show_div.div1" class="tabcontent">
+			Name:
+			<input type="text" ng-model="puName" maxlength="30">
+			</br>
+			Description:
+			<textarea rows="10" cols="10" ng-model="puDescription" maxlength="1000"></textarea>
+			</br>
+			Image:
+			<input type="text" ng-model="puImage">
+			</br>
+			Ending date:
+			<input type="date" ng-model="puEndingDate">
+			</br>
+			Ending time:
+			<input type="time" ng-model="puEndingTime">
+			<div align="right">
+				<button type="button" ng-click="add_promo_used()">add product</button>
+			</div>
+		</div>
+		
+		
+		<!-- div za izlistavanje oficijalnih proizvoda -->
+		<div id="list_po_div" ng-show="show_div.div2" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Cinema name</th>
+					<th>Cinema location</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Price</th>						
+				</thead>
+			
+				<tbody>
+					<tr ng-repeat="promo in unreservedPromosOfficial">
+						<td>{{promo.cinema_name}}</td>
+						<td>{{promo.cinema_location}}</td>
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.price}}</td>
+						<td><input type="button" value="reserve" ng-click="reserve_po( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- div za izlistavanje rezervisanih proizvoda -->
+		<div id="list_reserved_po_div" ng-show="show_div.div3" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Cinema name</th>
+					<th>Cinema location</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Price</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in myReservedPromosOfficial">
+						<td>{{promo.cinema_name}}</td>
+						<td>{{promo.cinema_location}}</td>
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.price}}</td>
+						<td><input type="button" value="unreserve" ng-click="unreserve_po( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- div za izlistavanje polovnih proizvoda -->
+		<div id="list_pu_div" ng-show="show_div.div4" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Ending time</th>
+					<th>Owner</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in ungoingPromosUsed">
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.owner_email}}</td>
+						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- div za izlistavanje mojih bidovanih proizvoda -->
+		<div id="list_my_bidded_pu_div" ng-show="show_div.div5" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Ending time</th>
+					<th>Owner</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in myBiddedPromosUsed">
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.owner_email}}</td>
+						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<!-- div za izlistavanje mojih postavljenih proizvoda -->
+		<div id="list_my_pu_div" ng-show="show_div.div6" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Ending time</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in myPostedPromosUsed">
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td><input type="button" value="details" ng-click="see_my_pu( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>	
+		
+		
+		<!-- div za izlistavanje mojih pobeda na licitacijama -->
+		<div id="list_my_won_pu_div" ng-show="show_div.div7" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Ending time</th>
+					<th>Owner</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in myWonPromosUsed">
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.owner_email}}</td>
+						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>		
+</div>

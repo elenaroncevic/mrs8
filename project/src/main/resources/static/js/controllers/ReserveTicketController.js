@@ -9,10 +9,12 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $location, $http) {
   				$( function() {
     				$( "#datepicker" ).datepicker();
-				} );
+				} );		
 				$scope.projectionDate=false;
 				$scope.timeAud=false;
 				$scope.showSeatsPreview=false;
+				$scope.friendsBox=false;
+				$scope.disableButtons=false;
 				$scope.searchCinemas=function(){
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
 					for(let i =0;i<op.length;i++){
@@ -29,35 +31,28 @@ angular.module('Application').controller(
 					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						$scope.moviesShow=data;
 					});
+					$scope.showSeatsPreview=false;
 				};
 				$scope.timeAndAud=function(){
 					$scope.chosenDate=$("#datepicker").datepicker().val();
 					$scope.chosenMovie = $scope.moviesShow[document.getElementById("movieCombo").selectedIndex];
-					$scope.projShow={};
-					$scope.audShow={};
 					let num=0;
-					for(let x in $scope.chosenMovie.projections){
-						if($scope.chosenMovie.projections[x].date==$scope.chosenDate){
-							$http.get('http://localhost:8181/reguser/auditorium/'+$scope.chosenMovie.projections[x].id).success(function(data,status){
-								$scope.audShow[num]=data;
-								$scope.projShow[num]=$scope.chosenMovie.projections[x];
+					$scope.projShow={};
+					
+					$http.get('http://localhost:8181/reguser/projections/'+$scope.chosenMovie.id).success(function(data, status){
+						for(let x in data){
+							if($scope.chosenDate==data[x].date){
+								$scope.projShow[num]=data[x];
 								num=num+1;
-							});
-						}
-					};
-					$scope.timeAud=true;
+							}
+						};
+					});
+					$scope.timeAud=true;	
 				};
 				$scope.chosenProjection= null;
-				$scope.audChanged=function(ac){
-					$scope.chosenProjection = $scope.projShow[document.getElementById("audCombo").selectedIndex];
-					$scope.tc=$scope.chosenProjection.time;
-				};
-				$scope.projChanged=function(tc){
-					$scope.chosenProjection = $scope.projShow[document.getElementById("projCombo").selectedIndex];
-					$scope.ac="Room "+$scope.chosenProjection.id;
-				};		
-				$scope.passed=false;
 				$scope.loadSeats=function(){
+					var myEl = angular.element( document.querySelector( '#seat-map' ) );
+					myEl.empty();
 					$scope.chosenProjection = $scope.projShow[document.getElementById("projCombo").selectedIndex];
 					if($scope.chosenProjection==null){
 						alert('Projection not chosen!');
@@ -65,14 +60,17 @@ angular.module('Application').controller(
 						$http.get('http://localhost:8181/reguser/seats/'+$scope.chosenProjection.id).success(function(data,status){
 							$scope.seatovi=data[0];
 							$scope.takenSeatovi=data[1];
-							arrangement();
+							$http.get('http://localhost:8181/reguser/auditorium/'+$scope.chosenProjection.audId).success(function(data, status){
+								$scope.rNum=data.rowNumber;
+								arrangement();
+							});		
 						});
 					}
 				};
 				arrangement=function(){
 					var allSeats = [];
 					var takenSeats=[];
-					for(let i=0;i<3;i++){
+					for(let i=0;i<$scope.rNum;i++){
 						allSeats.push('');
 					};
 					let numrow=0;
@@ -80,15 +78,17 @@ angular.module('Application').controller(
 						numrow=parseInt($scope.seatovi[x].number[0]);
 						allSeats[numrow-1]=allSeats[numrow-1]+'a';
 					};
+					$rootScope.h=allSeats;
 					let numcol;
 					for(let x in $scope.takenSeatovi){
 						numrow=$scope.takenSeatovi[x].number[0];
-						numcol = $scope.takenSeatovi[x].number[1].charCodeAt(0)-64;
+						numcol = $scope.takenSeatovi[x].number[1];
 						takenSeats.push(numrow+"_"+numcol);		
 					};
-					$rootScope.h=takenSeats;
 					var $cart = $('#selected-seats');
-					var sc = $('#seat-map').seatCharts({
+					$scope.selectedSeats=[];
+					$scope.seatsSel=0;
+					var $sc = $('#seat-map').seatCharts({
 						map: allSeats,
 						naming : {
 							top : false,
@@ -100,8 +100,8 @@ angular.module('Application').controller(
 							node : $('#legend'),
 							items : [
 								[ 'a', 'available',   'Available' ],
-								[ 'a', 'unavailable', 'Sold'],
-								[ 'a', 'selected', 'Selected']
+								[ 'u', 'unavailable', 'Sold'],
+								[ 's', 'selected', 'Selected']
 							]					
 						},
 						click: function () {
@@ -110,10 +110,23 @@ angular.module('Application').controller(
 									.attr('id', 'cart-item-'+this.settings.id)
 									.data('seatId', this.settings.id)
 									.appendTo($cart);
+								var ss = {};
+								for(let x in $scope.seatovi){
+									if($scope.seatovi[x].number==""+(this.settings.row+1)+this.settings.label){
+										ss['id']=$scope.seatovi[x].id;
+										break;
+									}
+								};
+								ss['num']=""+(this.settings.row+1)+this.settings.label;
+								$scope.selectedSeats[$scope.seatsSel]=ss;
+								$scope.seatsSel=$scope.seatsSel+1;
 								return 'selected';
 							} 
 							else if (this.status() == 'selected') {
 									$('#cart-item-'+this.settings.id).remove();
+									var index = $scope.selectedSeats.indexOf(""+(this.settings.row+1)+this.settings.label);
+									$scope.selectedSeats.splice(index, 1);
+									$scope.seatsSel=$scope.seatsSel-1;
 									return 'available';
 							} 
 							else if (this.status() == 'unavailable') {
@@ -124,12 +137,53 @@ angular.module('Application').controller(
 							}
 						}
 					});
-					sc.get(takenSeats).status('unavailable');
+					$sc.get(takenSeats).status('unavailable');
+					
+					
 					$scope.showSeatsPreview=true;
-					$scope.passed=true;
+					$scope.projectionDate=false;
+					$scope.timeAud=false;
 				};
-	
-
+				var currentUser =JSON.parse(localStorage.getItem("currentUser"));
+				$scope.inviteFriends=function(){
+					if($scope.seatsSel==1){
+						$scope.finishReservation();
+					}else{
+						$http.get('http://localhost:8181/reguser/friends/'+currentUser.email).success(function(data, status){
+						$scope.friends=data;
+						$scope.friendsBox=true;
+					});
+					}
+				};
+				var friendsChosen=0;
+				var friendsSelected={};
+				let x = 0;
+				$scope.inviteFriend=function(friend){
+					//disable pojedinacni
+					friendsChosen=friendsChosen+1;
+					if(friendsChosen==$scope.seatsSel-1){
+						$scope.disableButtons=true;
+					}
+					friendsSelected[x]=friend;
+					x=x+1;
+				}
+				var s=0;
+				$scope.finishReservation=function(){		
+					$http.post('http://localhost:8181/reguser/makeReservation/'+currentUser.email+'/'+$scope.selectedSeats[s].id+'/'+$scope.chosenProjection.id).success(function(data, status){
+						$scope.reservId=data;
+						s=s+1;
+						saveData();
+					});
+				};
+				saveData=function(){
+					for(let x in friendsSelected){
+						$http.post('http://localhost:8181/reguser/makeTicket/'+friendsSelected[x].email+'/'+$scope.chosenProjection.id+'/'+$scope.reservId+'/'+$scope.selectedSeats[s].id).success(function(data, status){
+							alert('Successfully reserved a ticket!');
+						});
+						s=s+1;
+					};
+					//redirekcija
+				};
 			}
 		]
 );

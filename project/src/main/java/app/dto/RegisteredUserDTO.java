@@ -1,5 +1,7 @@
 package app.dto;
 
+import app.model.RegisteredUser;
+
 public class RegisteredUserDTO {
 
 	private String email;
@@ -11,6 +13,15 @@ public class RegisteredUserDTO {
 	
 	public RegisteredUserDTO() {
 		
+	}
+	
+	public RegisteredUserDTO(RegisteredUser reg) {
+		this.email=reg.getEmail();
+		this.password=reg.getPassword();
+		this.firstName=reg.getFirstName();
+		this.lastName=reg.getLastName();
+		this.city=reg.getCity();
+		this.phone=reg.getPhone();
 	}
 
 	public RegisteredUserDTO(String email, String password, String firstName, String lastName, String city,

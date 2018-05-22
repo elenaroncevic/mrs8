@@ -7,6 +7,9 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
+				$scope.cancelReservation=function(reservation){
+					alert('obrisano ' + reservation.id);
+				};
 				$scope.loadReservations = function(){
 					$scope.reservationsShow={};
 					$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));

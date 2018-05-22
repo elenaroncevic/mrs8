@@ -30,19 +30,41 @@ public class Ticket {
 	@JsonBackReference
 	private Reservation reservation;
 	
+	private boolean accepted;
+	
 	public Ticket() {
 		
+	}
+	
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
 	}
 
 
 
-	public Ticket(Long id, Projection projection, Seat seat, Reservation reservation) {
+
+
+
+
+
+
+	public Ticket(Long id, Projection projection, Seat seat, Reservation reservation, boolean accepted) {
 		super();
 		this.id = id;
 		this.projection = projection;
 		this.seat = seat;
 		this.reservation = reservation;
+		this.accepted = accepted;
 	}
+
+
+
+
 
 
 

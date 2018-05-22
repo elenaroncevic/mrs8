@@ -17,10 +17,6 @@ public class PromoUsedDTO {
 	private String buyer_email;
 	private String image;
 	
-	//ove liste se mozda izbace
-	private List<Long> bid_id = new ArrayList<Long>();
-	private List<String> bid_email = new ArrayList<String>();
-	private List<Double> bid_price = new ArrayList<Double>();
 	
 	public PromoUsedDTO() {
 		super();
@@ -32,8 +28,7 @@ public class PromoUsedDTO {
 
 
 	public PromoUsedDTO(Long id, String ending_date, String ending_time, String name, String description,
-			String activity, double price, String owner_email, String buyer_email, String image, List<Long> bid_id,
-			List<String> bid_email, List<Double> bid_price) {
+			String activity, double price, String owner_email, String buyer_email, String image) {
 		super();
 		this.id = id;
 		this.ending_date = ending_date;
@@ -45,9 +40,6 @@ public class PromoUsedDTO {
 		this.owner_email = owner_email;
 		this.buyer_email = buyer_email;
 		this.image = image;
-		this.bid_id = bid_id;
-		this.bid_email = bid_email;
-		this.bid_price = bid_price;
 	}
 
 
@@ -164,55 +156,5 @@ public class PromoUsedDTO {
 	}
 
 
-
-	public List<Long> getBid_id() {
-		return bid_id;
-	}
-
-
-
-
-
-	public void setBid_id(List<Long> bid_id) {
-		this.bid_id = bid_id;
-	}
-
-
-
-
-
-	public List<String> getBid_email() {
-		return bid_email;
-	}
-
-
-
-
-
-	public void setBid_email(List<String> bid_email) {
-		this.bid_email = bid_email;
-	}
-
-
-
-
-
-	public List<Double> getBid_price() {
-		return bid_price;
-	}
-
-
-
-
-
-	public void setBid_price(List<Double> bid_price) {
-		this.bid_price = bid_price;
-	}
-
-
-
-	
-	
-	
 	
 }
