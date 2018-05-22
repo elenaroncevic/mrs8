@@ -12,23 +12,38 @@ angular.module('Application').controller(
 				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
-					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+					//$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
 							$rootScope.currentUser=data2;
 							//localStorage.setItem("currentUser",angular.toJson(data2));
-							$rootScope.currentCinema=data1;
+							$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
 							//alert(data1.auditoriums[0].projections.length);
-							localStorage.setItem("currentCinema",angular.toJson(data1));
+							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
 							$scope.getProjections();
 							//alert("ovo je bio u refreshy");
 						}).error(function(){
 							alert("error refreshUser");
 						});
-					}).error(function(){
-						alert("error refreshCinema");
-					});	
-					
-					
+					//}).error(function(){
+					//	alert("error refreshCinema");
+					//});						
+				}
+				$scope.refreshUserAudi=function(){
+					//$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+						$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
+							$rootScope.currentUser=data2;
+							//localStorage.setItem("currentUser",angular.toJson(data2));
+							$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
+							//alert(data1.auditoriums[0].projections.length);
+							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
+							//$scope.getProjections();
+							//alert("ovo je bio u refreshy");
+						}).error(function(){
+							alert("error refreshUser");
+						});
+					//}).error(function(){
+					//	alert("error refreshCinema");
+					//});						
 				}
 				$scope.getProjections= function(){
 					//alert("getP");
@@ -51,15 +66,7 @@ angular.module('Application').controller(
 				$scope.removeProjection= function(projection){
 					if(projection.tickets.length ==0){
 						$http.get('http://localhost:8181/removeProjection/'+ projection.id).success(function( status){
-							/*let newProjections=[]
-							for(let i in $scope.projections){
-								if($scope.projections[i].id != projection.id){
-									newProjections.push($scope.projections[i]);
-								}								
-							}
-							$scope.projections=newProjections;*/
 							$scope.refreshUser();
-
 						}).error(function(){
 							alert("error remove");
 						});	
@@ -67,8 +74,6 @@ angular.module('Application').controller(
 					else{
 						alert("Ne moze, ma rezervacija!");
 					}
-
-					//$location.path("/cinema_profile").replace();
 				};
 				$scope.drugo= function(){
 					$location.path("/add_projection").replace();
@@ -113,7 +118,6 @@ angular.module('Application').controller(
 				
 						let time = $scope.proj_time;
 						let price = $scope.proj_price;
-						
 						let movieEl = document.getElementById("proj_movie");
 						movie = JSON.parse(movieEl.options[movieEl.selectedIndex].value);
 						alert(date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes());
@@ -121,7 +125,7 @@ angular.module('Application').controller(
 							/*let projection = data;
 							projection.movie = movie;
 							aid.projections.push(data);*/
-							$scope.refreshUser();
+							//$scope.refreshUser();
 							$location.path("/cinema_profile").replace();
 
 						}).error(function(){
@@ -136,7 +140,44 @@ angular.module('Application').controller(
 					//$scope.refreshUser();
 
 				};
+				$scope.buttonValue =function(row,seat){
+					if (seat.active){
+						return row.number+'|'+seat.number;
+					}
+					else{
+						return "X|X";
+					}
+				};
+				$scope.disableSeat=function(seat){
+					$http.post('http://localhost:8181/disableSeat/'+ seat.id).success(function( status){
+						$scope.refreshUserAudi();
+
+					}).error(function(){
+						alert("Seat has active reservations!");
+
+					});
+				};
 				
+				$scope.addSeat=function(audi){
+					$http.post('http://localhost:8181/addSeat/'+ audi.rowAdd+"/"+audi.seatAdd).success(function( status){
+						$scope.refreshUserAudi();
+
+					}).error(function(){
+						alert("Row has active reservations!");
+
+					});	
+				};
+				$scope.removeSeat=function(audi){
+					let row = JSON.parse(audi.rowRemove);
+					if(row.seats.length > audi.seatRemove);
+					$http.post('http://localhost:8181/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
+						$scope.refreshUserAudi();
+
+					}).error(function(){
+						alert("Row has active reservations!");
+
+					});						
+				};
 			}
 		]
 	);

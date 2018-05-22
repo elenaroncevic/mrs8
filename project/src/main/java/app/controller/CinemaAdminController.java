@@ -63,9 +63,18 @@ public class CinemaAdminController {
 		Cinema cinema =cinemaAdminService.getCinema(id);
 		return new ResponseEntity<>(cinema, HttpStatus.OK);
 	}
+	@RequestMapping(value="/disableSeat/{id}", method=RequestMethod.POST)
+	public ResponseEntity<Void> disableSeat(@PathVariable("id") Long id) {
+		boolean reserved =cinemaAdminService.disableSeat(id);
+		if(reserved)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			System.out.println("dobro");
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
 	
 	@RequestMapping(value="/addProjection/{id}/{aid}/{year}/{month}/{day}/{hours}/{minutes}/{price}/{movie}", method=RequestMethod.POST)
-	public ResponseEntity<Projection> addProjection(
+	public ResponseEntity<Void> addProjection(
 			@PathVariable("id") Long id,
 			@PathVariable("aid") Long aid,
 			@PathVariable("year")int year,
@@ -77,8 +86,33 @@ public class CinemaAdminController {
 			@PathVariable("movie") Long movie) {
 		Calendar c = Calendar.getInstance();
 		c.set(year,month,day,hours,minutes);
-		Projection p = cinemaAdminService.addProjection(id, aid, c,price,movie);
-		return new ResponseEntity<>(p, HttpStatus.OK);
+		boolean ok = cinemaAdminService.addProjection(id, aid, c,price,movie);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/addSeat/{row}/{kol}", method=RequestMethod.POST)
+	public ResponseEntity<Void> addSeat(
+			@PathVariable("row") Long row_id,
+			@PathVariable("kol") Integer kol){
+		boolean ok = cinemaAdminService.addSeat(row_id,kol);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/removeSeat/{row}/{kol}", method=RequestMethod.POST)
+	public ResponseEntity<Void> removeSeat(
+			@PathVariable("row") Long row_id,
+			@PathVariable("kol") Integer kol){
+		boolean ok = cinemaAdminService.removeSeat(row_id,kol);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
 }
 

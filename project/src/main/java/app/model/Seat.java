@@ -36,6 +36,8 @@ public class Seat {
 	@Column(name="snumber")
 	private String number;
 	
+	@Column(name = "s_active") 
+	public Boolean active;
 
 	
 	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
@@ -78,9 +80,22 @@ public class Seat {
 		return tickets;
 	}
 	
-
+	
+	
+	public Row getRow() {
+		return row;
+	}
+	public void setRow(Row row) {
+		this.row = row;
+	}
+	public Boolean getActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	public Seat(){}
-	public Seat(Long id, Auditorium auditorium, Row row,String number, Set<Ticket> tickets, Sector sector) {
+	public Seat(Long id, Auditorium auditorium, Row row,String number, Set<Ticket> tickets, Sector sector,Boolean active ) {
 		super();
 		this.id = id;
 		this.auditorium = auditorium;
@@ -88,6 +103,14 @@ public class Seat {
 		this.tickets = tickets;
 		this.row = row;
 		this.sector = sector;
+		this.active = active;
+	}
+	public Seat(Auditorium auditorium2, Row row2, String number2, boolean b) {
+		super();
+		this.auditorium = auditorium2;
+		this.number = number2;
+		this.row = row2;
+		this.active = b;
 	}
 	
 	
