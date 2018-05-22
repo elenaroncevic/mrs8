@@ -33,7 +33,7 @@ public class PromoOfficialService {
 			PromoOfficialDTO po_dto=new PromoOfficialDTO();
 			po_dto.setActivity(po.getActivity());
 			
-			//bice null buyer jer je aktivnost unreserved, a ne reserved
+			//aktivnost je unreserved i ne postoji buyer
 			po_dto.setBuyer_email("none");						
 			po_dto.setCinema_id(po.getCinema().getId());
 			po_dto.setCinema_location(po.getCinema().getLocation());
@@ -57,6 +57,43 @@ public class PromoOfficialService {
 		RegisteredUser ru = (RegisteredUser) userRepository.findOne(currentUser);
 		po.setBuyer(ru);
 		
+		promoOfficialRepository.save(po);
+		return true;
+	}
+
+	public List<PromoOfficialDTO> listReservedPromosOfficial(String email) {
+		List<PromoOfficial> listOfPromosOfficial = promoOfficialRepository.findAll();
+		List<PromoOfficialDTO> listOfReservedPromosOfficialDTO = new ArrayList<PromoOfficialDTO>();
+		
+		for (PromoOfficial po : listOfPromosOfficial){
+			if (po.getBuyer()==null){
+				continue;
+			}
+			if (!po.getBuyer().getEmail().equals(email)){
+				continue;
+			}
+			PromoOfficialDTO po_dto=new PromoOfficialDTO();
+			po_dto.setActivity(po.getActivity());
+			
+			//aktivnost je reserved i postoji buyer
+			po_dto.setBuyer_email(po.getBuyer().getEmail());						
+			po_dto.setCinema_id(po.getCinema().getId());
+			po_dto.setCinema_location(po.getCinema().getLocation());
+			po_dto.setCinema_name(po.getCinema().getName());
+			po_dto.setDescription(po.getDescription());
+			po_dto.setId(po.getId());
+			po_dto.setImage(po.getImage());
+			po_dto.setName(po.getName());
+			po_dto.setPrice(po.getPrice());
+			
+			listOfReservedPromosOfficialDTO.add(po_dto);
+		}
+		return listOfReservedPromosOfficialDTO;
+	}
+
+	public boolean unreservePromoOfficial(Long id) {
+		PromoOfficial po = promoOfficialRepository.findOne(id);
+		po.setBuyer(null);
 		promoOfficialRepository.save(po);
 		return true;
 	}

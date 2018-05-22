@@ -31,6 +31,8 @@ angular.module('Application').controller(
 					$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":true};
 				};
 				
+				$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
+				
 				
 				//dodatne funkcije
 				fill_unreserved_promos_official=function(){
@@ -40,14 +42,25 @@ angular.module('Application').controller(
 						alert("couldn't list unreserved official promos");
 					});
 				};
+				
+				fill_my_reserved_promos_official=function(){
+					$http.get('http://localhost:8181/reg_user/list_reserved_po/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+						$scope.myReservedPromosOfficial=data;
+					}).error(function(){
+						alert("couldn't list my reserved official promos");
+					});
+				};
 				////
 			
-				
-				$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
 				
 				//ucitavanje podataka za div2
 				$scope.unreservedPromosOfficial={};
 				fill_unreserved_promos_official();
+				
+				//ucitavanje podataka za div3
+				$scope.myReservedPromosOfficial={};
+				fill_my_reserved_promos_official();
+				
 				
 				$scope.add_promo_used = function(){
 					//proveravam podatke - name, description, image, date, time
@@ -62,13 +75,13 @@ angular.module('Application').controller(
 						}
 						var puImage = $scope.puImage;
 						if (!puImage){
-							puImage="https//blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png";
+							puImage="http://cdn7.bigcommerce.com/s-viqdwewl26/stencil/8f903ed0-76e7-0135-12e4-525400970412/icons/icon-no-image.svg";
 						}
 						puImage = puImage.replace(/\//g, "+");
 						puImage = puImage.replace(/\?/g, "*");
 						
 						
-						$http.get('http://localhost:8181/reg_user/add_pu/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date+'/'+time+'/'+$scope.currentUser.email).success(function(){
+						$http.get('http://localhost:8181/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date+'/'+time).success(function(){
 							alert('successfuly added a product');
 							$scope.puName="";
 							$scope.puDescription="";
@@ -82,14 +95,25 @@ angular.module('Application').controller(
 				};
 				
 				$scope.reserve_po=function(id){
-					$http.get('http://localhost:8181/reg_user/reserve_po/'+id+'/'+$scope.currentUser.email).success(function(){
+					$http.get('http://localhost:8181/reg_user/reserve_po/'+$scope.currentUser.email+'/'+id).success(function(){
 						fill_unreserved_promos_official();
+						fill_my_reserved_promos_official();
 						alert('successfuly reserved a product');				
 					}).error(function(){
 						alert("couldn't create used product");
 					});
 				};
 				
+				
+				$scope.unreserve_po=function(id){
+					$http.get('http://localhost:8181/reg_user/unreserve_po/'+id).success(function(){
+						fill_my_reserved_promos_official();
+						fill_unreserved_promos_official();
+						alert('successfuly reserved a product');				
+					}).error(function(){
+						alert("couldn't create used product");
+					});
+				};
 				
 				
 				

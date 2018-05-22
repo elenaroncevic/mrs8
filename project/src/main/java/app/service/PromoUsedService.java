@@ -92,7 +92,7 @@ public class PromoUsedService {
 	}
 
 
-	public boolean createPromoUsed(String name, String description, String image, String date, String time, String owner) {
+	public boolean createPromoUsed(String owner, String name, String description, String image, String date, String time) {
 		PromoUsed pu = new PromoUsed();
 		pu.setActivity("unapproved");
 		pu.setDescription(description);
