@@ -46,7 +46,7 @@ public class PromoOfficialService {
 			
 			listOfPromosOfficialDTO.add(po_dto);
 		}
-		return listOfPromosOfficialDTO;
+		return listOfPromosOfficialDTO;//
 		
 	}
 
