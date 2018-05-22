@@ -14,6 +14,7 @@
 					<td>{{reservation.num}}</td>
 					<td>{{reservation.seats}}</td>
 					<td>{{reservation.price*reservation.num}}</td>
+					<td><button type="button" ng-click="cancelReservation(reservation)">Cancel this reservation</button></td>
 				</tr>
 			
 			</tbody>

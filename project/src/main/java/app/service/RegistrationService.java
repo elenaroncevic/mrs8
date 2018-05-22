@@ -32,7 +32,6 @@ public class RegistrationService {
     @Autowired
     private JavaMailSender mailSender;
 	
-	
 	public boolean registration(String email, String pass, String firstName, String lastName, String city, String phone, WebRequest request) {
         String appUrl = request.getContextPath();
         if(userRepository.findOne(email)!=null) {
