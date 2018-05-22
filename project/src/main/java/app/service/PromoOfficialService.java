@@ -15,7 +15,7 @@ import app.repository.UserRepository;
 @Service
 public class PromoOfficialService {
 	@Autowired 
-	private PromoOfficialRepository promoOfficialRepository;
+	private PromoOfficialRepository promoOfficialRepository;//
 	
 	@Autowired 
 	private UserRepository userRepository;
