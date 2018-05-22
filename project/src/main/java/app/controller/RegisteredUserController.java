@@ -19,6 +19,7 @@ import app.model.Movie;
 import app.model.Projection;
 import app.model.Reservation;
 import app.model.Seat;
+import app.model.Ticket;
 import app.service.RegisteredUserService;
 
 @RestController
@@ -92,7 +93,7 @@ public class RegisteredUserController {
 	
 	@RequestMapping(value="/makeTicket/{email}/{projId}/{resId}/{seatId}", method=RequestMethod.POST)
 	public ResponseEntity<Void> makeTicket(@PathVariable("email") String email, @PathVariable("projId") Long projId, @PathVariable("resId") Long resId, @PathVariable("seatId") Long seatId, WebRequest req){
-		regUserService.makeTicket(email, resId, projId, seatId, false, req);
+		regUserService.makeTicket(email, resId, projId, seatId, Ticket.TicketState.Requested, req);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -103,6 +104,16 @@ public class RegisteredUserController {
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@RequestMapping(value="/deleteReservation/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id){
+		if(regUserService.deleteReservation(id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
 	}
 	
 

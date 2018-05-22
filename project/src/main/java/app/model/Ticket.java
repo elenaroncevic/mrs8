@@ -13,6 +13,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Ticket {
+	
+	public enum TicketState{
+		Active,
+		Inactive,
+		Cancelled, 
+		Requested
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(name="qid")
@@ -30,36 +38,20 @@ public class Ticket {
 	@JsonBackReference
 	private Reservation reservation;
 	
-	private boolean accepted;
+	private TicketState state;
 	
 	public Ticket() {
 		
 	}
-	
-	public boolean isAccepted() {
-		return accepted;
-	}
 
 
-	public void setAccepted(boolean accepted) {
-		this.accepted = accepted;
-	}
-
-
-
-
-
-
-
-
-
-	public Ticket(Long id, Projection projection, Seat seat, Reservation reservation, boolean accepted) {
+	public Ticket(Long id, Projection projection, Seat seat, Reservation reservation, TicketState state) {
 		super();
 		this.id = id;
 		this.projection = projection;
 		this.seat = seat;
 		this.reservation = reservation;
-		this.accepted = accepted;
+		this.state = state;
 	}
 
 
@@ -104,6 +96,16 @@ public class Ticket {
 
 	public void setReservation(Reservation reservation) {
 		this.reservation = reservation;
+	}
+
+
+	public TicketState getState() {
+		return state;
+	}
+
+
+	public void setState(TicketState state) {
+		this.state = state;
 	}
 	
 	

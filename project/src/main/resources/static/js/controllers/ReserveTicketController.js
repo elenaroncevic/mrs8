@@ -78,7 +78,6 @@ angular.module('Application').controller(
 						numrow=parseInt($scope.seatovi[x].number[0]);
 						allSeats[numrow-1]=allSeats[numrow-1]+'a';
 					};
-					$rootScope.h=allSeats;
 					let numcol;
 					for(let x in $scope.takenSeatovi){
 						numrow=$scope.takenSeatovi[x].number[0];

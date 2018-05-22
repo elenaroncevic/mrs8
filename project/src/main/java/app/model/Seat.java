@@ -34,7 +34,7 @@ public class Seat {
 	private Row row;
 	 
 	@Column(name="snumber")
-	private String number;
+	private Integer number;
 	
 	@Column(name = "s_active") 
 	public Boolean active;
@@ -69,10 +69,10 @@ public class Seat {
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
 	}
-	public String getNumber() {
+	public Integer getNumber() {
 		return number;
 	}
-	public void setNumber(String number) {
+	public void setNumber(Integer number) {
 		this.number = number;
 	}
 
@@ -95,7 +95,7 @@ public class Seat {
 		this.active = active;
 	}
 	public Seat(){}
-	public Seat(Long id, Auditorium auditorium, Row row,String number, Set<Ticket> tickets, Sector sector,Boolean active ) {
+	public Seat(Long id, Auditorium auditorium, Row row,Integer number, Set<Ticket> tickets, Sector sector,Boolean active ) {
 		super();
 		this.id = id;
 		this.auditorium = auditorium;
@@ -105,7 +105,7 @@ public class Seat {
 		this.sector = sector;
 		this.active = active;
 	}
-	public Seat(Auditorium auditorium2, Row row2, String number2, boolean b) {
+	public Seat(Auditorium auditorium2, Row row2, Integer number2, boolean b) {
 		super();
 		this.auditorium = auditorium2;
 		this.number = number2;

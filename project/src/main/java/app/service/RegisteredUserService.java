@@ -1,6 +1,8 @@
 package app.service;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -22,8 +24,10 @@ import app.model.Movie;
 import app.model.Projection;
 import app.model.RegisteredUser;
 import app.model.Reservation;
+import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
+import app.model.Ticket.TicketState;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
@@ -106,18 +110,19 @@ public class RegisteredUserService {
 	
 	public List<List<Seat>> getSeatsFromProjection(Long id){
 		Projection proj = getProjection(id);
-		Set<Seat> setSeats = proj.getAuditorium().getSeats();
 		List<Seat> listSeats = new ArrayList<Seat>();
 		List<Seat> unavailableSeats = new ArrayList<Seat>();
 		
 		//all and sectored seats
-		
-		for(Seat s : setSeats) {
-			listSeats.add(s);
-			if(s.getSector()!=null) {
-				unavailableSeats.add(s);
+		for(Row r : proj.getAuditorium().getRows()) {
+			for(Seat s : r.getSeats()) {
+				listSeats.add(s);
+				if(s.getSector()!=null) {
+					unavailableSeats.add(s);
+				}
 			}
 		}
+
 		
 		//reserved seats
 		for(Ticket tick : proj.getTickets()) {
@@ -177,14 +182,14 @@ public class RegisteredUserService {
 		reserv.setState(Reservation.ReservationState.Active);
 		reserv.setBuyer((RegisteredUser)userRep.findOne(email));
 		Reservation saved = reservRep.save(reserv);
-		makeTicket(null, saved.getId(), projId, seatId, true, null);
+		makeTicket(null, saved.getId(), projId, seatId, Ticket.TicketState.Active, null);
 		return saved.getId();
 	}
 	
-	public boolean makeTicket(String email, Long resId, Long projId, Long seatId, boolean acc, WebRequest request) {
+	public boolean makeTicket(String email, Long resId, Long projId, Long seatId, Ticket.TicketState state, WebRequest request) {
 		Ticket tick = new Ticket();
 		Reservation r = reservRep.findOne(resId);
-		tick.setAccepted(acc);
+		tick.setState(state);
 		tick.setProjection(projRep.findOne(projId));
 		tick.setReservation(r);
 		tick.setSeat(seatRep.findOne(seatId));
@@ -214,9 +219,45 @@ public class RegisteredUserService {
 			return false;
 		}
 		Ticket tick = ct.getTicket();
-		tick.setAccepted(true);
+		tick.setState(Ticket.TicketState.Active);
 		ticketRep.save(tick);
 		ctRep.delete(ct);
 		return true;
+	}
+	
+	public boolean deleteReservation(Long id) {
+		Reservation reserv = reservRep.findOne(id);
+		String time = "";
+		for(Ticket tick : reserv.getTickets()) {
+			time= tick.getProjection().getTime();
+			break;
+		}
+		String[] lista = time.split(":");
+		int min = Integer.parseInt(lista[1]);
+		int h = Integer.parseInt(lista[0]);
+		if(min<30) {
+			min=min+30;
+			h=h-1;
+		}else if(min>30) {
+			min=min-30;
+		}else {
+			min=0;
+		}
+	    Date now = new Date();
+	    Date what = new Date();
+	    what.setHours(h);
+	    what.setMinutes(min);
+	    what.setSeconds(0);
+	    System.out.println(what);
+		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && what.before(now)) {
+			reserv.setState(Reservation.ReservationState.Cancelled);
+			reservRep.save(reserv);
+			for(Ticket tick : reserv.getTickets()) {
+				tick.setState(Ticket.TicketState.Cancelled);
+				ticketRep.save(tick);
+			}
+			return true;
+		}
+		return false;
 	}
 }

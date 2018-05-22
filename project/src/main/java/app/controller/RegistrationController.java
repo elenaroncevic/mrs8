@@ -16,7 +16,6 @@ import org.springframework.web.context.request.WebRequest;
 
 import app.dto.RegisteredUserDTO;
 import app.model.RegisteredUser;
-import app.model.VerificationToken;
 import app.service.RegistrationService;
 
 @RestController

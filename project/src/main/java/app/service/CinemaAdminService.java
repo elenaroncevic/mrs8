@@ -163,7 +163,7 @@ public class CinemaAdminService {
 		}
 		int num = row.getSeats().size()+1;	
 		for(int i=0; i< kol; i++){
-			Seat newSeat =new Seat( row.getAuditorium(),row,String.valueOf(num+i), true );
+			Seat newSeat =new Seat( row.getAuditorium(),row,num+i, true );
 			seatRepository.save(newSeat);
 		}
 		return true;		

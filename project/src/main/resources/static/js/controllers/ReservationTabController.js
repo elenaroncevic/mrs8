@@ -8,7 +8,12 @@ angular.module('Application').controller(
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
 				$scope.cancelReservation=function(reservation){
-					alert('obrisano ' + reservation.id);
+					$rootScope.h=reservation;
+					$http.delete('http://localhost:8181/reguser/deleteReservation/'+reservation.id).success(function(data, status){
+						alert('Reservation cancelled');
+					}).error(function(data, status){
+						alert('Reservation cannot be cancelled - less then 30 minutes until the show');
+					});
 				};
 				$scope.loadReservations = function(){
 					$scope.reservationsShow={};
@@ -17,6 +22,7 @@ angular.module('Application').controller(
 					let num=0;
 					for (let x in rez){
 						let resShow = {};
+						resShow["id"]=rez[x].id;
 						if(rez[x].state=="Active"){
 							$http.get('http://localhost:8181/reguser/projection/'+rez[x].tickets[0].id).success(function(data,status){
 								resShow["price"]=data.price;
