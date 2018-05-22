@@ -169,8 +169,18 @@ angular.module('Application').controller(
 				};
 				$scope.removeSeat=function(audi){
 					let row = JSON.parse(audi.rowRemove);
-					if(row.seats.length > audi.seatRemove);
+					if(row.seats.length >= audi.seatRemove);
 					$http.post('http://localhost:8181/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
+						$scope.refreshUserAudi();
+
+					}).error(function(){
+						alert("Row has active reservations!");
+
+					});						
+				};
+				
+				$scope.addRow=function(audi){
+					$http.post('http://localhost:8181/addRow/'+ audi.addRow+"/"+audi.id).success(function( status){
 						$scope.refreshUserAudi();
 
 					}).error(function(){

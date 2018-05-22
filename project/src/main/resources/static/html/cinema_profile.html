@@ -49,7 +49,7 @@
 					<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row.id}}">{{row.number}}</option>
 				</select>
 			</td>
-			<td>how much?</td>
+			<td>number of seats</td>
 			<td><input type="number" ng-model="audi.seatAdd"></td>
 			<td><button type = "button" ng-click="addSeat(audi)">+</button></td>
 		</tr>
@@ -60,10 +60,16 @@
 					<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row}}">{{row.number}}</option>
 				</select>
 			</td>
-			<td>how much?</td>
+			<td>number of seats</td>
 			<td><input type="number" ng-model="audi.seatRemove"></td>
 			<td><button type = "button" ng-click="removeSeat(audi)">X</button></td>
 		</tr>
+		<tr>
+			<td>number of seats</td>
+			<td><input type="number" ng-model="audi.addRow"></td>
+			<td><button type = "button" ng-click="addRow(audi)">Add a whole row</button></td>
+		</tr>
+		
 	</table>
 	<br>
 	

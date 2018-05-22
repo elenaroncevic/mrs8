@@ -18,6 +18,7 @@ import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
+import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.MovieRepository;
 import app.repository.ProjectionRepository;
@@ -44,6 +45,9 @@ public class CinemaAdminService {
 	
 	@Autowired
 	private RowRepository rowRepository;
+	
+	@Autowired
+	private AuditoriumRepository audiRepository;
 	
 	public Cinema editCinemaBasic(Long id, String name, String location, String description){
 		Cinema cinema = cinemaRepository.findOne(id);
@@ -155,7 +159,6 @@ public class CinemaAdminService {
 		Row row = rowRepository.findOne(row_id);
 		for(Seat s : row.getSeats()){
 			for(Ticket t : s.getTickets()){
-				//System.out.println(t.getReservation().getState());
 				if(t.getReservation().getState()==ReservationState.Active){
 					return false;
 				}
@@ -178,19 +181,24 @@ public class CinemaAdminService {
 				}
 			}
 		}
-		int num = row.getSeats().size();	
-		
-		List<Seat> seats =seatRepository.findByNumberBetween(String.valueOf(num-kol),String.valueOf(num));
+		int num = row.getSeats().size();			
+		List<Seat> seats =seatRepository.findByNumberBetween(num-kol,num);
 		for(Seat s: seats){
 			if(s.getRow().getId()==row.getId())
 				seatRepository.delete(s);
 		}
-		System.out.println("row:"+row_id);
-		row = rowRepository.findOne(row_id);
-		for(Seat s: row.getSeats()){
-			System.out.println(s.getNumber());
+		return true;
+	}
+	public boolean addRow(int kol, Long audi_id) {
+		Auditorium audi = audiRepository.findOne(audi_id);
+		Row row = new Row();
+		row.setAuditorium(audi);
+		row.setNumber((long) (audi.getRows().size()+1));
+		rowRepository.save(row);
+		for(int i = 1; i<kol+1; i++){
+			Seat newSeat =new Seat( audi,row,i, true );
+			seatRepository.save(newSeat);
 		}
-		System.out.println("__");
 		return true;
 	}
 	

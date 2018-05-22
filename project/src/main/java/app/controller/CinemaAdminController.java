@@ -114,6 +114,17 @@ public class CinemaAdminController {
 		else
 			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
+	
+	@RequestMapping(value="/addRow/{kol}/{audi}", method=RequestMethod.POST)
+	public ResponseEntity<Void> addRow(
+			@PathVariable("kol") int kol,
+			@PathVariable("audi") Long audi_id){
+		boolean ok = cinemaAdminService.addRow(kol,audi_id);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
 }
 
 
