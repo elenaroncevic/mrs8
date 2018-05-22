@@ -34,9 +34,6 @@ public class PromoUsed{
 	@Column(name="puendingdate")
 	private String endingDate;
 	
-	@Column(name="puendingtime")
-	private String endingTime;
-	
 	@Column(name="puname")
 	private String name;
 	
@@ -73,13 +70,6 @@ public class PromoUsed{
 		this.endingDate = endingDate;
 	}
 
-	public String getEndingTime() {
-		return endingTime;
-	}
-
-	public void setEndingTime(String endingTime) {
-		this.endingTime = endingTime;
-	}
 
 	public Long getId() {
 		return id;
@@ -166,12 +156,11 @@ public class PromoUsed{
 
 	
 
-	public PromoUsed(Long id, String endingDate, String endingTime, String name, String description, String activity,
+	public PromoUsed(Long id, String endingDate, String name, String description, String activity,
 			Double price, String image, RegisteredUser owner, RegisteredUser buyer, Set<Bid> bids) {
 		super();
 		this.id = id;
 		this.endingDate = endingDate;
-		this.endingTime = endingTime;
 		this.name = name;
 		this.description = description;
 		this.activity = activity;

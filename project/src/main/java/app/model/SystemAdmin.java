@@ -10,18 +10,21 @@ import javax.persistence.Table;
 public class SystemAdmin extends User{
 	
 	private Boolean def;
-	
+	private Boolean first_time;
 
 	public SystemAdmin() {
 		super();
 	}
 
-
-
-	public SystemAdmin(Boolean def) {
+	public SystemAdmin(Boolean def, Boolean first_time) {
 		super();
 		this.def = def;
+		this.first_time = first_time;
 	}
+
+
+
+
 
 
 
@@ -35,7 +38,15 @@ public class SystemAdmin extends User{
 		this.def = def;
 	}
 
+	public Boolean getFirst_time() {
+		return first_time;
+	}
 
+	public void setFirst_time(Boolean first_time) {
+		this.first_time = first_time;
+	}
+
+	
 	
 	
 	

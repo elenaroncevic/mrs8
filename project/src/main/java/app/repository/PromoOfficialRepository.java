@@ -10,8 +10,7 @@ import app.model.PromoOfficial;
 
 public interface PromoOfficialRepository extends JpaRepository<PromoOfficial,Long>{//
 	
-	/*
-	@Query("SELECT p FROM promo_official p WHERE poactivity = :poactivity")
-    List<PromoOfficial> findPromoOfficialByActivity(@Param("poactivity") String poactivity);
-    */
+	
+    List<PromoOfficial> findByActivity(String activity);
+    
 }

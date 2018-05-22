@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import app.model.Bid;
+import app.model.RegisteredUser;
 
 
 public interface BidRepository extends JpaRepository<Bid,Long>{
 	
-	@Query("SELECT t from Bid t WHERE promo_puid = :promo_puid")
-	List<Bid> getBidByPromoId(@Param("promo_puid") Long promo_puid);
+	List<Bid> findByBidder(RegisteredUser bidder);
+
 }

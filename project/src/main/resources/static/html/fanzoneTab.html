@@ -3,7 +3,7 @@
 			<button type="button" id="new_product" ng-click=show_div1()>New product</button>
 			<button type="button" id="official_products" ng-click=show_div2()>Official products</button>
 			<button type="button" id="my_reservations" ng-click=show_div3()>My reservations</button>
-			<button type="button" id="used_products" ng-click=show_div4()>Used products</button>
+			<button type="button" id="others_products" ng-click=show_div4()>Other's products</button>
 			<button type="button" id="my_bids" ng-click=show_div5()>My bids</button>
 			<button type="button" id="products_i_sell" ng-click=show_div6()>Products i sell</button>
 			<button type="button" id="bids_i_won" ng-click=show_div7()>Bids i won</button>
@@ -20,11 +20,10 @@
 			Image:
 			<input type="text" ng-model="puImage">
 			</br>
-			Ending date:
-			<input type="date" ng-model="puEndingDate">
+			Ending date and time:
+			<input type="datetime-local" ng-model="puEndingDate">
 			</br>
-			Ending time:
-			<input type="time" ng-model="puEndingTime">
+			
 			<div align="right">
 				<button type="button" ng-click="add_promo_used()">add product</button>
 			</div>
@@ -82,7 +81,8 @@
 			</table>
 		</div>
 		
-		<!-- div za izlistavanje polovnih proizvoda -->
+		<!-- div za izlistavanje polovnih proizvoda approved i bought gde ja nisam owner-->
+		<!-- za ovo mogu da licitiram-->
 		<div id="list_pu_div" ng-show="show_div.div4" class="tabcontent">
 			<table class="table table-bordered">
 				<thead>
@@ -93,11 +93,11 @@
 					<th>Owner</th>						
 				</thead>
 				<tbody>
-					<tr ng-repeat="promo in ungoingPromosUsed">
+					<tr ng-repeat="promo in othersPromosUsed">
 						<td>{{promo.name}}</td>
 						<td>{{promo.description}}</td>
 						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
-						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.ending_date}}</td>
 						<td>{{promo.owner_email}}</td>
 						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
 					</tr>			
@@ -105,7 +105,8 @@
 			</table>
 		</div>
 		
-		<!-- div za izlistavanje mojih bidovanih proizvoda -->
+		<!-- div za izlistavanje mojih bidovanih proizvoda gde sam ja u listi bidova-->
+		<!-- za ovo mogu da licitiram-->
 		<div id="list_my_bidded_pu_div" ng-show="show_div.div5" class="tabcontent">
 			<table class="table table-bordered">
 				<thead>
@@ -120,7 +121,7 @@
 						<td>{{promo.name}}</td>
 						<td>{{promo.description}}</td>
 						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
-						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.ending_date}}</td>
 						<td>{{promo.owner_email}}</td>
 						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
 					</tr>			
@@ -130,6 +131,7 @@
 		
 		
 		<!-- div za izlistavanje mojih postavljenih proizvoda -->
+		<!-- za ovo mogu da biram pobednika-->
 		<div id="list_my_pu_div" ng-show="show_div.div6" class="tabcontent">
 			<table class="table table-bordered">
 				<thead>
@@ -143,7 +145,7 @@
 						<td>{{promo.name}}</td>
 						<td>{{promo.description}}</td>
 						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
-						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.ending_date}}</td>
 						<td><input type="button" value="details" ng-click="see_my_pu( promo.id )"></td>
 					</tr>			
 				</tbody>
@@ -152,6 +154,7 @@
 		
 		
 		<!-- div za izlistavanje mojih pobeda na licitacijama -->
+		<!-- za ovo mogu mi je onemoguceno da licitiram, ali je prikaz kao da mogu da licitiram-->
 		<div id="list_my_won_pu_div" ng-show="show_div.div7" class="tabcontent">
 			<table class="table table-bordered">
 				<thead>
@@ -166,11 +169,74 @@
 						<td>{{promo.name}}</td>
 						<td>{{promo.description}}</td>
 						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
-						<td>{{promo.ending_date}} {{promo.ending_time}}</td>
+						<td>{{promo.ending_date}}</td>
 						<td>{{promo.owner_email}}</td>
 						<td><input type="button" value="details" ng-click="see_pu( promo.id )"></td>
 					</tr>			
 				</tbody>
 			</table>
-		</div>		
+		</div>
+		
+		
+		<!-- div za izlistavanje jednog proizvoda na koji mogu da licitiram (see_pu)-->
+		<div id="possible_licitation" ng-show="show_div.div8" class="tabcontent">
+			<p><b>Name: </b> {{licitation.name}} </p>
+			</br>
+			<p><b>Description: </b> {{licitation.description}} </p>
+			</br>
+			<p><b>Image: </b> <img ng-src="licitation.image"> </p>
+			</br>
+			<p><b>Ending date and time: </b> {{licitation.ending_date}}</p>
+			</br>
+			<p><b>Owner: </b> {{licitation.owner_email}} </p>
+			</br>
+			<p><b>Buyer: </b> {{licitation.buyer_email}} </p>
+			</br>
+			Bids:
+			<table class="table table-bordered">
+				<thead>
+					<th>Bidder</th>
+					<th>Price</th>				
+				</thead>
+				<tbody>
+					<tr ng-repeat="bid in bidsInLicitation">
+						<td>{{bid.bidder}}</td>
+						<td>{{bid.price}}</td>
+					</tr>			
+				</tbody>
+			</table>
+			</br>
+			<div id="adding_bid">
+				Add my bid:
+				<input type="text" maxlength="15">
+				<button type="button" ng-click="add_my_bid(licitation.id)">add product</button>
+			</div>
+		</div>	
+		
+		<!-- div za izlistavanje jednog proizvoda za koji mogu da biram pobednika (see_my_pu)-->
+		<div id="changing_product" ng-show="show_div.div9" class="tabcontent">
+			<div>
+				Name:
+				<input type="text" ng-model="changing_promo.name" id="changing_promo_name">
+				</br>
+				Description:
+				<textarea ng-model="changing_promo.description" id="changing_promo_description"></textarea>
+				</br>
+				Image:
+				<input type="text" ng-model="changing_promo.image" id="changing_promo_image">
+				</br>
+				Ending date and time: {{changing_promo.ending_date}} {{changing_promo.ending_time}}
+				</br>
+				Owner: {{changing_promo.owner_email}}
+				</br>
+				Buyer: {{changing_promo.buyer_email}}
+				</br>
+				<div align="right" id="save_or_reset">
+					<button type="button" ng-click="save_changed_pu()">Save changes</button>
+					<button type="button" ng-click="reset_changes_pu()">Cancel</button>
+				</div>
+			</div>
+		</div>	
+		
+			
 </div>

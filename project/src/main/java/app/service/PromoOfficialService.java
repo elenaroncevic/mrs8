@@ -94,6 +94,7 @@ public class PromoOfficialService {
 	public boolean unreservePromoOfficial(Long id) {
 		PromoOfficial po = promoOfficialRepository.findOne(id);
 		po.setBuyer(null);
+		po.setActivity("unreserved");
 		promoOfficialRepository.save(po);
 		return true;
 	}

@@ -25,9 +25,9 @@ public class FanZoneRegUserController {
 	@Autowired
 	PromoOfficialService promoOfficialService;
 	
-	@RequestMapping(value="/reg_user/add_pu/{owner}/{puName}/{puDescription}/{puImage}/{puDate}/{puTime}", method=RequestMethod.GET)
-	public ResponseEntity<Void> createPromoUsed(@PathVariable("owner") String owner, @PathVariable("puName") String name, @PathVariable("puDescription") String description, @PathVariable("puImage") String image, @PathVariable("puDate") String date, @PathVariable("puTime") String time){
-		if (promoUsedService.createPromoUsed(owner, name, description, image, date, time)) {
+	@RequestMapping(value="/reg_user/add_pu/{owner}/{puName}/{puDescription}/{puImage}/{puDate}", method=RequestMethod.GET)
+	public ResponseEntity<Void> createPromoUsed(@PathVariable("owner") String owner, @PathVariable("puName") String name, @PathVariable("puDescription") String description, @PathVariable("puImage") String image, @PathVariable("puDate") String date){
+		if (promoUsedService.createPromoUsed(owner, name, description, image, date)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
@@ -66,5 +66,29 @@ public class FanZoneRegUserController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
 		}
 
+	}
+	
+	@RequestMapping(value = "/reg_user/list_others_approved_pu/{email}/{nesto}", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoUsedDTO>> listOthersPromosUsedApproved(@PathVariable("email") String email, @PathVariable("nesto") String nesto) {
+		List<PromoUsedDTO> listOfPromosUsedApprovedDTO = promoUsedService.listOthersPromosUsedApproved(email);
+		return new ResponseEntity<>(listOfPromosUsedApprovedDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/reg_user/list_my_bids_pu/{email}/{nesto}", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoUsedDTO>> listMyBidsPromosUsed(@PathVariable("email") String email, @PathVariable("nesto") String nesto) {
+		List<PromoUsedDTO> listOfMyBidsPromosUsedDTO = promoUsedService.listMyBidsPromosUsed(email);
+		return new ResponseEntity<>(listOfMyBidsPromosUsedDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/reg_user/list_my_posted_pu/{email}/{nesto}", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoUsedDTO>> listMyPostedPromosUsed(@PathVariable("email") String email, @PathVariable("nesto") String nesto) {
+		List<PromoUsedDTO> listOfMyPostedPromosUsedDTO = promoUsedService.listMyPostedPromosUsed(email);
+		return new ResponseEntity<>(listOfMyPostedPromosUsedDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/reg_user/list_my_won_pu/{email}/{nesto}", method = RequestMethod.GET)
+	public ResponseEntity<List<PromoUsedDTO>> listMyWonPromosUsed(@PathVariable("email") String email, @PathVariable("nesto") String nesto) {
+		List<PromoUsedDTO> listOfMyWonPromosUsedDTO = promoUsedService.listMyWonPromosUsed(email);
+		return new ResponseEntity<>(listOfMyWonPromosUsedDTO,HttpStatus.OK);	
 	}
 }
