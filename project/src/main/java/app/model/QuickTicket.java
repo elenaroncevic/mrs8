@@ -7,8 +7,8 @@ public class QuickTicket extends Ticket{
 	
 	private Integer discount;
 
-	public QuickTicket(Long id, Projection projection, Seat seat, Reservation reservation, Integer discount) {
-		super(id, projection, seat, reservation);
+	public QuickTicket(Long id, Projection projection, Seat seat, Reservation reservation, boolean acc, Integer discount) {
+		super(id, projection, seat, reservation, acc);
 		this.discount=discount;
 	}
 
