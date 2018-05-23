@@ -31,6 +31,7 @@ angular.module('Application').controller(
 					$scope.cinemaSelected = $rootScope.cinemasShow[selCinema];
 					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						$scope.moviesShow=data;
+						
 					});
 					$scope.showSeatsPreview=false;
 				};

@@ -27,8 +27,14 @@ angular.module('Application').controller(
 					$scope.showProjCombo=true;
 					let selTheater = document.getElementById("theaterCombo").selectedIndex;
 					$scope.theaterSelected = $rootScope.theatersShow[selTheater];
+<<<<<<< HEAD
 					$http.get('/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
 						$scope.projsShow=data;
+=======
+					$http.get('http://localhost:8181/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
+						$scope.showsShow=data;
+						alert('hm');
+>>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8.git
 					});
 					$scope.showingSeats=false;
 				};
