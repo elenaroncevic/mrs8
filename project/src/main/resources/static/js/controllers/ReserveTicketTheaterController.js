@@ -1,5 +1,5 @@
 angular.module('Application').controller(
-		'ReserveTicketController',
+		'ReserveTicketTheaterController',
 		[
 			'$rootScope',
 			'$scope',
@@ -15,10 +15,10 @@ angular.module('Application').controller(
 				$scope.showSeatsPreview=false;
 				$scope.friendsBox=false;
 				$scope.disableButtons=false;
-				$scope.searchCinemas=function(){
-					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
+				$scope.searchTheaters=function(){
+					var op = document.getElementById("theaterCombo").getElementsByTagName("option");
 					for(let i =0;i<op.length;i++){
-						if(op[i].value.toLowerCase().includes($scope.searchCinemaText.toLowerCase())){
+						if(op[i].value.toLowerCase().includes($scope.searchTheaterText.toLowerCase())){
 							op[i].selected=true;
 							break;
 						}
@@ -26,24 +26,25 @@ angular.module('Application').controller(
 				};
 				$scope.projectionAndDate=function(){
 					$scope.projectionDate=true;
-					let selCinema = document.getElementById("cinemaCombo").selectedIndex;
-					$scope.cinemaSelected = $rootScope.cinemasShow[selCinema];
-					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
-						$scope.moviesShow=data;
+					let selTheater = document.getElementById("theaterCombo").selectedIndex;
+					$scope.theaterSelected = $rootScope.theatersShow[selTheater];
+					$http.get('http://localhost:8181/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
+						$scope.showsShow=data;
 					});
 					$scope.showSeatsPreview=false;
 				};
 				$scope.timeAndAud=function(){
-					if($scope.moviesShow.length==0){
-						alert('No movies found!');
+					$rootScope.h=$scope.showsShow;
+					if($scope.showsShow.length==0){
+						alert('No shows found');
 						return;
-					};
+					};				
 					$scope.chosenDate=$("#datepicker").datepicker().val();
-					$scope.chosenMovie = $scope.moviesShow[document.getElementById("movieCombo").selectedIndex];
+					$scope.chosenShow = $scope.showsShow[document.getElementById("showCombo").selectedIndex];
 					let num=0;
 					$scope.projShow={};
 					
-					$http.get('http://localhost:8181/reguser/projections/'+$scope.chosenMovie.id).success(function(data, status){
+					$http.get('http://localhost:8181/reguser/projections/'+$scope.chosenShow.id).success(function(data, status){
 						for(let x in data){
 							if($scope.chosenDate==data[x].date){
 								$scope.projShow[num]=data[x];
@@ -186,7 +187,6 @@ angular.module('Application').controller(
 						});
 						s=s+1;
 					};
-					
 					alert('Successfully reserved a ticket!');
 					$rootScope.loadReservations();
 					$scope.projectionDate=false;

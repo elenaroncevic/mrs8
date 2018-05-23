@@ -22,15 +22,23 @@ angular.module('Application').controller(
 				$scope.reservationView=function(){
 					$scope.reserve=true;
 					$scope.regular=false;
-				}
+				};
+				$scope.reservationViewTheater=function(){
+					$scope.theaterReserve=true;
+					$scope.theaterRegular=false;
+				};
+				
 				
 				$scope.home=function(){
 					$scope.tabs = {"home":true, "theaters":false, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 				};
 				$scope.theaters=function(){
 					$scope.tabs = {"home":false, "theaters":true, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
-					$scope.reserve=false;
-					$scope.regular=true;
+					$http.get('/theaters').success(function(data, status){
+						$rootScope.theatersShow=data;
+					});
+					$scope.theaterReserve=false;
+					$scope.theaterRegular=true;
 				};
 				$scope.cinemas=function(){
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":true, "friends":false, "reservations":false, "settings":false, "fanzone":false};

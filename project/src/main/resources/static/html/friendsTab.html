@@ -1,0 +1,34 @@
+<div ng-controller="FriendsTabController">
+
+	<button type="button" ng-click="people()" ng-show="!showBack">Explore people</button>
+	</br></br>
+	
+	<button type="button" ng-click="friends()" ng-show="!showBack">Explore friends</button>
+	</br></br>
+	
+	<button type="button" ng-click="back()" ng-show="showBack">Back</button>
+	
+	<div ng-show="explore">
+		Search people(by first or last name):
+		<input type="textfield" ng-model="searchUnknownText">
+		<button type="button" ng-click="searchUnknown()">Search</button>
+		</br>
+		
+		<select id="unknownCombo">
+			<option ng-repeat="person in unknownsShow">{{person.firstName+" "+person.lastName}}</option>
+		</select>
+		<button type="button" ng-click="addFriend()" ng-selected="showAddButton">Add a friend</button>
+	</div>
+	
+	<div ng-show="my">
+		Search friends(by first or last name):
+		<input type="textfield" ng-model="searchFriendsText">
+		<button type="button" ng-click="searchFriends()">Search</button>
+		</br>
+		
+		<select id="friendsCombo">
+			<option ng-repeat="friend in friendsShow">{{friend.firstName+" "+friend.lastName}}</option>
+		</select>
+		<button type="button" ng-click="addFriend()" ng-selected="showRemoveButton">Remove from friends</button>		
+	</div>
+</div>

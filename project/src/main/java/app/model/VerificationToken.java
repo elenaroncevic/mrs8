@@ -45,7 +45,6 @@ public class VerificationToken {
 	}
 	
 	public VerificationToken(String token, User user) {
-		this.id=12345678910L;
 		this.token=token;
 		this.user=user;
 		this.expiryDate=calculateExpiryDate(EXPIRATION);
@@ -54,6 +53,7 @@ public class VerificationToken {
 
 	public VerificationToken() {
 		super();
+		this.expiryDate=calculateExpiryDate(EXPIRATION);
 	}
 
 	public Long getId() {

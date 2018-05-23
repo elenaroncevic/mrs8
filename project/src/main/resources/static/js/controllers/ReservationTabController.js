@@ -7,18 +7,28 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
+				$scope.reservationsShow={};
+				$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
+				let rez;
+				
 				$scope.cancelReservation=function(reservation){
 					$rootScope.h=reservation;
 					$http.delete('http://localhost:8181/reguser/deleteReservation/'+reservation.id).success(function(data, status){
 						alert('Reservation cancelled');
+						$rootScope.loadReservations();
 					}).error(function(data, status){
 						alert('Reservation cannot be cancelled - less then 30 minutes until the show');
 					});
 				};
-				$scope.loadReservations = function(){
-					$scope.reservationsShow={};
-					$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
-					let rez = $scope.currentUser.reservations;
+				$rootScope.loadReservations=function(){
+					$http.get('http://localhost:8181/reguser/reservations/'+$scope.currentUser.email).success(function(data, status){
+						rez = data;
+						$scope.reservationsShow={};
+						showReservation();
+					});
+				};
+				$rootScope.loadReservations();
+				showReservation=function(){
 					let num=0;
 					for (let x in rez){
 						let resShow = {};

@@ -1,0 +1,58 @@
+<div ng-show="theaterReserve" ng-controller="ReserveTicketTheaterController">
+	Search theaters(name or part of it):
+	<input type="textfield" ng-model="searchTheaterText">
+	<button type="button" ng-click="searchTheaters()">Search</button>
+	</br>
+	
+	<select id="theaterCombo"> 
+		<option ng-repeat="theater in theatersShow" value="{{theater.name}}">{{theater.name}}</option>
+	</select>
+	<button type="button" ng-click="projectionAndDate()">Select this theater</button>
+	
+	<div ng-show="projectionDate">
+		<select id="showCombo"> 
+			<option ng-repeat="show in showShow" value="{{show.title}}">{{show.title}}</option>
+		</select>
+		<div id="datepicker"></div>
+		<button type="button" ng-click="timeAndAud()">See available time and seats</button>
+	</div>
+	
+	<div ng-show="timeAud">
+		Time(room):
+		<select id="projCombo">
+			<option ng-repeat="proj in projShow">{{proj.time +" (Room " + proj.audId+")" }}</option>
+		</select>
+		<button type="button" ng-click="loadSeats()">Choose your seats</button>		
+	</div>
+	<div class="main" ng-show="showSeatsPreview">
+		<div class="demo">
+			<div id="seat-map">				
+			</div>
+			<div class="booking-details">
+				<p>Movie: {{chosenShow.title}}</p>
+				<p>Time: {{chosenProjection.date+ " " +chosenProjection.time}}</p>
+				<p>Room: {{chosenProjection.audId}}</p>
+				<div class="clear"></div>
+				<ul id="selected-seats" class="scrollbar scrollbar1"></ul>
+			
+						
+				<button class="checkout-button" ng-click="inviteFriends()">Book Now</button>
+			</div>
+			<div style="clear:both"></div>
+	    </div>
+	</div>
+	<div ng-show="friendsBox">
+		<table class="table table-bordered">
+			<thead>
+				<th>Name</th>				
+			</thead>
+			</tbody>
+				<tr ng-repeat="friend in friends">
+					<td>{{friend.firstName+" " + friend.lastName}}</td>
+					<td><button type="button" ng-click="inviteFriend(friend)" ng-disabled="disableButtons">Invite friend</button></td>
+				</tr>
+			</tbody>
+		</table>
+		<button type="button" ng-click="finishReservation()">Finish reservation</button>
+	</div>
+</div>

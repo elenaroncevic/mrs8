@@ -15,11 +15,13 @@ import app.dto.AuditoriumDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
+import app.dto.SeatDTO;
+import app.model.Cinema;
 import app.model.Movie;
 import app.model.Projection;
 import app.model.Reservation;
-import app.model.Seat;
 import app.model.Ticket;
+import app.model.User;
 import app.service.RegisteredUserService;
 
 @RestController
@@ -56,14 +58,14 @@ public class RegisteredUserController {
 	}*/
 	
 	@RequestMapping("/seats/{id}")
-	public ResponseEntity<List<List<Seat>>> getSeatsFromProjection(@PathVariable Long id){
-		List<List<Seat>> seats = regUserService.getSeatsFromProjection(id);
+	public ResponseEntity<List<List<SeatDTO>>> getSeatsFromProjection(@PathVariable Long id){
+		List<List<SeatDTO>> seats = regUserService.getSeatsFromProjection(id);
 		return new ResponseEntity<>(seats, HttpStatus.OK);
 	}
 	
 	@RequestMapping("/reservseats/{id}")
-	public ResponseEntity<List<Seat>> getSeatsFromReservation(@PathVariable Long id){
-		List<Seat> seats = regUserService.getSeatsFromReservation(id);
+	public ResponseEntity<List<SeatDTO>> getSeatsFromReservation(@PathVariable Long id){
+		List<SeatDTO> seats = regUserService.getSeatsFromReservation(id);
 		return new ResponseEntity<>(seats, HttpStatus.OK);
 	}
 	
@@ -82,6 +84,12 @@ public class RegisteredUserController {
 	@RequestMapping("/friends/{email:.+}")
 	public ResponseEntity<List<RegisteredUserDTO>> getFriends(@PathVariable("email") String email){
 		List<RegisteredUserDTO> friends = regUserService.getFriends(email);
+		return new ResponseEntity<>(friends, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/people/{email:.+}")
+	public ResponseEntity<List<RegisteredUserDTO>> getPeople(@PathVariable("email") String email){
+		List<RegisteredUserDTO> friends = regUserService.getPeople(email);
 		return new ResponseEntity<>(friends, HttpStatus.OK);
 	}
 	
@@ -113,8 +121,40 @@ public class RegisteredUserController {
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
 	}
+	
+	@RequestMapping("/reservations/{email:.+}")
+	public ResponseEntity<List<Reservation>> getReservations(@PathVariable("email") String email){
+		List<Reservation> reservs = regUserService.getReservations(email);
+		return new ResponseEntity<>(reservs, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/history/{email:.+}")
+	public ResponseEntity<List<Cinema>> getHistory(@PathVariable("email") String email){
+		List<Cinema> reservs = regUserService.getHistory(email);
+		return new ResponseEntity<>(reservs, HttpStatus.OK);
+	}
+	
+	@RequestMapping("/editPass/{email}/{oldPass}/{pass}/{pass2}")
+	public ResponseEntity<User> editPass(@PathVariable("email") String email, @PathVariable("oldPass") String oldPass, @PathVariable("pass") String pass, @PathVariable("pass2") String pass2){
+		User user = regUserService.editPass(email, oldPass, pass, pass2);
+		if(user==null) {
+			return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+		}else {
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+	}
+	
+	@RequestMapping("/editInfo/{email}/{firstName}/{lastName}/{city}/{phone}")
+	public ResponseEntity<User> editInfo(@PathVariable("email") String email, @PathVariable("firstName") String firstName, @PathVariable("lastName") String lastName, @PathVariable("city") String city, @PathVariable("phone") String phone){
+		User user = regUserService.editInfo(email, firstName, lastName, city, phone);
+		if(user==null) {
+			return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+		}else {
+			return new ResponseEntity<>(user, HttpStatus.OK);
+		}
+	}
+	
 	
 
 }

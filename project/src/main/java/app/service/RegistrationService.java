@@ -48,7 +48,9 @@ public class RegistrationService {
         userRepository.save(ru);
         
         String token = UUID.randomUUID().toString();
-        VerificationToken myToken = new VerificationToken(token, ru);
+        VerificationToken myToken = new VerificationToken();
+        myToken.setToken(token);
+        myToken.setUser(ru);
         tokenRepository.save(myToken);
         String subject = "Registration Confirmation";
         String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;
@@ -89,7 +91,9 @@ public class RegistrationService {
         userRepository.save(admin);
         
         String token = UUID.randomUUID().toString();
-        VerificationToken myToken = new VerificationToken(token, admin);
+        VerificationToken myToken = new VerificationToken();
+        myToken.setToken(token);
+        myToken.setUser(admin);
         tokenRepository.save(myToken);
         String subject = "Registration Confirmation";
         String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;

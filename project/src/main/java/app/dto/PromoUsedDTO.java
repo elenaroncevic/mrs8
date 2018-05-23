@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class PromoUsedDTO {
+public class PromoUsedDTO {//
 	private Long id;
 	private String ending_date;
-	private String ending_time;
 	private String name;
 	private String description;
 	private String activity;
@@ -27,12 +26,11 @@ public class PromoUsedDTO {
 	
 
 
-	public PromoUsedDTO(Long id, String ending_date, String ending_time, String name, String description,
+	public PromoUsedDTO(Long id, String ending_date, String name, String description,
 			String activity, double price, String owner_email, String buyer_email, String image) {
 		super();
 		this.id = id;
 		this.ending_date = ending_date;
-		this.ending_time = ending_time;
 		this.name = name;
 		this.description = description;
 		this.activity = activity;
@@ -69,28 +67,6 @@ public class PromoUsedDTO {
 	public void setEnding_date(String ending_date) {
 		this.ending_date = ending_date;
 	}
-
-
-
-
-
-
-	public String getEnding_time() {
-		return ending_time;
-	}
-
-
-
-
-
-
-	public void setEnding_time(String ending_time) {
-		this.ending_time = ending_time;
-	}
-
-
-
-
 
 
 	public String getName() {
