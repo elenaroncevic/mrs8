@@ -96,7 +96,7 @@ public class FanZoneRegUserController {
 	@RequestMapping(value = "/reg_user/get_pu/{id}", method = RequestMethod.GET)
 	public ResponseEntity<PromoUsedDTO> getPromoUsed(@PathVariable("id") Long id) {
 		PromoUsedDTO pu_dto = promoUsedService.getPromoUsed(id);
-		return new ResponseEntity<>(pu_dto,HttpStatus.OK);	
+		return new ResponseEntity<>(pu_dto,HttpStatus.OK);	//
 	}
 	
 	@RequestMapping(value = "/reg_user/list_bids/{id}", method = RequestMethod.GET)

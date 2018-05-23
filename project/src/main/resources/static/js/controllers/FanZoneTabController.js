@@ -206,7 +206,7 @@ angular.module('Application').controller(
 				$scope.add_my_bid=function(id, ending_date){
 					//provera valjanog unosa za ponudu i opet provera za datum
 					var offer=parseFloat(document.getElementById("given_price").value);
-					var lic_date=(ending_date).replace(' ','T');
+					var lic_date=(ending_date).replace(' ','T');   
 					lic_date=lic_date+"Z";
 					var licitations_date=new Date(lic_date);
 					var now = new Date();

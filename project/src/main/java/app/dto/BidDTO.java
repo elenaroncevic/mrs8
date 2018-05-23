@@ -1,6 +1,6 @@
 package app.dto;
 
-public class BidDTO {
+public class BidDTO {//
 	private Long id;
 	private Long promo_id;
 	private Double price;

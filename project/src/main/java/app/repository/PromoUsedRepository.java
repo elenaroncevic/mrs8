@@ -11,6 +11,6 @@ import app.model.RegisteredUser;
 
 public interface PromoUsedRepository extends JpaRepository<PromoUsed,Long>{
 	
-	List<PromoUsed> findByOwner(RegisteredUser ru);
+	List<PromoUsed> findByOwner(RegisteredUser ru);//
 	List<PromoUsed> findByBuyer(RegisteredUser ru);
 }

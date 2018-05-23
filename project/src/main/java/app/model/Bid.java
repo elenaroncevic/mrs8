@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="Bid")
-public class Bid {
+public class Bid {//
 	@Id
 	@GeneratedValue
 	@Column(name="bid")

@@ -292,7 +292,7 @@ public class PromoUsedService {
 			bid_dto.setId(b.getId());
 			bid_dto.setPrice(b.getPrice());
 			bid_dto.setPromo_id(id);
-			bidsDTO.add(bid_dto);
+			bidsDTO.add(bid_dto);//
 		}
 		
 		return bidsDTO;

@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "PromoUsed")
-public class PromoUsed{
+public class PromoUsed{//
 	
 	@Id
 	@GeneratedValue

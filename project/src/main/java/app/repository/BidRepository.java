@@ -13,7 +13,7 @@ import app.model.RegisteredUser;
 
 public interface BidRepository extends JpaRepository<Bid,Long>{
 	
-	List<Bid> findByBidder(RegisteredUser bidder);
+	List<Bid> findByBidder(RegisteredUser bidder);//
 	List<Bid> findByPromo(PromoUsed promo);
 	Bid findByBidderAndPromo(RegisteredUser bidder, PromoUsed promo);
 }
