@@ -1,8 +1,9 @@
-<div>
- 	<table ng-init= "list_cinemas()">
-	<thead class="thead-inverse">
+<div ">
+Cinemas:
+<br>
+<table ng-init="list_cinemas()">
+	<thead class=>
 		<tr>
-			<th>ID</th>
 			<th>DEscription</th>
 			<th>Name</th>	
 			<th>Location</th>
@@ -11,12 +12,34 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="cinema in cinemaList">
-			<td>{{ cinema.id }}</td>
 			<td>{{ cinema.description }}</td>
 			<td>{{ cinema.name }}</td>
 			<td>{{ cinema.location }}</td>			
 			<td>{{ cinema.rating }}</td>
 		</tr>		
 	</tbody>
+</table>
+	<hr>
+	<br>
+	Theaters:<br>
+<table ng-init="list_theaters()">
+	<thead >
+		<tr>
+			<th>Name</th>	
+		
+			<th>DEscription</th>
+			<th>Location</th>
+			<th>rating</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="cinema in theaterList">
+			<td>{{ cinema.name }}</td>
+			<td>{{ cinema.description }}</td>
+			<td>{{ cinema.location }}</td>			
+			<td>{{ cinema.rating }}</td>
+		</tr>		
+	</tbody>
+	
 </table>
 </div>

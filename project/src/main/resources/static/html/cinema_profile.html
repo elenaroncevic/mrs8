@@ -6,7 +6,7 @@
 	{{currentCinema.description}} 
 	<br>
 	
-	<button ng-click=editBasicInformations()>Edit basic informations</button>
+	<button ng-click=editBasicInformations() ng-show=cinemaAdmin>Edit basic informations</button>
 	<hr>
 	<br>
 	Projections:
@@ -23,12 +23,12 @@
 				<td >{{projection.date}}</td>
 				<td >{{projection.auditorium.number}}</td>
 				<td >{{projection.price}}</td>	
-				<td ><button type="button" ng-click="removeProjection(projection)" >X</button></td>
-				<td ><button type="button" ng-click="qtMake(projection)" >Make quick ticket</button></td>		
+				<td ng-show=cinemaAdmin><button type="button" ng-click="removeProjection(projection)" >X</button></td>
+				<td ng-show=cinemaAdmin><button type="button" ng-click="qtMake(projection)" >Make quick ticket</button></td>		
 			</tr>
 		</tbody>
 	</table>
-	<button type="button" ng-click="drugo()" >Add projection</button>
+	<button type="button" ng-click="drugo()" ng-show=cinemaAdmin>Add projection</button>
 	<hr>
 	<br>
 	Quick tickets:
@@ -53,7 +53,7 @@
 				<td >{{qt.rowNumber}}</td>	
 				<td >{{qt.seatNumber}}</td>	
 				
-				<td ><button type="button" ng-click="qtRemove(qt)" >X</button></td>
+				<td ng-show=cinemaAdmin><button type="button" ng-click="qtRemove(qt)" >X</button></td>
 			</tr>
 		</tbody>
 	</table>
@@ -74,7 +74,7 @@
 	</table>
 	<br>
 	
-	<table>
+	<table ng-show=cinemaAdmin>
 		<tr>
 			<td>row:</td>	
 			<td>
