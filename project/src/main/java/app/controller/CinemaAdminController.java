@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.dto.MovieDTO;
+import app.dto.QuickTicketDTO;
 import app.model.Cinema;
 import app.model.Movie;
-import app.model.Projection;
 import app.model.User;
 import app.service.CinemaAdminService;
 
@@ -115,11 +115,52 @@ public class CinemaAdminController {
 			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
 	
-	@RequestMapping(value="/addRow/{kol}/{audi}", method=RequestMethod.POST)
+	@RequestMapping(value="/addRow/{rowNum}/{audi}", method=RequestMethod.POST)
 	public ResponseEntity<Void> addRow(
-			@PathVariable("kol") int kol,
+			@PathVariable("rowNum") int kol,
 			@PathVariable("audi") Long audi_id){
 		boolean ok = cinemaAdminService.addRow(kol,audi_id);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/removeRow/{row}/{audi}", method=RequestMethod.POST)
+	public ResponseEntity<Void> addRow(
+			@PathVariable("row") Long row_id,
+			@PathVariable("audi") Long audi_id){
+		boolean ok = cinemaAdminService.removeRow(row_id,audi_id);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/qtGet/{cinemaId}", method=RequestMethod.GET)
+	public ResponseEntity<List<QuickTicketDTO>> getQTs(
+			@PathVariable("cinemaId") Long cid){
+		List<QuickTicketDTO> qts = cinemaAdminService.qtGet(cid);
+		return new ResponseEntity<>(qts, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value="/qtAdd/{proj_id}/{seat_id}/{discount}", method=RequestMethod.POST)
+	public ResponseEntity<Void> qtAdd(
+			@PathVariable("proj_id") Long proj_id,
+			@PathVariable("seat_id") Long seat_id,
+			@PathVariable("discount") Integer discount){
+		boolean ok = cinemaAdminService.qtAdd(proj_id,seat_id, discount);
+		if(ok)
+			return new ResponseEntity<>( HttpStatus.OK);
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/qtRemove/{qtId}", method=RequestMethod.POST)
+	public ResponseEntity<Void> qtAdd(
+			@PathVariable("qtId") Long qtId){
+		boolean ok = cinemaAdminService.qtRemove(qtId);
 		if(ok)
 			return new ResponseEntity<>( HttpStatus.OK);
 		else

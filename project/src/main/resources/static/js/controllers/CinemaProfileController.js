@@ -28,6 +28,23 @@ angular.module('Application').controller(
 					//	alert("error refreshCinema");
 					//});						
 				}
+				$scope.refreshUserQT=function(){
+					//$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+						$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
+							$rootScope.currentUser=data2;
+							//localStorage.setItem("currentUser",angular.toJson(data2));
+							$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
+							//alert(data1.auditoriums[0].projections.length);
+							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
+							$scope.qtGet();
+							//alert("ovo je bio u refreshy");
+						}).error(function(){
+							alert("error refreshUser");
+						});
+					//}).error(function(){
+					//	alert("error refreshCinema");
+					//});						
+				}
 				$scope.refreshUserAudi=function(){
 					//$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
@@ -53,7 +70,7 @@ angular.module('Application').controller(
 							//alert(i+" "+p);
 							let projection = $rootScope.currentCinema.auditoriums[i].projections[p];
 							$http.get('http://localhost:8181/getProjectionMovie/'+ projection.id).success(function( data,status){
-								projection.auditorium = $rootScope.currentCinema.auditoriums[i].number;
+								projection.auditorium = $rootScope.currentCinema.auditoriums[i];
 								projection.movie = data;
 								$scope.projections.push(projection);
 							}).error(function(){
@@ -129,7 +146,7 @@ angular.module('Application').controller(
 							$location.path("/cinema_profile").replace();
 
 						}).error(function(){
-							alert("Error in change basic");
+							alert("Invalid date");
 							$location.path("/cinema_profile").replace();
 
 						});
@@ -169,8 +186,33 @@ angular.module('Application').controller(
 				};
 				$scope.removeSeat=function(audi){
 					let row = JSON.parse(audi.rowRemove);
-					if(row.seats.length >= audi.seatRemove);
-					$http.post('http://localhost:8181/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
+					if(row.seats.length > audi.seatRemove){
+						$http.post('http://localhost:8181/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
+							$scope.refreshUserAudi();
+	
+						}).error(function(){
+							alert("Row has active reservations!");
+	
+						});
+					}
+					else{
+						alert("too much seats!");
+					}
+				};
+				
+				$scope.addRow=function(audi){
+					$http.post('http://localhost:8181/addRow/'+ audi.addRow+"/"+audi.id).success(function( status){
+						$scope.refreshUserAudi();
+
+					}).error(function(){
+						alert("nzm!");
+
+					});						
+				};
+				
+				$scope.removeRow=function(audi){
+					let row = JSON.parse(audi.removeRow);
+					$http.post('http://localhost:8181/removeRow/'+ row.id+"/"+audi.id).success(function( status){
 						$scope.refreshUserAudi();
 
 					}).error(function(){
@@ -179,15 +221,57 @@ angular.module('Application').controller(
 					});						
 				};
 				
-				$scope.addRow=function(audi){
-					$http.post('http://localhost:8181/addRow/'+ audi.addRow+"/"+audi.id).success(function( status){
+				//poziva se klikom na dugme kraj projekcije
+				$scope.qtMake=function(projection){
+					$rootScope.qtAudi = projection.auditorium;
+					$rootScope.Elena="cao";
+					$rootScope.qtProjection = projection;
+					$rootScope.chooseSeat=true;
+					$rootScope.qtViewSubmit=false;
+					console.log($rootScope.qtAudi);
+					$location.path("/make_qt").replace();
+				}
+				
+				//submit forme
+				$scope.qtAdd=function(projection){
+					alert("cap");
+					$http.post('http://localhost:8181/qtAdd/'+ $scope.qtProjection.id +"/"+ $scope.qtSeat.id + "/"+ $scope.qtDiscount).success(function( status){
 						$scope.refreshUserAudi();
+						$location.path("/cinema_profile").replace();
 
 					}).error(function(){
-						alert("Row has active reservations!");
+						alert("Seat has active reservations!");
+						$location.path("/cinema_profile").replace();
 
-					});						
+					});		
 				};
+				
+				//kad se izabere sediste na njegov klik
+				$scope.qtSeat=function(seat){
+					$scope.qtSeat = seat;
+					$scope.qtViewSubmit = true;
+				};
+				
+				//listanje svih qt
+				$scope.qtGet=function(){
+					$http.get('http://localhost:8181/qtGet/'+ $rootScope.currentCinema.id).success(function(data, status){
+						$scope.qtList=data;
+						//$scope.refreshUserAudi();
+						//console.log($scope.qtList);
+					}).error(function(){
+						alert("nesto je fejl");
+
+					});	
+				};
+				
+				$scope.qtRemove=function(qt){
+					$http.post('http://localhost:8181/qtRemove/'+ qt.id).success(function(data, status){
+						$scope.refreshUserQT();
+					}).error(function(){
+						alert("nesto je fejl");
+
+					});	
+				}
 			}
 		]
 	);

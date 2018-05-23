@@ -1,0 +1,19 @@
+<div>
+
+{{Elena}}
+<table>
+	<tbody>
+	<tr><td>tabela</td></tr>
+	<tr ng-repeat="row in qtAudi.rows | orderBy:'number'">
+		<td  ng-repeat="seat in row.seats | orderBy:'number'"> 
+			<button type="button"  ng-click="qtSeat(seat)"> {{buttonValue(row,seat)}} </button>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+<div ng-show="qtViewSubmit">
+	Discount(%): <input type="number" ng-model="qtDiscount" step="5" max="100" />
+	<button type="button" ng-click="qtAdd()">Add quick ticket</button>
+</div>
+</div>

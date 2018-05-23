@@ -3,20 +3,24 @@ package app.service;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.dto.QuickTicketDTO;
 import app.model.Auditorium;
 import app.model.Cinema;
 import app.model.Movie;
 import app.model.Projection;
+import app.model.QuickTicket;
 import app.model.Reservation.ReservationState;
 import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
+import app.model.Ticket.TicketState;
 import app.model.User;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
@@ -24,6 +28,7 @@ import app.repository.MovieRepository;
 import app.repository.ProjectionRepository;
 import app.repository.RowRepository;
 import app.repository.SeatRepository;
+import app.repository.TicketRepository;
 import app.repository.UserRepository;
 
 @Service
@@ -48,6 +53,9 @@ public class CinemaAdminService {
 	
 	@Autowired
 	private AuditoriumRepository audiRepository;
+	
+	@Autowired
+	private TicketRepository ticketRepository;
 	
 	public Cinema editCinemaBasic(Long id, String name, String location, String description){
 		Cinema cinema = cinemaRepository.findOne(id);
@@ -144,7 +152,6 @@ public class CinemaAdminService {
 	public boolean disableSeat(Long id) {
 		Seat seat = seatRepository.findOne(id);
 		for(Ticket t : seat.getTickets()){
-			System.out.println(t.getReservation().getState());
 			if(t.getReservation().getState()==ReservationState.Active){
 				return false;
 			}
@@ -181,25 +188,84 @@ public class CinemaAdminService {
 				}
 			}
 		}
-		int num = row.getSeats().size();			
-		List<Seat> seats =seatRepository.findByNumberBetween(num-kol,num);
-		for(Seat s: seats){
-			if(s.getRow().getId()==row.getId())
-				seatRepository.delete(s);
+		int num = row.getSeats().size();	
+		if(kol<num){
+			List<Seat> seats =seatRepository.findByNumberBetween(num-kol,num);
+			for(Seat s: seats){
+				if(s.getRow().getId()==row.getId())
+					seatRepository.delete(s);
+			}
+			return true;
 		}
-		return true;
+		else
+			return false;
 	}
 	public boolean addRow(int kol, Long audi_id) {
+		int i = 0;
 		Auditorium audi = audiRepository.findOne(audi_id);
 		Row row = new Row();
 		row.setAuditorium(audi);
 		row.setNumber((long) (audi.getRows().size()+1));
 		rowRepository.save(row);
-		for(int i = 1; i<kol+1; i++){
+
+		for( i = 1; i<kol+1; i++){
 			Seat newSeat =new Seat( audi,row,i, true );
 			seatRepository.save(newSeat);
 		}
 		return true;
 	}
 	
+	public boolean removeRow(Long row_id, Long audi_id) {
+		Row row = rowRepository.findOne(row_id);
+		for(Seat s : row.getSeats()){			
+			for(Ticket t : s.getTickets()){
+				if(t.getReservation().getState()==ReservationState.Active){
+					return false;
+				}
+			}
+		}
+		Auditorium audi = audiRepository.findOne(audi_id);
+		for(Row r : audi.getRows() )
+			if(r.getNumber()>row.getNumber())
+				r.setNumber(r.getNumber()-1);
+		for(Seat s: row.getSeats()){
+			seatRepository.delete(s);
+		}
+		rowRepository.delete(row_id);
+		return true;
+	}
+	
+	
+	public List<QuickTicketDTO> qtGet(Long cid) {
+		Cinema c =cinemaRepository.findOne(cid);
+		List<QuickTicketDTO> qts = new ArrayList<QuickTicketDTO>();
+		for(Auditorium a : c.getAuditoriums()){
+			for(Projection p : a.getProjections()){
+				for(Ticket t: p.getTickets()){
+					if(t instanceof QuickTicket && t.getState()==TicketState.Requested){
+						QuickTicket qt = (QuickTicket)t;
+						QuickTicketDTO qtDTO = new QuickTicketDTO(qt);
+						qts.add(qtDTO);
+					}
+				}
+			}
+		}
+		return qts;
+	}
+	public boolean qtAdd(Long proj_id, Long seat_id, Integer discount) {
+		Seat seat = seatRepository.findOne(seat_id);
+		Projection proj = projectionRepository.findOne(proj_id);
+		QuickTicket qt = new QuickTicket();
+		qt.setProjection(proj);
+		qt.setSeat(seat);
+		qt.setState(TicketState.Requested);
+		qt.setDiscount(discount);
+		ticketRepository.save(qt);
+		return true;
+	}
+	public boolean qtRemove(Long qtId) {
+		ticketRepository.delete(qtId);
+		return true;
+	}
+		
 }
