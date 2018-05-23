@@ -33,7 +33,22 @@ angular.module('Application').controller(
 				};
 				
 				$scope.searchUnknown=function(){
-				
+					var op = document.getElementById("unknownCombo").getElementsByTagName("option");
+					for(let i=0;i<op.length;i++){
+						if(op[i].value.toLowerCase().includes($scope.searchUnknownText)){
+							op[i].seletected=true;
+							break;
+						};
+					};
+				};
+				$scope.searchFriends=function(){
+					var op = document.getElementById("friendsCombo").getElementsByTagName("option");
+					for(let i=0;i<op.length;i++){
+						if(op[i].value.toLowerCase().includes($scope.searchFriendsText)){
+							op[i].seletected=true;
+							break;
+						};
+					};
 				};
 				
 				

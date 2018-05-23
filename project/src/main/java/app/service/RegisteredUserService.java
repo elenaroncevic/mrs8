@@ -345,8 +345,13 @@ public class RegisteredUserService {
 		for(User person : ppl){
 			if(person instanceof RegisteredUser) {
 				RegisteredUserDTO potential = new RegisteredUserDTO((RegisteredUser)person);
-				if(friends.indexOf(potential)==-1 && !email.equals(potential.getEmail())) {
-					retValue.add(potential);
+				if(!email.equals(potential.getEmail())) {
+					for(RegisteredUserDTO friend : friends) {
+						if(!friend.getEmail().equals(potential.getEmail())) {
+							retValue.add(potential);
+							break;
+						}
+					}
 				}
 			}
 		}
