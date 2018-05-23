@@ -292,6 +292,7 @@ angular.module('Application').controller(
 						
 						$http.get('http://localhost:8181/reg_user/update_pu/'+puid+'/'+name+'/'+image+'/'+description).success(function(){
 							fill_changing_promo(puid);
+							fill_my_posted_promos_used();
 							alert('successfuly updated a product');				
 						}).error(function(){
 							alert("couldn't update a product");
