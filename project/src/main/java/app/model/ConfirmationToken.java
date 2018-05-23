@@ -16,12 +16,12 @@ public class ConfirmationToken {
      
     private String token;
    
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
+    @OneToOne(targetEntity = Ticket.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "ticket_id")
     private Ticket ticket;
     
     public ConfirmationToken() {
-    	
+    	super();
     }
 
 	public ConfirmationToken(Long id, String token, Ticket ticket) {

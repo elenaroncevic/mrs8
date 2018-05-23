@@ -2,10 +2,11 @@ package app.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,7 +18,9 @@ import app.dto.AuditoriumDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
+import app.dto.SeatDTO;
 import app.model.Auditorium;
+import app.model.Cinema;
 import app.model.ConfirmationToken;
 import app.model.Friendship;
 import app.model.Movie;
@@ -27,7 +30,7 @@ import app.model.Reservation;
 import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
-import app.model.Ticket.TicketState;
+import app.model.User;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
@@ -108,17 +111,17 @@ public class RegisteredUserService {
 		return projRep.findOne(id).getAuditorium();
 	}
 	
-	public List<List<Seat>> getSeatsFromProjection(Long id){
+	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
 		Projection proj = getProjection(id);
-		List<Seat> listSeats = new ArrayList<Seat>();
-		List<Seat> unavailableSeats = new ArrayList<Seat>();
+		List<SeatDTO> listSeats = new ArrayList<SeatDTO>();
+		List<SeatDTO> unavailableSeats = new ArrayList<SeatDTO>();
 		
 		//all and sectored seats
 		for(Row r : proj.getAuditorium().getRows()) {
 			for(Seat s : r.getSeats()) {
-				listSeats.add(s);
+				listSeats.add(new SeatDTO(s));
 				if(s.getSector()!=null) {
-					unavailableSeats.add(s);
+					unavailableSeats.add(new SeatDTO(s));
 				}
 			}
 		}
@@ -126,20 +129,24 @@ public class RegisteredUserService {
 		
 		//reserved seats
 		for(Ticket tick : proj.getTickets()) {
-			unavailableSeats.add(tick.getSeat());
+			if(tick.getState()==Ticket.TicketState.Active) {
+				unavailableSeats.add(new SeatDTO(tick.getSeat()));
+			}
 		}
 		
-		List<List<Seat>> retValue=new ArrayList<List<Seat>>();
+		List<List<SeatDTO>> retValue=new ArrayList<List<SeatDTO>>();
 		retValue.add(listSeats);
 		retValue.add(unavailableSeats);
 		return retValue;
 	}
 	
-	public List<Seat> getSeatsFromReservation(Long id) {
+	public List<SeatDTO> getSeatsFromReservation(Long id) {
 		Reservation reserv = reservRep.findOne(id);
-		List<Seat> retValue = new ArrayList<Seat>();
+		List<SeatDTO> retValue = new ArrayList<SeatDTO>();
 		for(Ticket tick : reserv.getTickets()) {
-			retValue.add(tick.getSeat());
+			if(tick.getState()==Ticket.TicketState.Active) {
+				retValue.add(new SeatDTO(tick.getSeat()));
+			}
 		}
 		return retValue;
 	}
@@ -161,7 +168,6 @@ public class RegisteredUserService {
 	
 	public List<RegisteredUserDTO> getFriends(String email){
 		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
-		System.out.println(email);
 		RegisteredUser current = (RegisteredUser) userRep.findOne(email);
 		
 		for(Friendship friendship : current.getFriendsAccepted()) {
@@ -197,17 +203,20 @@ public class RegisteredUserService {
 		if(request!=null) {
 			String appUrl = request.getContextPath();
 	        String token = UUID.randomUUID().toString();
-	        ConfirmationToken ct = new ConfirmationToken(token, tick);
+	        ConfirmationToken ct = new ConfirmationToken();
+	        ct.setTicket(tick);
+	        ct.setToken(token);
 	        String subject = "Invitation to a movie";
 	        String text = "Your friend "+r.getBuyer().getFirstName()+" "+r.getBuyer().getLastName()+" wants you to go see a movie with him. Click on the link below if you accept his invitation!";
 	        String confirmationUrl = appUrl + "/acceptInvitation.html?token=" + token;
+	        String declinationUrl = appUrl + "/declineInvitation.html?token=" +token;
 	        
 	        ctRep.save(ct);
 	        
 	        SimpleMailMessage eMail = new SimpleMailMessage();
 	        eMail.setTo(email);
 	        eMail.setSubject(subject);
-	        eMail.setText(text+"\n"+"http://localhost:8181" + confirmationUrl);
+	        eMail.setText(text+"\n"+"http://localhost:8181" + confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n"+declinationUrl);
 	        mailSender.send(eMail);
 		}
 		return true;
@@ -219,7 +228,25 @@ public class RegisteredUserService {
 			return false;
 		}
 		Ticket tick = ct.getTicket();
+		if(tick.getState()==Ticket.TicketState.Cancelled) {
+			return false;
+		}
 		tick.setState(Ticket.TicketState.Active);
+		ticketRep.save(tick);
+		ctRep.delete(ct);
+		return true;
+	}
+	
+	public boolean declineInvitation(String token) {
+		ConfirmationToken ct = ctRep.findByToken(token);
+		if(ct==null) {
+			return false;
+		}
+		Ticket tick = ct.getTicket();
+		if(tick.getState()==Ticket.TicketState.Cancelled) {
+			return false;
+		}
+		tick.setState(Ticket.TicketState.Cancelled);
 		ticketRep.save(tick);
 		ctRep.delete(ct);
 		return true;
@@ -228,13 +255,19 @@ public class RegisteredUserService {
 	public boolean deleteReservation(Long id) {
 		Reservation reserv = reservRep.findOne(id);
 		String time = "";
+		String date="";
 		for(Ticket tick : reserv.getTickets()) {
 			time= tick.getProjection().getTime();
+			date=tick.getProjection().getDate();
 			break;
 		}
 		String[] lista = time.split(":");
+		String[] listaDatum = date.split("/");
 		int min = Integer.parseInt(lista[1]);
 		int h = Integer.parseInt(lista[0]);
+		int day = Integer.parseInt(listaDatum[0]);
+		int month = Integer.parseInt(listaDatum[1]);
+		int year = Integer.parseInt(listaDatum[2]);
 		if(min<30) {
 			min=min+30;
 			h=h-1;
@@ -245,11 +278,15 @@ public class RegisteredUserService {
 		}
 	    Date now = new Date();
 	    Date what = new Date();
+	    
 	    what.setHours(h);
 	    what.setMinutes(min);
 	    what.setSeconds(0);
+	    what.setDate(day);
+	    what.setMonth(month);
+	    what.setYear(year);
 	    System.out.println(what);
-		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && what.before(now)) {
+		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && now.before(what)) {
 			reserv.setState(Reservation.ReservationState.Cancelled);
 			reservRep.save(reserv);
 			for(Ticket tick : reserv.getTickets()) {
@@ -259,5 +296,60 @@ public class RegisteredUserService {
 			return true;
 		}
 		return false;
+	}
+	
+	public List<Reservation> getReservations(String email){
+		List<Reservation> retValue = new ArrayList<Reservation>();
+		RegisteredUser regU =(RegisteredUser) userRep.findOne(email);
+		for(Reservation r : regU.getReservations()) {
+			if(r.getState()==Reservation.ReservationState.Active) {
+				retValue.add(r);
+			}
+		}
+		return retValue;
+	}
+	
+	public List<Cinema> getHistory(String email){
+		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
+		List<Cinema> all = cinemaRep.findAll();
+		//dodaj
+		return all;
+	}
+	
+	public User editPass(String email, String oldPass, String pass, String pass2) {
+		RegisteredUser ru =(RegisteredUser) userRep.findOne(email);
+		if(!pass.equals(pass2) || !oldPass.equals(ru.getPassword())) {
+			return null;
+		}
+		ru.setPassword(pass);
+		userRep.save(ru);
+		return ru;
+	}
+	
+	public User editInfo(String email, String firstName, String lastName, String city, String phone) {
+		RegisteredUser ru =(RegisteredUser) userRep.findOne(email);
+		if(ru!=null) {
+			ru.setFirstName(firstName);
+			ru.setLastName(lastName);
+			ru.setCity(city);
+			ru.setPhone(phone);
+		}
+		userRep.save(ru);
+		return ru;
+	}
+	
+	public List<RegisteredUserDTO> getPeople(String email){
+		List<User> ppl = userRep.findAll();
+		List<RegisteredUserDTO> friends = getFriends(email);
+		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
+		for(User person : ppl){
+			if(person instanceof RegisteredUser) {
+				RegisteredUserDTO potential = new RegisteredUserDTO((RegisteredUser)person);
+				if(friends.indexOf(potential)==-1 && !email.equals(potential.getEmail())) {
+					retValue.add(potential);
+				}
+			}
+		}
+		return retValue;
 	}
 }

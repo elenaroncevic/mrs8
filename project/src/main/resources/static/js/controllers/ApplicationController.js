@@ -23,6 +23,13 @@ angular.module('Application').controller(
 							$location.path('/fan_zone_admin').replace();
 						}
 					}
+					$rootScope.logout=function(){
+						localStorage.removeItem("currentUser");
+						alert('You have successfully logged out!');
+						$location.path('/home').replace();
+						$rootScope.home_btn=false;
+						$rootScope.log_out_btn=false;
+					};
 				}
 		]
 );

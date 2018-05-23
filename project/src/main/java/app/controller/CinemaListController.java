@@ -21,7 +21,17 @@ public class CinemaListController {
 	
 	@RequestMapping(value="/cinemas", method=RequestMethod.GET)
 	public ResponseEntity<List<Cinema>> listCinemas() {
-		List<Cinema> lc = listCinemasService.list();
+		List<Cinema> lc = listCinemasService.getCinemas();
+		if(lc!=null){
+			System.out.println("ovde sam u clc.java!");
+			return new ResponseEntity<>(lc,HttpStatus.OK);	}
+		else
+			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+	}
+	
+	@RequestMapping(value="/theaters", method=RequestMethod.GET)
+	public ResponseEntity<List<Cinema>> listTheaters() {
+		List<Cinema> lc = listCinemasService.getTheaters();
 		if(lc!=null){
 			System.out.println("ovde sam u clc.java!");
 			return new ResponseEntity<>(lc,HttpStatus.OK);	}

@@ -10,15 +10,31 @@
 	</div>
 	
 	<div class="tabcontent" ng-show="tabs.home">
-					<h3><b>{{currentUser.firstName}} {{currentUser.lastName}}</b></h3>
-	
-					</br></br></br>
-					<p><b>E-mail:  </b>{{currentUser.email}}</p>
-					<p><b>City:  </b>{{currentUser.city}}</p>
-					<p><b>Phone:  </b>{{currentUser.phone}}</p>
+		<div data-ng-include src="'/html/homeTab.html'"></div>
 	</div>
 	<div class="tabcontent" ng-show="tabs.theaters">
-		<p>{{cinemasShow}}></p>
+		<div ng-show="theaterRegular">
+			<button type="button" ng-click="reservationViewTheater()">Make a reservation</button>
+			<table class="table table-bordered">
+			<thead>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Location</th>
+				<th>Rating</th>
+				<th>Profile</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="theater in theatersShow">
+					<td>{{theater.name}}</td>
+					<td>{{theater.description}}</td>
+					<td>{{theater.location}}</td>
+					<td>{{theater.rating}}</td>
+					<td><button type="button" ng-click="showCinema(theater)">View Profile</button></td>
+				</tr>
+			</tbody>		
+			</table>
+		</div>
+		<div data-ng-include src="'/html/reserveTicketTheater.html'"></div>
 	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
 		<div ng-show="regular">
@@ -45,8 +61,7 @@
 		<div data-ng-include src="'/html/reserveTicket.html'"></div>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.friends">
-		<p> hhh</p>
-		<p>{{hm}}</p>
+		<div data-ng-include src="'/html/friendsTab.html'"></div>
 	</div>
 	<div class = "tabcontent" ng-show="tabs.reservations">
 		<div data-ng-include src="'/html/reservationTab.html'"></div>
