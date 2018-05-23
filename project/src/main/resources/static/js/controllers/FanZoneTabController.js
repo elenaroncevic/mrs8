@@ -89,6 +89,17 @@ angular.module('Application').controller(
 				fill_licitation=function(pu_id){
 					$http.get('http://localhost:8181/reg_user/get_pu/'+pu_id).success(function(data, status){
 						$scope.licitation=data;
+						
+						var lic_date=($scope.licitation.ending_date).replace(' ','T');
+						lic_date=lic_date+"Z";
+						var licitations_date=new Date(lic_date);
+						var now=new Date();
+						if ($scope.licitation.activity=="bought" || licitations_date.getTime()<now.getTime()){ //ne moze da biduje jer vec postoji buyer ili je proslo vreme
+							document.getElementById("adding_bid").style.display="none";
+						}else{
+							document.getElementById("adding_bid").style.display="block";
+						}
+						$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":true, "div9":false};
 					}).error(function(){
 						alert("couldn't get promo licitation");
 					});
@@ -96,7 +107,7 @@ angular.module('Application').controller(
 				
 				fill_bids_in_licitation=function(pu_id){
 					$http.get('http://localhost:8181/reg_user/list_bids/'+pu_id).success(function(data, status){
-						$scope.bids_in_licitation=data;
+						$scope.bidsInLicitation=data;
 					}).error(function(){
 						alert("couldn't list bids in promo used");
 					});
@@ -137,8 +148,8 @@ angular.module('Application').controller(
 				$scope.add_promo_used = function(){
 					//proveravam podatke - name, description, image, date, time
 					
-					var date = $scope.puEndingDate; //da li ovde treba .value
-					
+					var date = document.getElementById("ending_date").value; //da li ovde treba .value
+					alert(date);
 					if ($scope.puName && date){
 						var puDescription = $scope.puDescription;					
 						if (!puDescription){
@@ -189,14 +200,32 @@ angular.module('Application').controller(
 				
 				$scope.see_pu=function(id){
 					fill_licitation(id);
-					var licitations_date=new Date((($scope.licitation.date).replace(' ','T')).concate("Z"));
-					var now=new Date();
-					if ($scope.licitation.activity="bought" || now<licitations_date){ //ne moze da biduje jer vec postoji buyer ili je proslo vreme
-						document.getElementById("adding_bid").style.display="none";
-					}
-					$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":true, "div9":false};
-				}
+					fill_bids_in_licitation(id);
+				};
 				
+				$scope.add_my_bid=function(id, ending_date){
+					//provera valjanog unosa za ponudu i opet provera za datum
+					var offer=parseFloat(document.getElementById("given_price").value);
+					var lic_date=(ending_date).replace(' ','T');
+					lic_date=lic_date+"Z";
+					var licitations_date=new Date(lic_date);
+					var now = new Date();
+					if (!isNaN(offer) && offer>=0 && now.getTime()<licitations_date.getTime()){
+						//dodavanje/update bida
+						$http.get('http://localhost:8181/reg_user/update_bid/'+$scope.currentUser.email+'/'+offer+'/'+id).success(function(){
+							fill_licitation(id);
+							fill_bids_in_licitation(id);
+							fill_my_bidded_promos_used();
+							document.getElementById("given_price").value="";
+							alert('successfuly given a bid');				
+						}).error(function(){
+							alert("couldn't give a bid");
+						});
+					}else{
+						alert("time for bidding is over or you have wrong input in field");
+						fill_licitation(id);
+					}
+				};
 				
 			}
 		]

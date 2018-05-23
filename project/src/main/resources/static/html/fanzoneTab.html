@@ -21,7 +21,7 @@
 			<input type="text" ng-model="puImage">
 			</br>
 			Ending date and time:
-			<input type="datetime-local" ng-model="puEndingDate">
+			<input type="datetime-local" ng-model="puEndingDate" id="ending_date">
 			</br>
 			
 			<div align="right">
@@ -184,7 +184,7 @@
 			</br>
 			<p><b>Description: </b> {{licitation.description}} </p>
 			</br>
-			<p><b>Image: </b> <img ng-src="licitation.image"> </p>
+			<p><b>Image: </b> <img ng-src="{{ licitation.image }}" width="150" height="150"/> </p>
 			</br>
 			<p><b>Ending date and time: </b> {{licitation.ending_date}}</p>
 			</br>
@@ -200,7 +200,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="bid in bidsInLicitation">
-						<td>{{bid.bidder}}</td>
+						<td>{{bid.bidder_email}}</td>
 						<td>{{bid.price}}</td>
 					</tr>			
 				</tbody>
@@ -208,8 +208,8 @@
 			</br>
 			<div id="adding_bid">
 				Add my bid:
-				<input type="text" maxlength="15">
-				<button type="button" ng-click="add_my_bid(licitation.id)">add product</button>
+				<input type="text" maxlength="15" id="given_price">
+				<button type="button" ng-click="add_my_bid(licitation.id, licitation.ending_date)">Give bid</button>
 			</div>
 		</div>	
 		

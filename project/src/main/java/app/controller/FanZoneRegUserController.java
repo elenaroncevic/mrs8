@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
+import app.dto.BidDTO;
 import app.dto.PromoOfficialDTO;
 import app.dto.PromoUsedDTO;
 import app.service.PromoOfficialService;
@@ -90,5 +91,27 @@ public class FanZoneRegUserController {
 	public ResponseEntity<List<PromoUsedDTO>> listMyWonPromosUsed(@PathVariable("email") String email, @PathVariable("nesto") String nesto) {
 		List<PromoUsedDTO> listOfMyWonPromosUsedDTO = promoUsedService.listMyWonPromosUsed(email);
 		return new ResponseEntity<>(listOfMyWonPromosUsedDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/reg_user/get_pu/{id}", method = RequestMethod.GET)
+	public ResponseEntity<PromoUsedDTO> getPromoUsed(@PathVariable("id") Long id) {
+		PromoUsedDTO pu_dto = promoUsedService.getPromoUsed(id);
+		return new ResponseEntity<>(pu_dto,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value = "/reg_user/list_bids/{id}", method = RequestMethod.GET)
+	public ResponseEntity<List<BidDTO>> getBids(@PathVariable("id") Long id) {
+		List<BidDTO> bidsDTO = promoUsedService.getBids(id);
+		return new ResponseEntity<>(bidsDTO,HttpStatus.OK);	
+	}
+	
+	@RequestMapping(value="/reg_user/update_bid/{email}/{offer}/{id}", method=RequestMethod.GET)
+	public ResponseEntity<Void> updateBid(@PathVariable("id") Long id, @PathVariable("email") String email, @PathVariable("offer") Double offer){
+		if (promoUsedService.updateBid(email, offer, id)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
+		}
+
 	}
 }

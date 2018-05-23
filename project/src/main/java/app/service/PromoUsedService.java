@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.dto.BidDTO;
 import app.dto.PromoUsedDTO;
 import app.model.Bid;
 import app.model.PromoUsed;
@@ -252,5 +253,67 @@ public class PromoUsedService {
 		
 		return listOfPromosUsedDTO;
 	}
+	
+	
+	public PromoUsedDTO getPromoUsed(Long id) {
+		PromoUsed pu = promoUsedRepository.findOne(id);
+		PromoUsedDTO pu_dto = new PromoUsedDTO();
+		
+		pu_dto.setActivity(pu.getActivity());
+		if (pu.getBuyer()==null){
+			pu_dto.setBuyer_email("none");
+		}else{
+			pu_dto.setBuyer_email(pu.getBuyer().getEmail());
+		}
+		pu_dto.setDescription(pu.getDescription());
+		pu_dto.setEnding_date(pu.getEndingDate().replace('T', ' '));
+		pu_dto.setId(pu.getId());
+		pu_dto.setImage(pu.getImage());
+		pu_dto.setName(pu.getName());
+		pu_dto.setOwner_email(pu.getOwner().getEmail());
+		if (pu.getPrice()==null){
+			pu_dto.setPrice(0);
+		}else{
+			pu_dto.setPrice(pu.getPrice());
+		}
+		
+		return pu_dto;
+	}
+	
+	
+	public List<BidDTO> getBids(Long id) {
+		PromoUsed pu = promoUsedRepository.findOne(id);
+		List<Bid> bids = bidRepository.findByPromo(pu);
+		List<BidDTO> bidsDTO = new ArrayList<BidDTO>();
+		
+		for (Bid b : bids){
+			BidDTO bid_dto = new BidDTO();
+			bid_dto.setBidder_email(b.getBidder().getEmail());
+			bid_dto.setId(b.getId());
+			bid_dto.setPrice(b.getPrice());
+			bid_dto.setPromo_id(id);
+			bidsDTO.add(bid_dto);
+		}
+		
+		return bidsDTO;
+	}
+
+
+	public boolean updateBid(String email, Double offer, Long id) {
+		RegisteredUser ru = (RegisteredUser) userRepository.findOne(email);
+		PromoUsed pu = promoUsedRepository.findOne(id);
+		Bid bid = bidRepository.findByBidderAndPromo(ru, pu);
+		if (bid==null){
+			bid=new Bid();
+			bid.setBidder(ru);
+			bid.setPromo(pu);
+		}
+		bid.setPrice(offer);
+		
+		bidRepository.save(bid);
+		return true;
+	}
+	
+	
 			
 }
