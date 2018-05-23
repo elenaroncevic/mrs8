@@ -1,6 +1,6 @@
 angular.module('Application').controller(
 		'CinemaAdminController',
-		[
+		[ 
 			'$rootScope',
 			'$scope',
 			'$window',

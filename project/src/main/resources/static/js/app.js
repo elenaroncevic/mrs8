@@ -59,6 +59,6 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).otherwise({
 				redirectTo : '/home'
 			});
-		} ]);
+		} ]); 
 		
 	
