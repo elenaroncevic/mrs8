@@ -53,7 +53,7 @@ public class CinemaAdminController {
 		return new ResponseEntity<>(movies, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/refreshUser/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="/refreshUser/{id:.+}", method=RequestMethod.GET)
 	public ResponseEntity<User> refreshUser(@PathVariable("id") String id) {
 		User user =cinemaAdminService.getUser(id);
 		return new ResponseEntity<>(user, HttpStatus.OK);

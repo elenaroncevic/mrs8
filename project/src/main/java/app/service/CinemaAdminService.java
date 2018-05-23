@@ -3,6 +3,7 @@ package app.service;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -114,8 +115,9 @@ public class CinemaAdminService {
 			return false;
 		}
 		Date date = new Date(projCalendar.getTimeInMillis());
-		DateFormat df = DateFormat.getInstance();
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
 		String s = df.format(date);
+		System.out.println();
 		String time = df.format(date.getTime());
 		String d = date.toString();
 		//System.out.println("s: "+s);

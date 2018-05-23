@@ -30,6 +30,7 @@ angular.module('Application').controller(
 					$scope.theaterSelected = $rootScope.theatersShow[selTheater];
 					$http.get('http://localhost:8181/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
 						$scope.showsShow=data;
+						alert('hm');
 					});
 					$scope.showSeatsPreview=false;
 				};
