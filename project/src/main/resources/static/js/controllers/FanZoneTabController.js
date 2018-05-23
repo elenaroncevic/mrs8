@@ -178,29 +178,37 @@ angular.module('Application').controller(
 				$scope.add_promo_used = function(){
 					//proveravam podatke - name, description, image, date, time
 					
-					var date = document.getElementById("ending_date").value; //da li ovde treba .value
-					alert(date);
+					var date = document.getElementById("ending_date").value; //da li ovde treba .value  
+					
 					if ($scope.puName && date){
-						var puDescription = $scope.puDescription;					
-						if (!puDescription){
-							puDescription="No description";
-						}
-						var puImage = $scope.puImage;
-						if (!puImage){
-							puImage="http://cdn7.bigcommerce.com/s-viqdwewl26/stencil/8f903ed0-76e7-0135-12e4-525400970412/icons/icon-no-image.svg";
-						}
-						puImage = puImage.replace(/\//g, "+");
-						puImage = puImage.replace(/\?/g, "*");
-						
-						
-						$http.get('http://localhost:8181/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date).success(function(){
-							alert('successfuly added a product');
-							$scope.puName="";
-							$scope.puDescription="";
-							$scope.puImage="";
-						}).error(function(){
-							alert("couldn't create used product");
-						});
+						var lic_date=date;
+						lic_date=lic_date+"Z";
+						var licitations_date=new Date(lic_date);
+						var now = new Date();
+						if (now.getTime()>licitations_date.getTime()){
+							alert("you must select date and time in the future");
+						}else{
+							var puDescription = $scope.puDescription;					
+							if (!puDescription){
+								puDescription="No description";
+							}
+							var puImage = $scope.puImage;
+							if (!puImage){
+								puImage="http://cdn7.bigcommerce.com/s-viqdwewl26/stencil/8f903ed0-76e7-0135-12e4-525400970412/icons/icon-no-image.svg";
+							}
+							puImage = puImage.replace(/\//g, "+");
+							puImage = puImage.replace(/\?/g, "*");
+							
+							
+							$http.get('http://localhost:8181/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date).success(function(){
+								alert('successfuly added a product');
+								$scope.puName="";
+								$scope.puDescription="";
+								$scope.puImage="";
+							}).error(function(){
+								alert("couldn't create used product");
+							});
+						}	
 					}else{
 						alert("invalid data in fields");
 					}	
