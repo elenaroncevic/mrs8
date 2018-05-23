@@ -44,7 +44,7 @@ angular.module('Application').controller(
 						}
 						var poImage = $scope.poImage;
 						if (!poImage){
-							poImage="https//blog.stylingandroid.com/wp-content/themes/lontano-pro/images/no-image-slide.png";
+							poImage="http://cdn7.bigcommerce.com/s-viqdwewl26/stencil/8f903ed0-76e7-0135-12e4-525400970412/icons/icon-no-image.svg";
 						}
 						poImage = poImage.replace(/\//g, "+");
 						poImage = poImage.replace(/\?/g, "*");
