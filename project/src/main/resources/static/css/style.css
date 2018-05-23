@@ -218,6 +218,24 @@ span.seatCharts-legendDescription {
     padding: 6px 11px;
     width: 50%;
 	}
+#selected-seats2 {
+	max-height: 84px;
+	overflow-y: auto;
+	overflow-x: none;
+	width: 200px;
+	}
+#selected-seats2 li{
+    border: 1px solid #d3d3d3;
+    background: #f7f7f7;
+    margin: 6px 0;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #000;
+    font-weight: 600;
+    padding: 6px 11px;
+    width: 50%;
+	}
 .scrollbar {
     overflow-y: scroll;
 }

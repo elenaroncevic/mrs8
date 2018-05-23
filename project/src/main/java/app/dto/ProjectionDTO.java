@@ -9,14 +9,16 @@ public class ProjectionDTO {
 	private String date;
 	private String time;
 	private Double price;
-	private Integer audId;
+	private Long audId;
+	private Integer audNum;
 	
 	public ProjectionDTO(Projection projection) {
 		this.id=projection.getId();
 		this.date=projection.getDate();
 		this.time=projection.getTime();
 		this.price=projection.getPrice();
-		this.audId=projection.getAuditorium().getNumber();
+		this.audId=projection.getAuditorium().getId();
+		this.audNum=projection.getAuditorium().getNumber();
 	}
 
 	public Long getId() {
@@ -51,22 +53,33 @@ public class ProjectionDTO {
 		this.price = price;
 	}
 
-	public Integer getAudId() {
+	public Long getAudId() {
 		return audId;
 	}
 
-	public void setAudId(Integer audId) {
+	public void setAudId(Long audId) {
 		this.audId = audId;
 	}
 
-	public ProjectionDTO(Long id, String date, String time, Double price, Integer audId) {
+	public Integer getAudNum() {
+		return audNum;
+	}
+
+	public void setAudNum(Integer audNum) {
+		this.audNum = audNum;
+	}
+
+	public ProjectionDTO(Long id, String date, String time, Double price, Long audId, Integer audNum) {
 		super();
 		this.id = id;
 		this.date = date;
 		this.time = time;
 		this.price = price;
 		this.audId = audId;
+		this.audNum = audNum;
 	}
+
+
 
 
 

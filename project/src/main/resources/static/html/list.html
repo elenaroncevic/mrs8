@@ -1,6 +1,5 @@
-<div ng-init="list_cinemas()">
-Cinemas:<br>
- 	<table style="cellPadding:10; cellspacing:10; rules:cols">
+<div>
+ 	<table ng-init= "list_cinemas()">
 	<thead class="thead-inverse">
 		<tr>
 			<th>ID</th>
@@ -19,29 +18,5 @@ Cinemas:<br>
 			<td>{{ cinema.rating }}</td>
 		</tr>		
 	</tbody>
-	</table>
-	<hr>
-	<br>
-	Theaters:<br>
-	<table>
-	<thead class="thead-inverse">
-		<tr>
-			<th>ID</th>
-			<th>DEscription</th>
-			<th>Name</th>	
-			<th>Location</th>
-			<th>rating</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="cinema in theaterList">
-			<td>{{ cinema.id }}</td>
-			<td>{{ cinema.description }}</td>
-			<td>{{ cinema.name }}</td>
-			<td>{{ cinema.location }}</td>			
-			<td>{{ cinema.rating }}</td>
-		</tr>		
-	</tbody>
-	
 </table>
 </div>

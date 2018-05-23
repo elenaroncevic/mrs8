@@ -9,12 +9,13 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $location, $http) {
   				$( function() {
     				$( "#datepicker" ).datepicker();
-				} );		
+				} );		 
 				$scope.projectionDate=false;
 				$scope.timeAud=false;
 				$scope.showSeatsPreview=false;
 				$scope.friendsBox=false;
 				$scope.disableButtons=false;
+				$scope.showSeatsPreview=true;
 				$scope.searchCinemas=function(){
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
 					for(let i =0;i<op.length;i++){
@@ -46,7 +47,8 @@ angular.module('Application').controller(
 					
 					$http.get('http://localhost:8181/reguser/projections/'+$scope.chosenMovie.id).success(function(data, status){
 						for(let x in data){
-							if($scope.chosenDate==data[x].date){
+							var lista = data[x].date.split(' ');
+							if($scope.chosenDate==lista[0]){
 								$scope.projShow[num]=data[x];
 								num=num+1;
 							}
@@ -58,6 +60,8 @@ angular.module('Application').controller(
 				$scope.loadSeats=function(){
 					var myEl = angular.element( document.querySelector( '#seat-map' ) );
 					myEl.empty();
+					var myEl2 = angular.element(document.querySelector( '#selected-seats'));
+					myEl2.empty();
 					$scope.chosenProjection = $scope.projShow[document.getElementById("projCombo").selectedIndex];
 					if($scope.chosenProjection==null){
 						alert('Projection not chosen!');

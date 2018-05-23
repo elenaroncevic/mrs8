@@ -1,12 +1,14 @@
 package app.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.swing.plaf.synth.SynthSpinnerUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -129,7 +131,7 @@ public class RegisteredUserService {
 		
 		//reserved seats
 		for(Ticket tick : proj.getTickets()) {
-			if(tick.getState()==Ticket.TicketState.Active) {
+			if(tick.getState()==Ticket.TicketState.Active || tick.getState()==Ticket.TicketState.Requested) {
 				unavailableSeats.add(new SeatDTO(tick.getSeat()));
 			}
 		}
@@ -144,7 +146,7 @@ public class RegisteredUserService {
 		Reservation reserv = reservRep.findOne(id);
 		List<SeatDTO> retValue = new ArrayList<SeatDTO>();
 		for(Ticket tick : reserv.getTickets()) {
-			if(tick.getState()==Ticket.TicketState.Active) {
+			if(tick.getState()==Ticket.TicketState.Active || tick.getState()==Ticket.TicketState.Requested) {
 				retValue.add(new SeatDTO(tick.getSeat()));
 			}
 		}
@@ -254,39 +256,23 @@ public class RegisteredUserService {
 	
 	public boolean deleteReservation(Long id) {
 		Reservation reserv = reservRep.findOne(id);
-		String time = "";
 		String date="";
 		for(Ticket tick : reserv.getTickets()) {
-			time= tick.getProjection().getTime();
 			date=tick.getProjection().getDate();
 			break;
 		}
-		String[] lista = time.split(":");
-		String[] listaDatum = date.split("/");
-		int min = Integer.parseInt(lista[1]);
-		int h = Integer.parseInt(lista[0]);
-		int day = Integer.parseInt(listaDatum[0]);
-		int month = Integer.parseInt(listaDatum[1]);
-		int year = Integer.parseInt(listaDatum[2]);
-		if(min<30) {
-			min=min+30;
-			h=h-1;
-		}else if(min>30) {
-			min=min-30;
-		}else {
-			min=0;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		try {
+			cal.setTime(df.parse(date));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-	    Date now = new Date();
-	    Date what = new Date();
-	    
-	    what.setHours(h);
-	    what.setMinutes(min);
-	    what.setSeconds(0);
-	    what.setDate(day);
-	    what.setMonth(month);
-	    what.setYear(year);
-	    System.out.println(what);
-		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && now.before(what)) {
+
+		now.add(Calendar.MINUTE, -30);
+		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && now.getTime().before(cal.getTime())) {
 			reserv.setState(Reservation.ReservationState.Cancelled);
 			reservRep.save(reserv);
 			for(Ticket tick : reserv.getTickets()) {
