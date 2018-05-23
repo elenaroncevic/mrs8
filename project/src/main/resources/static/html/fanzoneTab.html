@@ -216,25 +216,49 @@
 		<!-- div za izlistavanje jednog proizvoda za koji mogu da biram pobednika (see_my_pu)-->
 		<div id="changing_product" ng-show="show_div.div9" class="tabcontent">
 			<div>
-				Name:
-				<input type="text" ng-model="changing_promo.name" id="changing_promo_name">
+				<div id="able_to_change">
+					Name:
+					<input type="text" ng-model="changing_promo.name" id="changing_promo_name">
+					</br>
+					Description:
+					<textarea ng-model="changing_promo.description" id="changing_promo_description"></textarea>
+					</br>
+					Image:
+					<input type="text" ng-model="changing_promo.image" id="changing_promo_image">
+				</div>
+				<div id="unable_to_change">
+					<p><b>Name: </b> {{changing_promo.name}} </p>
+					</br>
+					<p><b>Description: </b> {{changing_promo.description}} </p>
+					</br>
+					<p><b>Image: </b> <img ng-src="{{ changing_promo.image }}" width="150" height="150"/> </p>
+				</div>
+				
 				</br>
-				Description:
-				<textarea ng-model="changing_promo.description" id="changing_promo_description"></textarea>
-				</br>
-				Image:
-				<input type="text" ng-model="changing_promo.image" id="changing_promo_image">
-				</br>
-				Ending date and time: {{changing_promo.ending_date}} {{changing_promo.ending_time}}
+				Ending date and time: {{changing_promo.ending_date}} 
 				</br>
 				Owner: {{changing_promo.owner_email}}
 				</br>
 				Buyer: {{changing_promo.buyer_email}}
 				</br>
 				<div align="right" id="save_or_reset">
-					<button type="button" ng-click="save_changed_pu()">Save changes</button>
-					<button type="button" ng-click="reset_changes_pu()">Cancel</button>
+					<button type="button" ng-click="save_changed_pu(changing_promo.id, changing_promo.ending_date)">Save changes</button>
+					<button type="button" ng-click="cancel_changes_pu(changing_promo.id, changing_promo.ending_date)">Cancel</button>
 				</div>
+				Bids:
+				<table class="table table-bordered">
+					<thead>
+						<th>Bidder</th>
+						<th>Price</th>				
+					</thead>
+					<tbody>
+						<tr ng-repeat="bid in bidsInLicitation">
+							<td>{{bid.bidder_email}}</td>
+							<td>{{ bid.price }}</td>
+							<td><button type="button" ng-click="choose_buyer(bid.id)" ng-show="can_choose_buyer">Choose buyer</button></td>
+						</tr>			
+					</tbody>
+				</table>
 			</div>
 		</div>	
 		

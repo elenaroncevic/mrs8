@@ -103,7 +103,7 @@ angular.module('Application').controller(
 					}).error(function(){
 						alert("couldn't get promo licitation");
 					});
-				}
+				};
 				
 				fill_bids_in_licitation=function(pu_id){
 					$http.get('http://localhost:8181/reg_user/list_bids/'+pu_id).success(function(data, status){
@@ -111,7 +111,35 @@ angular.module('Application').controller(
 					}).error(function(){
 						alert("couldn't list bids in promo used");
 					});
-				}
+				};
+				
+				fill_changing_promo=function(pu_id){
+					$http.get('http://localhost:8181/reg_user/get_pu/'+pu_id).success(function(data, status){
+						$scope.changing_promo=data;
+						
+						var lic_date=($scope.changing_promo.ending_date).replace(' ','T');
+						lic_date=lic_date+"Z";
+						var licitations_date=new Date(lic_date);
+						var now=new Date();
+						if ($scope.changing_promo.activity=="bought" || licitations_date.getTime()<now.getTime()){ //ne moze da menja jer vec postoji buyer ili je proslo vreme
+							document.getElementById("able_to_change").style.display="none";
+							document.getElementById("unable_to_change").style.display="block";
+							document.getElementById("save_or_reset").style.display="none";
+							$scope.can_choose_buyer=false;
+						}else{
+							document.getElementById("able_to_change").style.display="block";
+							document.getElementById("unable_to_change").style.display="none";
+							document.getElementById("save_or_reset").style.display="block";
+							$scope.can_choose_buyer=true;
+						}
+						$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":false, "div9":true};
+					}).error(function(){
+						alert("couldn't get changing promo");
+					});
+				};
+				
+			
+				
 				////
 			
 				
@@ -143,6 +171,8 @@ angular.module('Application').controller(
 				$scope.licitation={};
 				$scope.bidsInLicitation={};
 				
+				//ucitavanje podataka za div9
+				$scope.changing_promo={};
 				
 				
 				$scope.add_promo_used = function(){
@@ -203,6 +233,7 @@ angular.module('Application').controller(
 					fill_bids_in_licitation(id);
 				};
 				
+				
 				$scope.add_my_bid=function(id, ending_date){
 					//provera valjanog unosa za ponudu i opet provera za datum
 					var offer=parseFloat(document.getElementById("given_price").value);
@@ -224,6 +255,55 @@ angular.module('Application').controller(
 					}else{
 						alert("time for bidding is over or you have wrong input in field");
 						fill_licitation(id);
+					}
+				};
+				
+				
+				$scope.see_my_pu=function(id){
+					fill_changing_promo(id);
+					fill_bids_in_licitation(id);
+				};
+				
+				$scope.save_changed_pu=function(puid, ending_date){
+					var name=document.getElementById("changing_promo_name").value;
+					var description=document.getElementById("changing_promo_description").value;
+					var image=document.getElementById("changing_promo_image").value;
+					var lic_date=(ending_date).replace(' ','T');   
+					lic_date=lic_date+"Z";
+					var licitations_date=new Date(lic_date);
+					var now = new Date();
+					if (name && now.getTime()<licitations_date.getTime()){
+						if (!description){
+							description="No description";
+						}
+						if (!image){
+							image="http://cdn7.bigcommerce.com/s-viqdwewl26/stencil/8f903ed0-76e7-0135-12e4-525400970412/icons/icon-no-image.svg";
+						}
+						image = image.replace(/\//g, "+");
+						image = image.replace(/\?/g, "*");
+						
+						$http.get('http://localhost:8181/reg_user/update_pu/'+puid+'/'+name+'/'+image+'/'+description).success(function(){
+							fill_changing_promo(puid);
+							alert('successfuly updated a product');				
+						}).error(function(){
+							alert("couldn't update a product");
+						});
+					}else{
+						alert("time for changing promo is over or you have wrong input in field");
+						fill_changing_promo(puid);
+					}
+				};
+				
+				$scope.cancel_changes_pu= function(puid, ending_date){
+					var lic_date=(ending_date).replace(' ','T');   
+					lic_date=lic_date+"Z";
+					var licitations_date=new Date(lic_date);
+					var now = new Date();
+					if (now.getTime()<licitations_date.getTime()){
+						fill_changing_promo(puid);						
+					}else{
+						alert("time for changing promo is over or you have wrong input in field");
+						fill_changing_promo(puid);
 					}
 				};
 				

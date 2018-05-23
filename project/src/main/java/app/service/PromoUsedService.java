@@ -57,16 +57,6 @@ public class PromoUsedService {
 			
 			pu_dto.setImage(pu.getImage());
 			
-			
-			//unapproved nemaju bidove, ovo ide u approved
-			/*
-			List<Bid> listOfBids = bidRepository.getBidByPromoId(pu_dto.getId());
-			for (Bid b : listOfBids){
-				pu_dto.getBid_id().add(b.getId());
-				pu_dto.getBid_email().add(b.getBidder().getEmail());
-				pu_dto.getBid_price().add(b.getPrice());
-			}
-			*/
 			listOfPromosUsedDTO.add(pu_dto);
 		}
 		return listOfPromosUsedDTO;
@@ -311,6 +301,20 @@ public class PromoUsedService {
 		bid.setPrice(offer);
 		
 		bidRepository.save(bid);
+		return true;
+	}
+
+
+	public boolean updatePromoUsed(Long id, String name, String image, String description) {
+		PromoUsed pu = promoUsedRepository.findOne(id);
+		pu.setName(name);
+		pu.setDescription(description);
+		
+		image = image.replace('+','/');
+		image = image.replace('*','?');
+		pu.setImage(image);
+		
+		promoUsedRepository.save(pu);
 		return true;
 	}
 	

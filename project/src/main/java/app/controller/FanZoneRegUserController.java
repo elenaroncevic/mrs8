@@ -114,4 +114,14 @@ public class FanZoneRegUserController {
 		}
 
 	}
+	
+	@RequestMapping(value="/reg_user/update_pu/{id}/{name}/{image}/{description}", method=RequestMethod.GET)
+	public ResponseEntity<Void> updatePromoUsed(@PathVariable("id") Long id, @PathVariable("name") String name, @PathVariable("image") String image, @PathVariable("description") String description){
+		if (promoUsedService.updatePromoUsed(id, name, image, description)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
+		}
+
+	}
 }
