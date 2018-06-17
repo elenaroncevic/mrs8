@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import app.dto.AuditoriumDTO;
+import app.dto.CinemaDTO;
+import app.dto.FriendshipDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
+import app.dto.ReservationDTO;
 import app.dto.SeatDTO;
-import app.model.Cinema;
 import app.model.Movie;
 import app.model.Projection;
-import app.model.Reservation;
 import app.model.Ticket;
 import app.model.User;
 import app.service.RegisteredUserService;
@@ -69,9 +70,11 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(seats, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/projections/{id}")
-	public ResponseEntity<List<ProjectionDTO>> getProjectionsFromMovie(@PathVariable("id") Long id){
-		List<ProjectionDTO> projs = regUserService.getProjectionsFromMovie(id);
+	//needed
+	@RequestMapping("/projections/{id}/{date}")
+	public ResponseEntity<List<ProjectionDTO>> getProjectionsFromMovie(@PathVariable("id") Long id, @PathVariable("date") String date){
+		List<ProjectionDTO> projs = regUserService.getProjectionsFromMovie(id, date);
+		System.out.println("hm");
 		return new ResponseEntity<>(projs, HttpStatus.OK);
 	}
 	
@@ -114,6 +117,7 @@ public class RegisteredUserController {
 		}
 	}
 	
+	//needed
 	@RequestMapping(value="/deleteReservation/{id}", method=RequestMethod.DELETE)
 	public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id){
 		if(regUserService.deleteReservation(id)) {
@@ -123,15 +127,16 @@ public class RegisteredUserController {
 		}
 	}
 	
+	//needed
 	@RequestMapping("/reservations/{email:.+}")
-	public ResponseEntity<List<Reservation>> getReservations(@PathVariable("email") String email){
-		List<Reservation> reservs = regUserService.getReservations(email);
+	public ResponseEntity<List<ReservationDTO>> getReservations(@PathVariable("email") String email){
+		List<ReservationDTO> reservs = regUserService.getReservations(email);
 		return new ResponseEntity<>(reservs, HttpStatus.OK);
 	}
 	
 	@RequestMapping("/history/{email:.+}")
-	public ResponseEntity<List<Cinema>> getHistory(@PathVariable("email") String email){
-		List<Cinema> reservs = regUserService.getHistory(email);
+	public ResponseEntity<List<CinemaDTO>> getHistory(@PathVariable("email") String email){
+		List<CinemaDTO> reservs = regUserService.getHistory(email);
 		return new ResponseEntity<>(reservs, HttpStatus.OK);
 	}
 	
@@ -154,6 +159,38 @@ public class RegisteredUserController {
 			return new ResponseEntity<>(user, HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping("/friendReq/{email:.+}")
+	public ResponseEntity<List<FriendshipDTO>> getRequests(@PathVariable("email") String email){
+		List<FriendshipDTO> reqs = regUserService.getRequests(email);
+		return new ResponseEntity<> (reqs, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/acceptedReq/{id}", method = RequestMethod.POST)
+	public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id){
+		regUserService.acceptFriend(id);
+		return new ResponseEntity<> (HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/declinedReq/{id}", method = RequestMethod.POST)
+	public ResponseEntity<Void> declineFriend(@PathVariable("id") Long id){
+		regUserService.declineFriend(id);
+		return new ResponseEntity<> (HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/addFriend/{userEmail}/{frEmail:.+}", method = RequestMethod.POST)
+	public ResponseEntity<Void> addFriend(@PathVariable("userEmail") String userEmail, @PathVariable("frEmail") String frEmail){
+		regUserService.addFriend(userEmail, frEmail);
+		return new ResponseEntity<> (HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/removeFriend/{userEmail}/{frEmail:.+}", method = RequestMethod.POST)
+	public ResponseEntity<Void> removeFriend(@PathVariable("userEmail") String userEmail, @PathVariable("frEmail") String frEmail){
+		regUserService.removeFriend(userEmail, frEmail);
+		return new ResponseEntity<> (HttpStatus.OK);
+	}
+	
+	
 	
 	
 
