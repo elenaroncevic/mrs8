@@ -59,7 +59,9 @@ public class RegisteredUser extends User {
 	@JsonManagedReference
 	private Set<PromoUsed> promoUsed = new HashSet<PromoUsed>();
 	
-	
+	@OneToMany (mappedBy = "visitor",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	@JsonManagedReference
+	private Set<Visitation> visits = new HashSet<Visitation>();
 	
 	
 	public RegisteredUser(){
@@ -107,9 +109,13 @@ public class RegisteredUser extends User {
 	}
 
 
+	
+
+
 	public RegisteredUser(String firstName, String lastName, String city, String phone, Set<Friendship> friendsAdded,
 			Set<Friendship> friendsAccepted, Set<CinemaRate> cinemaRates, Set<MovieRate> movieRates,
-			Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials, Set<PromoUsed> promoUsed) {
+			Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials, Set<PromoUsed> promoUsed,
+			Set<Visitation> visits) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -123,6 +129,7 @@ public class RegisteredUser extends User {
 		this.bids = bids;
 		this.promoOfficials = promoOfficials;
 		this.promoUsed = promoUsed;
+		this.visits = visits;
 	}
 
 
@@ -200,6 +207,16 @@ public class RegisteredUser extends User {
 
 	public void setFriendsAccepted(Set<Friendship> friendsAccepted) {
 		this.friendsAccepted = friendsAccepted;
+	}
+
+
+	public Set<Visitation> getVisits() {
+		return visits;
+	}
+
+
+	public void setVisits(Set<Visitation> visits) {
+		this.visits = visits;
 	}
 	
 	
