@@ -35,7 +35,10 @@ import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
+<<<<<<< HEAD
 import app.model.QuickTicket;
+=======
+>>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 import app.model.Visitation;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
@@ -431,6 +434,7 @@ public class RegisteredUserService {
 		friendRep.save(remove);
 		return true;
 	}
+<<<<<<< HEAD
 
 	public boolean qtBuy(Long qtId, String userId) {
 		QuickTicket qt = (QuickTicket)ticketRep.findOne(qtId);
@@ -445,6 +449,8 @@ public class RegisteredUserService {
 		return true;
 		
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 	
 	
 }

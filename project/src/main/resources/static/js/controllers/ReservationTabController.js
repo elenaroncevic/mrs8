@@ -24,6 +24,7 @@ angular.module('Application').controller(
 					$http.get('/reguser/reservations/'+currentUser.email).success(function(data, status){
 						$rootScope.reservationsShow=data;
 					});
+<<<<<<< HEAD
 				};
 				$rootScope.loadReservations();
 				showReservation=function(){
@@ -51,6 +52,8 @@ angular.module('Application').controller(
 							});
 						}
 					};
+=======
+>>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 				};
 			}
 		]

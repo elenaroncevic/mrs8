@@ -160,6 +160,7 @@ public class RegisteredUserController {
 		}
 	}
 	
+<<<<<<< HEAD
 	@RequestMapping(value="/qtBuy/{qtId}/{email:.+}", method=RequestMethod.POST)
 	public ResponseEntity<Void> qtBuy(@PathVariable("qtId") Long qtId, @PathVariable("email") String email){
 		boolean ok = regUserService.qtBuy(qtId, email);
@@ -168,6 +169,8 @@ public class RegisteredUserController {
 		else
 			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
+=======
+>>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 	@RequestMapping("/friendReq/{email:.+}")
 	public ResponseEntity<List<FriendshipDTO>> getRequests(@PathVariable("email") String email){
 		List<FriendshipDTO> reqs = regUserService.getRequests(email);
