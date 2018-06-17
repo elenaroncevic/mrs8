@@ -1,4 +1,4 @@
-angular.module('Application').controller(
+angular.module('Application').controller( 
 		'CinemaAdminController',
 		[ 
 			'$rootScope',
