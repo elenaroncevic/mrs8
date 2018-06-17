@@ -16,14 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.WebRequest;
 
 import app.dto.AuditoriumDTO;
+import app.dto.CinemaDTO;
+import app.dto.FriendshipDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
+import app.dto.ReservationDTO;
 import app.dto.SeatDTO;
 import app.model.Auditorium;
-import app.model.Cinema;
 import app.model.ConfirmationToken;
 import app.model.Friendship;
+import app.model.Friendship.FriendshipState;
 import app.model.Movie;
 import app.model.Projection;
 import app.model.RegisteredUser;
@@ -33,9 +36,11 @@ import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
 import app.model.QuickTicket;
+import app.model.Visitation;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
+import app.repository.FriendshipRepository;
 import app.repository.MovieRepository;
 import app.repository.ProjectionRepository;
 import app.repository.ReservationRepository;
@@ -72,6 +77,9 @@ public class RegisteredUserService {
 	
 	@Autowired
 	ConfirmationTokenRepository ctRep;
+	
+	@Autowired
+	FriendshipRepository friendRep;
 	
     @Autowired
     private JavaMailSender mailSender;
@@ -113,6 +121,7 @@ public class RegisteredUserService {
 		return projRep.findOne(id).getAuditorium();
 	}
 	
+	//needed
 	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
 		Projection proj = getProjection(id);
 		List<SeatDTO> listSeats = new ArrayList<SeatDTO>();
@@ -153,11 +162,17 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
-	public List<ProjectionDTO> getProjectionsFromMovie(Long id){
+	//needed
+	public List<ProjectionDTO> getProjectionsFromMovie(Long id, String date){
 		Movie movie = movieRep.findOne(id);
+		String[] lista = null;
+		String comp = date.replace(",", "/");
 		List<ProjectionDTO> retValue = new ArrayList<ProjectionDTO>();
 		for(Projection proj : movie.getProjections()) {
-			retValue.add(new ProjectionDTO(proj));
+			lista = proj.getDate().split(" ");
+			if(lista[0].equals(comp)) {
+				retValue.add(new ProjectionDTO(proj));
+			}
 		}
 		return retValue;
 	}
@@ -254,6 +269,7 @@ public class RegisteredUserService {
 		return true;
 	}
 	
+	//needed
 	public boolean deleteReservation(Long id) {
 		Reservation reserv = reservRep.findOne(id);
 		String date="";
@@ -284,22 +300,25 @@ public class RegisteredUserService {
 		return false;
 	}
 	
-	public List<Reservation> getReservations(String email){
-		List<Reservation> retValue = new ArrayList<Reservation>();
+	//needed
+	public List<ReservationDTO> getReservations(String email){
+		List<ReservationDTO> retValue = new ArrayList<ReservationDTO>();
 		RegisteredUser regU =(RegisteredUser) userRep.findOne(email);
 		for(Reservation r : regU.getReservations()) {
 			if(r.getState()==Reservation.ReservationState.Active) {
-				retValue.add(r);
+				retValue.add(new ReservationDTO(r));
 			}
 		}
 		return retValue;
 	}
 	
-	public List<Cinema> getHistory(String email){
+	public List<CinemaDTO> getHistory(String email){
 		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
-		List<Cinema> all = cinemaRep.findAll();
-		//dodaj
-		return all;
+		List<CinemaDTO> retValue = new ArrayList<CinemaDTO>();
+		for(Visitation visit : ru.getVisits()) {
+			retValue.add(new CinemaDTO(visit.getCinema()));
+		}
+		return retValue;
 	}
 	
 	public User editPass(String email, String oldPass, String pass, String pass2) {
@@ -326,22 +345,91 @@ public class RegisteredUserService {
 	
 	public List<RegisteredUserDTO> getPeople(String email){
 		List<User> ppl = userRep.findAll();
-		List<RegisteredUserDTO> friends = getFriends(email);
+		RegisteredUser current = (RegisteredUser) userRep.findOne(email);
+		List<RegisteredUser> friends = new ArrayList<RegisteredUser>();
+		for(Friendship friendship : current.getFriendsAccepted()) {
+			if(friendship.getState()==Friendship.FriendshipState.Accepted || friendship.getState()==Friendship.FriendshipState.Requested) {
+				friends.add(friendship.getSender());
+			}
+		}
+		for(Friendship friendship : current.getFriendsAdded()) {
+			if(friendship.getState()==Friendship.FriendshipState.Accepted || friendship.getState()==Friendship.FriendshipState.Requested) {
+				friends.add(friendship.getFriend());
+			}
+		}
 		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
 		for(User person : ppl){
-			if(person instanceof RegisteredUser) {
+			if(person instanceof RegisteredUser && !email.equals(person.getEmail())) {
 				RegisteredUserDTO potential = new RegisteredUserDTO((RegisteredUser)person);
-				if(!email.equals(potential.getEmail())) {
-					for(RegisteredUserDTO friend : friends) {
+				if(friends.isEmpty()) {
+					retValue.add(potential);
+					continue;
+				}
+					for(RegisteredUser friend : friends) {
 						if(!friend.getEmail().equals(potential.getEmail())) {
 							retValue.add(potential);
 							break;
 						}
 					}
-				}
 			}
 		}
 		return retValue;
+	}
+	
+	public List<FriendshipDTO> getRequests(String email){
+		List<FriendshipDTO> retValue = new ArrayList<FriendshipDTO>();
+		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
+		for(Friendship fr : ru.getFriendsAccepted()) {
+			if(fr.getState()==FriendshipState.Requested) {
+				retValue.add(new FriendshipDTO(fr));
+			}
+		}
+		return retValue;
+	}
+	
+	public boolean acceptFriend(Long id) {
+		Friendship fr = friendRep.findOne(id);
+		fr.setState(Friendship.FriendshipState.Accepted);
+		friendRep.save(fr);
+		return true;
+	}
+	
+	public boolean declineFriend(Long id) {
+		Friendship fr = friendRep.findOne(id);
+		fr.setState(Friendship.FriendshipState.Cancelled);
+		friendRep.save(fr);
+		return true;
+	}
+	
+	public boolean addFriend(String uEmail, String fEmail) {
+		Friendship fr = new Friendship();
+		fr.setSender((RegisteredUser) userRep.findOne(uEmail));
+		fr.setFriend((RegisteredUser) userRep.findOne(fEmail));
+		fr.setState(Friendship.FriendshipState.Requested);
+		friendRep.save(fr);
+		return true;
+	}
+	
+	public boolean removeFriend(String uEmail, String fEmail) {
+		RegisteredUser ru = (RegisteredUser) userRep.findOne(uEmail);
+		Friendship remove = null;
+		for(Friendship fr : ru.getFriendsAccepted()) {
+			if(fr.getSender().getEmail().equals(fEmail)) {
+				remove = fr;
+				break;
+			}
+		}
+		if(remove==null) {
+			for(Friendship fr : ru.getFriendsAdded()) {
+				if(fr.getFriend().getEmail().equals(fEmail)) {
+					remove = fr;
+					break;
+				}
+			}
+		}
+		remove.setState(Friendship.FriendshipState.Cancelled);
+		friendRep.save(remove);
+		return true;
 	}
 
 	public boolean qtBuy(Long qtId, String userId) {
@@ -357,4 +445,6 @@ public class RegisteredUserService {
 		return true;
 		
 	}
+	
+	
 }
