@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -33,6 +32,7 @@ import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
+import app.model.QuickTicket;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
@@ -261,7 +261,7 @@ public class RegisteredUserService {
 			date=tick.getProjection().getDate();
 			break;
 		}
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		Calendar now = Calendar.getInstance();
 		try {
@@ -342,5 +342,19 @@ public class RegisteredUserService {
 			}
 		}
 		return retValue;
+	}
+
+	public boolean qtBuy(Long qtId, String userId) {
+		QuickTicket qt = (QuickTicket)ticketRep.findOne(qtId);
+		qt.setState(Ticket.TicketState.Active);
+		RegisteredUser user = (RegisteredUser)userRep.findOne(userId);
+		Reservation res = new Reservation(user,qt, Reservation.ReservationState.Active);
+		System.out.println(res.getTickets().contains(qt));
+		reservRep.save(res);
+		//reservRep.s
+		
+		
+		return true;
+		
 	}
 }

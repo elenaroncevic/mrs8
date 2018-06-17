@@ -11,12 +11,18 @@ angular.module('Application').controller(
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				if($rootScope.currentUser.hasOwnProperty("cinemas")){
 					$rootScope.cinemaAdmin = true;
+					$rootScope.ru = false;
 				}
-				else{$rootScope.cinemaAdmin =false;}
+				else{
+					if($rootScope.currentUser.hasOwnProperty("firstName")){
+						$rootScope.cinemaAdmin =false;
+						$rootScope.ru=true;
+					}
+				}
 				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
-					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
 							$rootScope.currentCinema=data1;
 							//localStorage.setItem("currentUser",angular.toJson(data2));
@@ -33,7 +39,7 @@ angular.module('Application').controller(
 					});						
 				}
 				$scope.refreshUserQT=function(){
-					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
 							$rootScope.currentCinema=data1;
 							//localStorage.setItem("currentUser",angular.toJson(data2));
@@ -50,7 +56,7 @@ angular.module('Application').controller(
 					//});						
 				}
 				$scope.refreshUserAudi=function(){
-					$http.get('http://localhost:8181/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
+					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
 							$rootScope.currentCinema=data1;
 							//localStorage.setItem("currentUser",angular.toJson(data2));
@@ -73,7 +79,7 @@ angular.module('Application').controller(
 						for (let p in $rootScope.currentCinema.auditoriums[i].projections){
 							//alert(i+" "+p);
 							let projection = $rootScope.currentCinema.auditoriums[i].projections[p];
-							$http.get('http://localhost:8181/getProjectionMovie/'+ projection.id).success(function( data,status){
+							$http.get('/getProjectionMovie/'+ projection.id).success(function( data,status){
 								projection.auditorium = $rootScope.currentCinema.auditoriums[i];
 								projection.movie = data;
 								$scope.projections.push(projection);
@@ -86,7 +92,7 @@ angular.module('Application').controller(
 				
 				$scope.removeProjection= function(projection){
 					if(projection.tickets.length ==0){
-						$http.get('http://localhost:8181/removeProjection/'+ projection.id).success(function( status){
+						$http.get('/removeProjection/'+ projection.id).success(function( status){
 							$scope.refreshUser();
 						}).error(function(){
 							alert("error remove");
@@ -104,7 +110,7 @@ angular.module('Application').controller(
 				};
 				$scope.changeBasic = function() {
 					if($scope.password == $rootScope.currentUser.password){
-						$http.post('http://localhost:8181/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(function( data,status){
+						$http.post('/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(function( data,status){
 							//$rootScope.currentCinema=data;
 							$scope.refreshUser();
 							$location.path("/cinema_profile").replace();
@@ -122,7 +128,7 @@ angular.module('Application').controller(
 					//$location.path("/cinema_profile").replace();
 				};
 				$scope.getMovies = function(){
-					$http.get('http://localhost:8181/getMovies/').success(function( data,status){
+					$http.get('/getMovies/').success(function( data,status){
 						$scope.movies=data;
 					}).error(function(){
 						alert("Error in  movies");
@@ -142,7 +148,7 @@ angular.module('Application').controller(
 						let movieEl = document.getElementById("proj_movie");
 						movie = JSON.parse(movieEl.options[movieEl.selectedIndex].value);
 						//alert(date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes());
-						$http.post('http://localhost:8181/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
+						$http.post('/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
 							/*let projection = data;
 							projection.movie = movie;
 							aid.projections.push(data);*/
@@ -171,7 +177,7 @@ angular.module('Application').controller(
 				};
 				$scope.disableSeat=function(seat){
 					if($rootScope.cinemaAdmin){
-						$http.post('http://localhost:8181/disableSeat/'+ seat.id).success(function( status){
+						$http.post('/disableSeat/'+ seat.id).success(function( status){
 							$scope.refreshUserAudi();
 	
 						}).error(function(){
@@ -182,7 +188,7 @@ angular.module('Application').controller(
 				};
 				
 				$scope.addSeat=function(audi){
-					$http.post('http://localhost:8181/addSeat/'+ audi.rowAdd+"/"+audi.seatAdd).success(function( status){
+					$http.post('/addSeat/'+ audi.rowAdd+"/"+audi.seatAdd).success(function( status){
 						$scope.refreshUserAudi();
 
 					}).error(function(){
@@ -193,7 +199,7 @@ angular.module('Application').controller(
 				$scope.removeSeat=function(audi){
 					let row = JSON.parse(audi.rowRemove);
 					if(row.seats.length > audi.seatRemove){
-						$http.post('http://localhost:8181/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
+						$http.post('/removeSeat/'+ row.id+"/"+audi.seatRemove).success(function( status){
 							$scope.refreshUserAudi();
 	
 						}).error(function(){
@@ -207,7 +213,7 @@ angular.module('Application').controller(
 				};
 				
 				$scope.addRow=function(audi){
-					$http.post('http://localhost:8181/addRow/'+ audi.addRow+"/"+audi.id).success(function( status){
+					$http.post('/addRow/'+ audi.addRow+"/"+audi.id).success(function( status){
 						$scope.refreshUserAudi();
 
 					}).error(function(){
@@ -218,7 +224,7 @@ angular.module('Application').controller(
 				
 				$scope.removeRow=function(audi){
 					let row = JSON.parse(audi.removeRow);
-					$http.post('http://localhost:8181/removeRow/'+ row.id+"/"+audi.id).success(function( status){
+					$http.post('/removeRow/'+ row.id+"/"+audi.id).success(function( status){
 						$scope.refreshUserAudi();
 
 					}).error(function(){
@@ -241,7 +247,7 @@ angular.module('Application').controller(
 				//submit forme
 				$scope.qtAdd=function(projection){
 					//alert("cap");
-					$http.post('http://localhost:8181/qtAdd/'+ $scope.qtProjection.id +"/"+ $scope.qtSeat.id + "/"+ $scope.qtDiscount).success(function( status){
+					$http.post('/qtAdd/'+ $scope.qtProjection.id +"/"+ $scope.qtSeat.id + "/"+ $scope.qtDiscount).success(function( status){
 						$scope.refreshUserAudi();
 						$location.path("/cinema_profile").replace();
 
@@ -260,7 +266,7 @@ angular.module('Application').controller(
 				
 				//listanje svih qt
 				$scope.qtGet=function(){
-					$http.get('http://localhost:8181/qtGet/'+ $rootScope.currentCinema.id).success(function(data, status){
+					$http.get('/qtGet/'+ $rootScope.currentCinema.id).success(function(data, status){
 						$scope.qtList=data;
 						//$scope.refreshUserAudi();
 						//console.log($scope.qtList);
@@ -271,12 +277,36 @@ angular.module('Application').controller(
 				};
 				
 				$scope.qtRemove=function(qt){
-					$http.post('http://localhost:8181/qtRemove/'+ qt.id).success(function(data, status){
+					if($rootScope.cinemaAdmin){
+						$http.post('/qtRemove/'+ qt.id).success(function(data, status){
+							$scope.refreshUserQT();
+						}).error(function(){
+							alert("nesto je fejl");
+	
+						});	
+					}
+					else{
+						$scope.qtBuy(qt);
+					}
+				};
+				
+				$scope.qtBuy= function(qt){
+					$http.post("/reguser/qtBuy/"+qt.id+"/"+$rootScope.currentUser.email ).success(function(data, status){
 						$scope.refreshUserQT();
 					}).error(function(){
-						alert("nesto je fejl");
+						alert("nesto je fejl u kupovini qt");
 
 					});	
+					
+				}
+				
+				$scope.buttonValueQt = function(){
+					if($rootScope.ru){
+						return "Buy";
+					}
+					else{
+						return "X";
+					}
 				}
 			}
 		]

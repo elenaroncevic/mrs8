@@ -53,7 +53,7 @@
 				<td >{{qt.rowNumber}}</td>	
 				<td >{{qt.seatNumber}}</td>	
 				
-				<td ng-show=cinemaAdmin><button type="button" ng-click="qtRemove(qt)" >X</button></td>
+				<td ><button type="button" ng-click="qtRemove(qt)" >{{buttonValueQt()}}</button></td>
 			</tr>
 		</tbody>
 	</table>
@@ -74,7 +74,7 @@
 	</table>
 	<br>
 	
-	<table ng-show=cinemaAdmin>
+	<table ng-show=cinemaAdmin >
 		<tr>
 			<td>row:</td>	
 			<td>
