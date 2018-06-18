@@ -1,58 +1,30 @@
-<div ng-show="reserve" ng-controller="ReserveTicketController">
+<div ng-controller="ReserveTicketController" class="reservation">
 	Search cinemas(name or part of it):
 	<input type="textfield" ng-model="searchCinemaText">
-	<button type="button" ng-click="searchCinemas()">Search</button>
+	<button type="button" class="profile-btn" ng-click="searchCinemas()">Search</button>
 	</br>
-	 
-	<select id="cinemaCombo"> 
+	Cinemas: 
+	<select id="cinemaCombo" ng-model="cin" ng-change="projectionAndDate()"> 
 		<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
 	</select>
-	<button type="button" ng-click="projectionAndDate()">Select this cinema</button>
-	
-	<div ng-show="projectionDate">
-		<select id="movieCombo"> 
+	<p>{{h}}</p>
+	<div>
+		Movies:
+		<select id="movieCombo" ng-model="mov" ng-change="timeAndAud()" ng-disabled="disMovCombo"> 
 			<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
 		</select>
 		<div id="datepicker"></div>
-		<button type="button" ng-click="timeAndAud()">See available time and rooms</button>
 	</div>
 	
-	<div ng-show="timeAud">
+	<div>
 		Time(room):
-		<select id="projCombo">
+		<select id="projCombo" ng-model="proj" ng-change="projectionChanged()" ng-disabled="disProjCombo">
+			<option value=""></option>
 			<option ng-repeat="proj in projShow">{{proj.time +" (Room " + proj.audNum+")" }}</option>
-		</select>
-		<button type="button" ng-click="loadSeats()">Choose your seats</button>		
+		</select>		
 	</div>
-	<div class="main" ng-show="showSeatsPreview">
-		<div class="demo">
-			<div id="seat-map">				
-			</div>
-			<div class="booking-details">
-				<p>Movie: {{chosenMovie.title}}</p>
-				<p>Time: {{chosenProjection.date+ " " +chosenProjection.time}}</p>
-				<p>Room: {{chosenProjection.audNum}}</p>
-				<div class="clear"></div>
-				<ul id="selected-seats" class="scrollbar scrollbar1"></ul>
-			
-						
-				<button class="checkout-button" ng-click="inviteFriends()">Book Now</button>
-			</div>
-			<div style="clear:both"></div>
-	    </div>
-	</div>
-	<div ng-show="friendsBox">
-		<table class="table table-bordered">
-			<thead>
-				<th>Name</th>				
-			</thead>
-			</tbody>
-				<tr ng-repeat="friend in friends">
-					<td>{{friend.firstName+" " + friend.lastName}}</td>
-					<td><button type="button" ng-click="inviteFriend(friend)" ng-disabled="disableButtons">Invite friend</button></td>
-				</tr>
-			</tbody>
-		</table>
-		<button type="button" ng-click="finishReservation()">Finish reservation</button>
-	</div>
+	
+    <modal show-modal="modal.show" />
+
 </div>
+

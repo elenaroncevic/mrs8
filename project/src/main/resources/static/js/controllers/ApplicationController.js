@@ -1,4 +1,4 @@
-angular.module('Application').controller(
+var app = angular.module('Application').controller(
 		'ApplicationController',
 		[
 				'$rootScope',
@@ -33,3 +33,23 @@ angular.module('Application').controller(
 				}
 		]
 );
+
+app.directive('modal', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showModal: '='
+    },
+    templateUrl: 'html/seats.html',
+    controller: 'SeatsController' ,
+     link: function (scope, element, attrs) {
+      
+      	
+      scope.modalClicked = function () {
+        scope.showModal = false;
+      }
+    }
+  }
+});

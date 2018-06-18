@@ -1,20 +1,21 @@
 <div ng-controller="ReservationTabController">
-		<table class="table table-bordered">
+		<table id="scrolltable" ng-init="loadReservations()">
 			<thead>
 				<th>Movie</th>
 				<th>Date</th>
 				<th>Number of seats</th>
 				<th>Seats</th>
 				<th>Price</th>
+				<th></th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="reservation in reservationsShow">
 					<td>{{reservation.title}}</td>
 					<td>{{reservation.date}}</td>
-					<td>{{reservation.num}}</td>
+					<td>{{reservation.ticketNum}}</td>
 					<td>{{reservation.seats}}</td>
-					<td>{{reservation.price*reservation.num}}</td>
-					<td><button type="button" ng-click="cancelReservation(reservation)">Cancel this reservation</button></td>
+					<td>{{reservation.totalPrice}}</td>
+					<td><button type="button" class="table_button" ng-click="cancelReservation(reservation)">Cancel this reservation</button></td>
 				</tr>
 			
 			</tbody>
