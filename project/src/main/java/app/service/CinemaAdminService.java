@@ -355,12 +355,7 @@ public class CinemaAdminService {
 		p2end.setTime(p2start.getTime());
 		p1end.add(Calendar.MINUTE, duration1);
 		p2end.add(Calendar.MINUTE, duration2);
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		
-		System.out.println("________\n"+df.format(p1start.getTime()));
-		System.out.println(df.format(p1end.getTime()));
-		System.out.println(df.format(p2start.getTime()));
-		System.out.println(df.format(p2end.getTime())+"\n____________");
 
 		if((p2start.after(p1start) && p1end.after(p2start)) ||
 			(p2end.after(p1start) && p1end.after(p2end)) ||

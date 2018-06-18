@@ -27,7 +27,6 @@ angular.module('Application').controller(
 					$rootScope.ru=false;
 					$rootScope.noUser=false;
 				}
-				alert($rootScope.cinemaAdmin);
 				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
