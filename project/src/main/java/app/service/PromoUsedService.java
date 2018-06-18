@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.WebRequest;
 
 import app.dto.BidDTO;
 import app.dto.PromoUsedDTO;
@@ -26,6 +29,9 @@ public class PromoUsedService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	public List<PromoUsedDTO> listPromosUsedUnapproved() { //koji treba tek da se potvrde
 		List<PromoUsed> listOfPromosUsed = promoUsedRepository.findAll();
@@ -319,7 +325,7 @@ public class PromoUsedService {
 	}
 
 
-	public boolean chooseWinnerPromoUsed(Long bid) {
+	public boolean chooseWinnerPromoUsed(Long bid) {	
 		Bid b = bidRepository.findOne(bid);
 		PromoUsed pu = b.getPromo();
 		pu.setActivity("bought");
@@ -327,15 +333,35 @@ public class PromoUsedService {
 		pu.setPrice(b.getPrice());
 		promoUsedRepository.save(pu);
 		
+		return true;
+		
+	}
+
+
+	public boolean mailWinnerAndLosers(Long bid) {
+		Bid b = bidRepository.findOne(bid);
+		PromoUsed pu = b.getPromo();
+		
+		String subject = "Licitation over!";
+		SimpleMailMessage eMail = new SimpleMailMessage();
+		eMail.setSubject(subject);
+		
 		//obavestavam pobednika da je pobedio i ostale da su izgubili
 		List<Bid> bids = bidRepository.findByPromo(pu);
 		for (Bid one_bid : bids){
 			if (one_bid.getBidder().getEmail().equals(b.getBidder().getEmail())){
-				//obavestava se da je pobedio
+				eMail.setTo(one_bid.getBidder().getEmail());        
+		        eMail.setText("You have won the bid on "+ one_bid.getPromo().getName());
+		        mailSender.send(eMail);
+		        
 			}else{
-				//obavestava se da je izgubio
+				eMail.setTo(one_bid.getBidder().getEmail());        
+		        eMail.setText("You have lost the bid on "+ one_bid.getPromo().getName());
+		        mailSender.send(eMail);
+		        
 			}
 		}
+		
 		return true;
 		
 	}

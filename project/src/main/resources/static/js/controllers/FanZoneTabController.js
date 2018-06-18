@@ -324,8 +324,9 @@ angular.module('Application').controller(
 					if (now.getTime()<licitations_date.getTime()){
 						$http.get('http://localhost:8181/reg_user/choose_winner/'+bid).success(function(){
 							fill_changing_promo(puid);
-							fill_my_posted_promos_used();
-							alert('you\'ve successfuly chosen a winner');				
+							fill_my_posted_promos_used();					
+							alert('you\'ve successfuly chosen a winner');	
+							mailWinnerAndLosers(bid);
 						}).error(function(){
 							alert("couldn't choose a buyer");
 						});
@@ -333,6 +334,13 @@ angular.module('Application').controller(
 						alert("time for choosing winner is over");
 						fill_changing_promo(puid);
 					}
+				};
+				
+				mailWinnerAndLosers=function(bid){
+					$http.get('http://localhost:8181/reg_user/mail_winner_and_losers/'+bid).success(function(){	
+					}).error(function(){
+						alert("couldn't mail about win and loss");
+					});
 				};
 				
 			}
