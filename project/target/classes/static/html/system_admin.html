@@ -1,0 +1,118 @@
+<div>	
+		<div class="tab">	
+			<button type="button" id="my_profile" ng-click=show_div1()>My profile</button>
+			<button type="button" id="changing_profile" ng-click=show_div2()>Change profile info</button>				
+			<button type="button" id="registering_admins" ng-click=show_div3() style="display:none">Register new admins</button>				
+			<button type="button" id="setting_scale" ng-click=show_div4() style="display:none">Set point scale</button>	
+			<button type="button" id="registering_cinemas" ng-click=show_div5() style="display:none">Register cinemas and theaters</button>				
+		</div>
+		
+		
+		<!-- div za prikaz info profila sistem admina -->
+		<div id="sys_admin_profile" ng-show="show_div.div1" class="tabcontent">
+			<b>Email:</b>
+			<p> {{currentUser.email}} </p>
+			</br>
+			<b>Image</b>:
+			<img ng-src="{{currentUser.image}}" width="150" height="150"/>
+		</div>
+		
+		
+		<!-- div za izmenu profila system admina -->
+		<div id="changing_info" ng-show="show_div.div2" class="tabcontent">				
+			New image:
+			<input type="text" id="changing_user_image">
+			<img ng-src="{{currentUser.image}}" width="150" height="150">
+			</br>
+			</br>
+			New password:
+			<input type="password" maxlength="30" id="new_pass">
+			</br>
+			</br>
+			Old password:
+			<input type="password" maxlength="30" id="old_pass">
+			<div align="right">
+				<input type="button" value="save" ng-click="save_changes_user()">
+				<input type="button" value="reset" ng-click="cancel_changes_user()">			
+			</div>
+		</div>	
+		
+		
+		<!-- div za registraciju drugih admina -->
+		<div id="register_admins" ng-show="show_div.div3" class="tabcontent">	
+			Admin type:
+		    <select id="type">		    	
+		        <option value="fanzone">fan zone</option>
+		        <option value="cinema/theater" seleted>cinema/theatre</option>
+		        <option value="system" id="system">system</option>
+		    </select>	
+		    </br>
+		    </br>
+		    Admin email:	
+			<input ng-model="admEmail" type="text" maxlength="50">
+			</br>
+			</br>
+			Admin password:
+			<input ng-model="admPass1" type="password" maxlength="30">
+			</br>
+			</br>
+			Repeat admin password:
+			<input ng-model="admPass2" type="password" maxlength="30">		
+			<div align="right">
+				<input type="button" value="Register admin" ng-click=registerAdmin()>
+			</div>
+		</div>	
+		
+		
+		<!-- div za postavljanje point skale -->
+		<div id="set_scale" ng-show="show_div.div4" class="tabcontent">	
+			Copper user: 
+			<input type="number" id="copper" ng-model="scale.copper">
+			</br>
+			</br>
+			Silver user:
+			<input type="number" id="silver" ng-model="scale.silver">
+			</br>
+			</br>
+			Golden user:
+			<input type="number" id="golden" ng-model="scale.golden">
+			<div align="right">
+				<input type="button" value="Save scale" ng-click=savePointScale()>
+			</div>
+		</div>	
+		
+		<!-- div za registraciju cinema/theaters i njegovog admina -->
+		<div id="register_cinema" ng-show="show_div.div5" class="tabcontent">	
+			Type:
+		    <select id="buildingType">
+		    	<option value="cinema" selected>cinema</option>
+		        <option value="theater">theater</option>
+		    </select>	
+		    </br>
+		    </br>
+		    Name:	
+			<input type="text" maxlength="30" id="buildingName">
+			</br>
+			</br>	
+			Description:
+			<textarea rows="10" cols="10" maxlength="1500" id="buildingDescription"></textarea>
+			</br>
+			</br>	
+			Location:
+			</br>
+			<input type="text" id="lat" hidden>
+			<input type="text" id="lng" hidden>
+			<div id="map"></div>
+			</br>			
+			</br>	
+			Admin:
+		    <select id="buildingAdmin"></select>	
+		    <div align="right">
+				<input type="button" value="Register building" ng-click=registerBuilding()>
+			</div>
+		</div>
+
+
+		
+</div>
+

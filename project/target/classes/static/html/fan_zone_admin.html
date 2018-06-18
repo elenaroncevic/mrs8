@@ -1,9 +1,139 @@
-<div>
-	<div id="fan_zone_admin_home">
-	  	<form>
-		    <input type="button" name="list_promos_official" value="list official products" ng-click=btn_list_promos_official()>
-		    <input type="button" name="add_promo_official" value="add official product" ng-click=btn_add_promo_official()>
-	    	<input type="button" name="list_promos_unapproved" value="list unapproved promos" ng-click=btn_list_promos_unapproved()>
-	    </form>
-	</div>
+<div>	
+		<div class="tab">	
+			<button type="button" id="my_profile" ng-click=show_div1()>My profile</button>
+			<button type="button" id="adding_promo_official" ng-click=show_div2() style="display:none">Add official product</button>
+			<button type="button" id="official_products" ng-click=show_div3() style="display:none">Official products</button>	
+			<button type="button" id="used_products" ng-click=show_div4() style="display:none">Approve used products</button>
+			<button type="button" id="changing_profile" ng-click=show_div5()>Change profile info</button>				
+		</div>
+		
+		
+		<!-- div za prikaz info profila fan zone admina -->
+		<div id="fz_admin_profile" ng-show="show_div.div1" class="tabcontent">
+			<b>Email:</b>
+			<p> {{currentUser.email}} </p>
+			</br>
+			<b>Image</b>:
+			<img ng-src="{{currentUser.image}}" width="150" height="150"/>
+		</div>
+		
+		<!-- div za dodavanje novog proizvoda -->
+		<div id="add_po_div" ng-show="show_div.div2" class="tabcontent">
+			Name:
+			<input type="text" ng-model="poName" maxlength="30">
+			</br>
+			Description:
+			<textarea rows="10" cols="10" ng-model="poDescription" maxlength="1000"></textarea>
+			</br>
+			Image:
+			<input type="text" ng-model="poImage">
+			</br>
+			Price:
+			<input type="text" ng-model="poPrice">
+			</br>
+			Cinema:
+			<select id="cinemas"></select>
+			<input type="button" value="Add product" ng-click="add_po()">
+		</div>
+		
+		
+		<!-- div za izlistavanje oficijalnih proizvoda -->
+		<div id="list_po_div" ng-show="show_div.div3" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Cinema name</th>
+					<th>Cinema location</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Price</th>	
+					<th>Buyer</th>					
+				</thead>
+			
+				<tbody>
+					<tr ng-repeat="promo in promosOfficial">
+						<td>{{promo.cinema_name}}</td>
+						<td>{{promo.cinema_location}}</td>
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.price}}</td>
+						<td>{{promo.buyer_email}}</td>
+						<td><input type="button" value="change" ng-click="change_po( promo.id )"></td>
+						<td><input type="button" value="delete" ng-click="delete_po( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<!-- div za izlistavanje unapproved proizvoda-->
+		<div id="list_po_unapproved_div" ng-show="show_div.div4" class="tabcontent">
+			<table class="table table-bordered">
+				<thead>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Image</th>
+					<th>Ending time</th>
+					<th>Owner</th>						
+				</thead>
+				<tbody>
+					<tr ng-repeat="promo in unapprovedPromosUsed">
+						<td>{{promo.name}}</td>
+						<td>{{promo.description}}</td>
+						<td><img ng-src="{{ promo.image }}" width="150" height="150"/></td>
+						<td>{{promo.ending_date}}</td>
+						<td>{{promo.owner_email}}</td>
+						<td><input type="button" value="approve" ng-click="approve_pu( promo.id )"></td>
+						<td><input type="button" value="disapprove" ng-click="disapprove_pu( promo.id )"></td>
+					</tr>			
+				</tbody>
+			</table>
+		</div>
+		
+		
+		<!-- div za izmenu profila fan zone admina -->
+		<div id="changing_info" ng-show="show_div.div5" class="tabcontent">				
+			New image:
+			<input type="text" id="changing_user_image">
+			<img ng-src="{{currentUser.image}}" width="150" height="150">
+			</br>
+			</br>
+			New password:
+			<input type="password" maxlength="30" id="new_pass">
+			</br>
+			</br>
+			Old password:
+			<input type="password" maxlength="30" id="old_pass">
+			<div align="right">
+				<input type="button" value="save" ng-click="save_changes_user()">
+				<input type="button" value="reset" ng-click="cancel_changes_user()">			
+			</div>
+		</div>	
+		
+		
+		<!-- div za izmenu promo official (change_po)-->
+		<div id="changing_product" ng-show="show_div.div6" class="tabcontent">				
+			Name:
+			<input id="changing_promo_name" type="text" ng-model="changing_promo.name" maxlength="30">
+			</br>
+			</br>
+			Description:
+			<textarea id="changing_promo_description"  rows="10" cols="10" ng-model="changing_promo.description" maxlength="1000"></textarea>
+			</br>
+			</br>
+			Image:
+			<input id="changing_promo_image"  type="text" ng-model="changing_promo.image">
+			</br>
+			</br>
+			Price:
+			<input id="changing_promo_price"  type="text" ng-model="changing_promo.price">
+			</br>
+			</br>
+			Cinema:
+			<select id="cinemas_changing"></select>
+			<input type="button" value="save" ng-click="save_changes_po( changing_promo.id )">
+			<input type="button" value="reset" ng-click="cancel_changes_po(changing_promo.id)">			
+		</div>	
+		
 </div>

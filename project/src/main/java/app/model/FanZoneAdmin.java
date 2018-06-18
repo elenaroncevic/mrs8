@@ -9,16 +9,18 @@ import javax.persistence.Table;
 @Entity
 public class FanZoneAdmin extends User{
 	private Boolean first_time;
+	private String image;
 	
 	public FanZoneAdmin() {
 		super();
 	}
 	
-	
 
-	public FanZoneAdmin(Boolean first_time) {
+
+	public FanZoneAdmin(Boolean first_time, String image) {
 		super();
 		this.first_time = first_time;
+		this.image = image;
 	}
 
 
@@ -29,6 +31,18 @@ public class FanZoneAdmin extends User{
 
 	public void setFirst_time(Boolean first_time) {
 		this.first_time = first_time;
+	}
+
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 	

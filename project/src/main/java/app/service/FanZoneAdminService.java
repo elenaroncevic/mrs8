@@ -9,9 +9,12 @@ import org.springframework.web.context.request.WebRequest;
 
 import app.dto.PromoOfficialDTO;
 import app.model.Cinema;
+import app.model.FanZoneAdmin;
 import app.model.PromoOfficial;
+import app.model.User;
 import app.repository.CinemaRepository;
 import app.repository.PromoOfficialRepository;
+import app.repository.UserRepository;
 
 
 @Service
@@ -22,6 +25,9 @@ public class FanZoneAdminService {
 	
 	@Autowired
 	private CinemaRepository cinemaRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	//name, description, image, cinema
 	public boolean addNewPromoOfficial(String poName, String poDescription, String poImage, Double poPrice, Long cId, WebRequest req){
@@ -103,10 +109,9 @@ public class FanZoneAdminService {
 
 	public boolean updatePromoOfficial(String poName, String poDescription, String poImage, Double poPrice, Long cId,
 			Long poId) {
-		//String appUrl = req.getContextPath();
 		poImage=poImage.replace('+', '/');
 		poImage=poImage.replace('*', '?');
-		//bice jedan bioskop
+
 		Cinema cinema = cinemaRepository.findOne(cId);
 		
 		PromoOfficial po=promoOfficialRepository.findOne(poId);
@@ -128,6 +133,20 @@ public class FanZoneAdminService {
 		promoOfficialRepository.save(po);
 		return true;
 	}
+
+	public User changeFanZoneAdminInfo(String email, String image, String pass) {
+		image=image.replace('+', '/');
+		image=image.replace('*', '?');
+		FanZoneAdmin fanZoneAdmin = (FanZoneAdmin) userRepository.findOne(email);
+		if (!pass.equals(fanZoneAdmin.getPassword())){
+			fanZoneAdmin.setFirst_time(false);
+		}
+		fanZoneAdmin.setImage(image);
+		fanZoneAdmin.setPassword(pass);
+		FanZoneAdmin fza = userRepository.save(fanZoneAdmin);
+		return fza;
+	}
+	
 	
 	
 	

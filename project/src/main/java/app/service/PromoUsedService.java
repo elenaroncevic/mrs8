@@ -72,9 +72,9 @@ public class PromoUsedService {
 		
 	}
 	
+	
 	public boolean deletePromoUsed(Long id) { 
 		PromoUsed pu = promoUsedRepository.findOne(id);
-		//da li se menja u disapproved ili se brise?? ukoliko se brise skroz onda mi ova metoda ne treba
 		pu.setActivity("deleted");
 		promoUsedRepository.save(pu);
 		return true;
@@ -316,6 +316,28 @@ public class PromoUsedService {
 		
 		promoUsedRepository.save(pu);
 		return true;
+	}
+
+
+	public boolean chooseWinnerPromoUsed(Long bid) {
+		Bid b = bidRepository.findOne(bid);
+		PromoUsed pu = b.getPromo();
+		pu.setActivity("bought");
+		pu.setBuyer(b.getBidder());
+		pu.setPrice(b.getPrice());
+		promoUsedRepository.save(pu);
+		
+		//obavestavam pobednika da je pobedio i ostale da su izgubili
+		List<Bid> bids = bidRepository.findByPromo(pu);
+		for (Bid one_bid : bids){
+			if (one_bid.getBidder().getEmail().equals(b.getBidder().getEmail())){
+				//obavestava se da je pobedio
+			}else{
+				//obavestava se da je izgubio
+			}
+		}
+		return true;
+		
 	}
 	
 	
