@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import app.model.Bid;
 import app.model.PromoUsed;
 import app.model.RegisteredUser;
-
+//
 
 public interface BidRepository extends JpaRepository<Bid,Long>{
 	
