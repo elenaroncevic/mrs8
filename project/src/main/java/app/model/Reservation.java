@@ -48,10 +48,9 @@ public class Reservation {
 		this.tickets = tickets;
 		this.state = rState;
 	}
-	public Reservation( RegisteredUser buyer, Ticket ticket, ReservationState rState) {
+	public Reservation( RegisteredUser buyer, ReservationState rState) {
 		super();
 		this.buyer = buyer;
-		this.tickets.add(ticket);
 		this.state = rState;
 	}
 
