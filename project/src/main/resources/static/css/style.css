@@ -32,14 +32,136 @@ img{max-width:100%;}
 body{
 	padding:0;
 	margin:0;
-    background:url(../images/banner2.jpg) no-repeat center;
     background-size: cover;
     -webkit-background-size: cover;
     -o-background-size: cover;
     -ms-background-size: cover;
     -moz-background-size: cover;
 	font-family: 'Open Sans', sans-serif !important;
+	background: lightblue;
 }
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1040;
+  opacity: 0.8;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1050;
+  background-color: transparent;
+}
+
+.modal-body {
+  position: relative;
+  max-height: 300px;
+  padding: 15px;
+  color: red;
+}
+
+.profile_info{
+	width : 30%;
+	float : left;
+	font-size: 18px;
+	border : 1px solid black;
+	line-height: 2;
+	padding : 10px;
+}
+
+.profile-photo{
+	diplay : block;
+	border : 1px solid red;
+	height : 200px;
+	width : 75%;
+}
+
+.ui-datepicker {
+    background: #333;
+}
+
+input, select{
+	background : #bfbfbf;
+}
+
+.history{
+    margin-left : 50%;
+}
+
+.history p{
+	color : #727272;
+	font-size : 20px;
+}
+
+.reservation{
+	line-height : 2;
+}
+
+#history_table{  
+  overflow-y: scroll;
+    border-color: #D88A04;
+    border-width: 1px;
+    border-style: solid;
+    align : right;
+   }
+   
+#scrolltable{
+  overflow-y: scroll;
+  max-height : 200px;
+  margin: 45px auto;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+}
+
+#scrolltable td, #history_table td{
+ 	height : 30px;
+ 	font-size: 15px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    background : #bfbfbf;
+    text-align : center;
+    color : green;
+ }
+ #scrolltable th, #history_table th{
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    background : #727272;
+    font-size: 18px;
+      padding: 12px 16px; 
+    text-align : center;
+    color : black;
+    
+ }
+#scrolltable th div { position: absolute; margin-top: -20px; }
+
+.table_button{
+    cursor: pointer;
+    background: lightsteelblue;
+    height : 50px;
+    width : 100%;
+}
+
+.profile-btn{
+    cursor: pointer;
+    background: grey;
+    font-size: 16px; 
+    padding: 8px 12px; 
+    content: "\00d7";
+}
+
+.profile-btn:hover{
+    background: RoyalBlue;
+}
+
+
+
 
 h1,h2,h3,h4,h5,h6{
 	margin:0;	
@@ -72,6 +194,8 @@ label{
     background:rgba(255, 255, 255, 0.88);
     padding: 30px 30px;
 }
+
+
 .main h2 {
     color: #000000;
     font-size: 28px;
@@ -92,6 +216,8 @@ p.copy_rights a{
 p.copy_rights a:hover{
 	text-decoration:underline;
 }
+
+
 /*-- movie ticket --*/
 .front{
     margin: 5px 4px 45px 38px;
@@ -142,7 +268,7 @@ div.seatCharts-row {
 	height: 35px;
 	}
 div.seatCharts-seat.available {
-	background-color: #949494;
+	background-color: #bfbfbf;
 	}
 div.seatCharts-seat.focused {
 	background-color: #00B70C;

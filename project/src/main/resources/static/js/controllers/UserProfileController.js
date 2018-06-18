@@ -40,12 +40,12 @@ angular.module('Application').controller(
 					$scope.theaterReserve=false;
 					$scope.theaterRegular=true;
 				};
+				$scope.cinemasShow={};
 				$scope.cinemas=function(){
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":true, "friends":false, "reservations":false, "settings":false, "fanzone":false};
-					$rootScope.cinemasShow={};
+					
 					$http.get('/cinemas').success(function(data, status){
-							$rootScope.cinemasShow=data;
-							alert(data);
+							$scope.cinemasShow=data;
 					});
 					$scope.reserve=false;
 					$scope.regular=true;
