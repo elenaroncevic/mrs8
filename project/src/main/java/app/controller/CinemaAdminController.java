@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.dto.MovieDTO;
 import app.dto.QuickTicketDTO;
 import app.model.Cinema;
+import app.model.CinemaAdmin;
 import app.model.Movie;
 import app.model.User;
 import app.service.CinemaAdminService;
@@ -47,13 +48,13 @@ public class CinemaAdminController {
 		cinemaAdminService.removeProjection(id);
 		return new ResponseEntity<>( HttpStatus.OK);
 	}
-	@RequestMapping(value="/getMovies", method=RequestMethod.GET)
-	public ResponseEntity<List<Movie>> getMovies() {
-		List<Movie> movies = cinemaAdminService.getMovies();
+	@RequestMapping(value="/getMovies/{id}", method=RequestMethod.GET)
+	public ResponseEntity<List<Movie>> getMovies(@PathVariable("id") Long id) {
+		List<Movie> movies = cinemaAdminService.getMovies(id);
 		return new ResponseEntity<>(movies, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/refreshUser/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="/refreshUser/{id:.+}", method=RequestMethod.GET)
 	public ResponseEntity<User> refreshUser(@PathVariable("id") String id) {
 		User user =cinemaAdminService.getUser(id);
 		return new ResponseEntity<>(user, HttpStatus.OK);
@@ -158,14 +159,39 @@ public class CinemaAdminController {
 	}
 	
 	@RequestMapping(value="/qtRemove/{qtId}", method=RequestMethod.POST)
-	public ResponseEntity<Void> qtAdd(
-			@PathVariable("qtId") Long qtId){
+	public ResponseEntity<Void> qtAdd(@PathVariable("qtId") Long qtId){
 		boolean ok = cinemaAdminService.qtRemove(qtId);
 		if(ok)
 			return new ResponseEntity<>( HttpStatus.OK);
 		else
 			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
+	
+	/*@RequestMapping(value="/qtBuy/{qtId}/{email:.+}", method=RequestMethod.POST)
+	public ResponseEntity<Void> qtBuy(@PathVariable("qtId") Long qtId, @PathVariable("email") String email){
+		System.out.println("ALELUJA");
+		return new ResponseEntity<>( HttpStatus.OK);
+		
+	}*/
+	
+	@RequestMapping(value="/addMovie/{id}/{title}/{director}/{description}/{actors}/{duration}/{image}/{genre}", method=RequestMethod.POST)
+	public ResponseEntity<Void> addMovie(@PathVariable("id") Long id,@PathVariable("title")String title, 
+			@PathVariable("director") String director, @PathVariable("description") String description,
+			@PathVariable("actors") String actors, @PathVariable("duration") Integer duration,
+			@PathVariable("image") String image,@PathVariable("genre") String genre){
+		System.out.println("tu je");
+		cinemaAdminService.addMovie(id, title, director,description,actors,duration,genre,image );
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/changePass/{email}/{pass}", method=RequestMethod.POST)
+	public ResponseEntity<User> changePass(@PathVariable("email") String email,@PathVariable("pass")String pass){
+		System.out.println("tu je");
+		User user = cinemaAdminService.changePass(email,pass );
+		return new ResponseEntity<>(user,HttpStatus.OK);
+	}
+	
+	
 }
 
 

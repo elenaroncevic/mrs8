@@ -1,8 +1,8 @@
-<div ">
+<div >
 Cinemas:
 <br>
 <table ng-init="list_cinemas()">
-	<thead class=>
+	<thead >
 		<tr>
 			<th>DEscription</th>
 			<th>Name</th>	
@@ -16,6 +16,7 @@ Cinemas:
 			<td>{{ cinema.name }}</td>
 			<td>{{ cinema.location }}</td>			
 			<td>{{ cinema.rating }}</td>
+			<td><button type="button" ng-click=showCinema(cinema)>Show</button>
 		</tr>		
 	</tbody>
 </table>
@@ -38,6 +39,7 @@ Cinemas:
 			<td>{{ cinema.description }}</td>
 			<td>{{ cinema.location }}</td>			
 			<td>{{ cinema.rating }}</td>
+			<td><button type="button" ng-click=showCinema(cinema)>Show</button>
 		</tr>		
 	</tbody>
 	

@@ -29,16 +29,13 @@ import app.model.Friendship;
 import app.model.Friendship.FriendshipState;
 import app.model.Movie;
 import app.model.Projection;
+import app.model.QuickTicket;
 import app.model.RegisteredUser;
 import app.model.Reservation;
 import app.model.Row;
 import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
-<<<<<<< HEAD
-import app.model.QuickTicket;
-=======
->>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 import app.model.Visitation;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
@@ -434,23 +431,21 @@ public class RegisteredUserService {
 		friendRep.save(remove);
 		return true;
 	}
-<<<<<<< HEAD
 
 	public boolean qtBuy(Long qtId, String userId) {
+		RegisteredUser user = (RegisteredUser)userRep.findOne(userId);
+		Reservation res = new Reservation(user, Reservation.ReservationState.Active);
+		Reservation saved =reservRep.save(res);
 		QuickTicket qt = (QuickTicket)ticketRep.findOne(qtId);
 		qt.setState(Ticket.TicketState.Active);
-		RegisteredUser user = (RegisteredUser)userRep.findOne(userId);
-		Reservation res = new Reservation(user,qt, Reservation.ReservationState.Active);
-		System.out.println(res.getTickets().contains(qt));
-		reservRep.save(res);
+		qt.setReservation(res);
+		ticketRep.save(qt);
 		//reservRep.s
 		
 		
 		return true;
 		
 	}
-=======
->>>>>>> branch 'master' of https://github.com/elenaroncevic/mrs8
 	
 	
 }

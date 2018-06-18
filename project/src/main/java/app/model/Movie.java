@@ -10,9 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
@@ -31,6 +33,8 @@ public class Movie {
 	private String director;
 	private String actors;
 	private int duration;
+	private String image;
+	private String genre;
 	
 	@Column (name="mdescription")
 	private String description;
@@ -43,8 +47,29 @@ public class Movie {
 	@JsonManagedReference
 	private Set<Projection> projections = new HashSet<Projection>();
 	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JsonBackReference	
+	private Cinema cinema;
 	
 	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public String getGenre() {
+		return genre;
+	}
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+	public Cinema getCinema() {
+		return cinema;
+	}
+	public void setCinema(Cinema cinema) {
+		this.cinema = cinema;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -102,6 +127,7 @@ public class Movie {
 	}
 	
 	
+	
 	public Movie(){}
 	public Movie(Long id, String title, double rating, String director, String actors, int duration,
 			String description, Set<MovieRate> rates, Set<Projection> projections) {
@@ -117,5 +143,15 @@ public class Movie {
 		this.projections = projections;
 	}
 	
-	
+	public Movie(Cinema cinema, String title, String director, String description, String actors, int duration, String genre, String image) {
+		super();
+		this.cinema = cinema;
+		this.title = title;
+		this.director = director;
+		this.actors = actors;
+		this.duration = duration;
+		this.description = description;
+		this.genre=genre;
+		this.image=image;
+	}	
 }

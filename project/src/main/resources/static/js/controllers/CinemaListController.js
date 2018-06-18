@@ -28,6 +28,12 @@ angular.module('Application').controller(
 						alert("ima neki error");
 					});
 				};
+				
+				$scope.showCinema = function(data){
+					$rootScope.currentCinema=data;
+					localStorage.setItem("currentCinema",angular.toJson(data));
+					$location.path('/cinema_profile').replace();
+				};
 			}
 		]
 );

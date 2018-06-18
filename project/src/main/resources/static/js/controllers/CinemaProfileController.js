@@ -9,15 +9,23 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $http, $location) {
 				$rootScope.currentCinema = JSON.parse(localStorage.getItem("currentCinema"));
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-				if($rootScope.currentUser.hasOwnProperty("cinemas")){
-					$rootScope.cinemaAdmin = true;
-					$rootScope.ru = false;
+				if($rootScope.currentUser != null){
+					$rootScope.noUser = true;
+					if($rootScope.currentUser.hasOwnProperty("cinemas")){
+						$rootScope.cinemaAdmin = true;
+						$rootScope.ru = false;
+					}
+					else{
+						if($rootScope.currentUser.hasOwnProperty("firstName")){
+							$rootScope.cinemaAdmin =false;
+							$rootScope.ru=true;
+						}
+					}
 				}
 				else{
-					if($rootScope.currentUser.hasOwnProperty("firstName")){
-						$rootScope.cinemaAdmin =false;
-						$rootScope.ru=true;
-					}
+					$rootScope.cinemaAdmin = false;
+					$rootScope.ru=false;
+					$rootScope.noUser=false;
 				}
 				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
@@ -105,12 +113,31 @@ angular.module('Application').controller(
 				$scope.drugo= function(){
 					$location.path("/add_projection").replace();
 				};
+				
+				$scope.addMovie=function(){
+					$location.path("/add_movie").replace();
+				}
+				
+				$scope.addMovieForm=function(){
+					$http.post('/addMovie/'+ $rootScope.currentCinema.id + '/' + $scope.title+'/'+ $scope.director +'/'+$scope.Mdescription+'/'
+							+$scope.actors+'/'+$scope.duration+'/'+$scope.image+'/'+$scope.genre).success(function( data,status){
+						$scope.refreshUser();
+						$location.path("/cinema_profile").replace();
+
+					}).error(function(){
+						alert("Error in add movie");
+						$location.path("/cinema_profile").replace();
+
+					});
+				}
+				
 				$scope.editBasicInformations=function(){
 					$location.path("/edit_cinema_basic").replace();
 				};
 				$scope.changeBasic = function() {
 					if($scope.password == $rootScope.currentUser.password){
-						$http.post('/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(function( data,status){
+						$http.post('/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(
+								function( data,status){
 							//$rootScope.currentCinema=data;
 							$scope.refreshUser();
 							$location.path("/cinema_profile").replace();
@@ -128,7 +155,7 @@ angular.module('Application').controller(
 					//$location.path("/cinema_profile").replace();
 				};
 				$scope.getMovies = function(){
-					$http.get('/getMovies/').success(function( data,status){
+					$http.get('/getMovies/'+$rootScope.currentCinema.id).success(function( data,status){
 						$scope.movies=data;
 					}).error(function(){
 						alert("Error in  movies");
@@ -148,7 +175,8 @@ angular.module('Application').controller(
 						let movieEl = document.getElementById("proj_movie");
 						movie = JSON.parse(movieEl.options[movieEl.selectedIndex].value);
 						//alert(date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes());
-						$http.post('/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
+						$http.post('/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +
+								'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
 							/*let projection = data;
 							projection.movie = movie;
 							aid.projections.push(data);*/
@@ -308,6 +336,8 @@ angular.module('Application').controller(
 						return "X";
 					}
 				}
+				
+				
 			}
 		]
 	);

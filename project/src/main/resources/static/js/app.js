@@ -18,6 +18,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 			}).when('/edit_cinema_basic', {
 				templateUrl : 'html/edit_cinema_basic.html',
 				controller : 'CinemaProfileController'
+			}).when('/add_movie', {
+				templateUrl : 'html/add_movie.html',
+				controller : 'CinemaProfileController'
 			}).when('/make_qt', {
 				templateUrl : 'html/form_make_qt.html',
 				controller : 'CinemaProfileController'
@@ -53,6 +56,9 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 				controller : 'SystemAdminController'
 			}).when('/cinema_admin', {
 				templateUrl : 'html/cinema_admin.html',
+				controller : 'CinemaAdminController'
+			}).when('/cinema_admin/change_password', {
+				templateUrl : 'html/change_pass.html',
 				controller : 'CinemaAdminController'
 			}).when('/error', {
 				templateUrl : 'html/error.html'

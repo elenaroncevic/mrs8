@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import app.dto.QuickTicketDTO;
 import app.model.Auditorium;
 import app.model.Cinema;
+import app.model.CinemaAdmin;
 import app.model.Movie;
 import app.model.Projection;
 import app.model.QuickTicket;
@@ -103,8 +104,15 @@ public class CinemaAdminService {
 	public void removeProjection(Long id) {
 		projectionRepository.delete(id);		 
 	}
-	public List<Movie> getMovies() {
-		return movieRepository.findAll();
+	public List<Movie> getMovies(Long id) {
+		List<Movie> movies = movieRepository.findAll();
+		List<Movie> ret = new ArrayList<Movie>();
+		for(Movie movie : movies){
+			if(movie.getCinema().getId() == id){
+				ret.add(movie);
+			}
+		}
+		return ret;
 		
 	}
 	public boolean addProjection(Long id, Long aid, Calendar projCalendar, Double price, Long movieId) {
@@ -115,7 +123,7 @@ public class CinemaAdminService {
 			return false;
 		}
 		Date date = new Date(projCalendar.getTimeInMillis());
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		String s = df.format(date);
 		String time = df.format(date.getTime());
 		String d = date.toString();
@@ -267,6 +275,20 @@ public class CinemaAdminService {
 	public boolean qtRemove(Long qtId) {
 		ticketRepository.delete(qtId);
 		return true;
+	}
+	public void addMovie(Long id, String title, String director, String description, String actors, int duration,
+			String genre, String image) {
+		Cinema cinema = cinemaRepository.findOne(id);
+		Movie movie = new Movie(cinema,title,director,description,actors,duration,genre,image);
+		movieRepository.save(movie);
+		
+	}
+	
+	public User changePass(String email, String pass){
+		User user = userRepository.findOne(email);
+		user.setPassword(pass);
+		user = userRepository.save(user);
+		return user;
 	}
 		
 }

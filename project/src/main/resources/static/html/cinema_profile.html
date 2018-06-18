@@ -7,24 +7,69 @@
 	<br>
 	
 	<button ng-click=editBasicInformations() ng-show=cinemaAdmin>Edit basic informations</button>
+	<button ng-show = cinemaAdmin ng-click = addMovie()>Add movie</button>
 	<hr>
+	
 	<br>
 	Projections:
 	<table class="table table-bordered" ng-init=refreshUser()>
-		<thead>
-			<th >Movie</th>
-			<th >date</th>
-			<th >Auditorium</th>
-			<th >price</th>
-		</thead>
 		<tbody>
 			<tr ng-repeat="projection in projections | orderBy:'date'">
-				<td >{{projection.movie.title}}</td>
-				<td >{{projection.date}}</td>
-				<td >{{projection.auditorium.number}}</td>
-				<td >{{projection.price}}</td>	
-				<td ng-show=cinemaAdmin><button type="button" ng-click="removeProjection(projection)" >X</button></td>
-				<td ng-show=cinemaAdmin><button type="button" ng-click="qtMake(projection)" >Make quick ticket</button></td>		
+				<td><img ng-src="{{ projection.movie.image }}" width="150" height="150"/></td>
+				<td >
+					<table>
+						<tr>
+							<td>Title: </td>
+							<td>{{projection.movie.title}}</td>
+						</tr>
+						<tr>
+							<td>Director: </td>
+							<td>{{projection.movie.director}}</td>
+						</tr>
+						<tr>
+							<td>Genre: </td>
+							<td>{{projection.movie.genre}}</td>
+						</tr>
+					</table>
+				</td>
+				<td>
+					<table>
+						<tr>
+							<td>Actors: </td>
+							<td>{{projection.movie.actors}}</td>
+						</tr>
+						<tr>
+							<td>Description: </td>
+							<td>{{projection.movie.description}}</td>
+						</tr>
+					</table>
+				</td>
+				<td >
+					<table>
+						<tr>
+							<td>Date: </td>
+							<td>{{projection.date}}</td>
+						</tr>
+						<tr>
+							<td>Auditorium: </td>
+							<td>{{projection.auditorium.number}}</td>
+						</tr>
+						<tr>
+							<td>Price: </td>
+							<td>{{projection.price}}</td>
+						</tr>
+					</table>
+				</td>
+				<td ng-show=cinemaAdmin>
+					<table>
+						<tr>
+							<td><button type="button" ng-click="removeProjection(projection)" >Remove projection</button> </td>					
+						</tr>
+						<tr>
+							<td><button type="button" ng-click="qtMake(projection)" >Make quick ticket</button> </td>
+						</tr>
+					</table>
+				</td>	
 			</tr>
 		</tbody>
 	</table>
@@ -53,7 +98,7 @@
 				<td >{{qt.rowNumber}}</td>	
 				<td >{{qt.seatNumber}}</td>	
 				
-				<td ><button type="button" ng-click="qtRemove(qt)" >{{buttonValueQt()}}</button></td>
+				<td ng-show=noUser><button  type="button" ng-click="qtRemove(qt)" >{{buttonValueQt()}}</button></td>
 			</tr>
 		</tbody>
 	</table>

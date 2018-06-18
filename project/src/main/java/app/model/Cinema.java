@@ -66,6 +66,25 @@ public class Cinema {
 	@JsonManagedReference
 	private Set<Visitation> visitors = new HashSet<Visitation>();
 
+	@OneToMany(mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
+	@JsonManagedReference
+	private Set<Movie> movies = new HashSet<Movie>();
+	
+	
+	
+	public Set<Movie> getMovies() {
+		return movies;
+	}
+
+
+
+
+	public void setMovies(Set<Movie> movies) {
+		this.movies = movies;
+	}
+
+
+
 
 	public CinemaAdmin getAdmin() {
 		return admin;

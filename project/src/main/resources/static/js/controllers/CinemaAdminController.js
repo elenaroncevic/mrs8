@@ -7,20 +7,29 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
-				/*if($rootScope.cinemaAdmin){
-					$scope.cinemaList = [];
-					$scope.theaterList = [];
-					var all = $rootScope.currentUser.cinemas;
-					for(var i in all){
-						if(all[i].type=="Cinema"){
-							$scope.cinemaList.push(all[i]);
-						}
-						else{
-							$scope.theaterList.push(all[i]);
-							
-						}
-					};
-				}*/
+				
+				$scope.changeInfo=function(){
+					$location.path('cinema_admin/change_password').replace();
+				};
+				
+				$scope.changePass=function(){
+					if($scope.newPass == $scope.confirmedPass && $scope.oldPass==$rootScope.currentUser.password){
+						$http.post('/changePass/'+$rootScope.currentUser.email+"/"+$scope.newPass).success(function( data,status){
+							localStorage.setItem("currentUser",angular.toJson(data));
+							$location.path("/cinema_admin").replace();
+
+						}).error(function(){
+							alert("Error in changePassword");
+							$location.path("/cinema_admin").replace();
+
+						});
+
+					}
+					else{
+						alert("wrong password!");
+					}
+				}
+				
 				$scope.showCinema = function(data){
 					$rootScope.currentCinema=data;
 					localStorage.setItem("currentCinema",angular.toJson(data));

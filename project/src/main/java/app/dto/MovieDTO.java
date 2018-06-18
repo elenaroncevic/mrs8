@@ -10,6 +10,8 @@ public class MovieDTO {
 	private Integer duration;
 	private String description;
 	private Long id;
+	private String genre;
+	private String image;
 	
 	public MovieDTO(Movie movie){
 		this.title = movie.getTitle();
@@ -19,9 +21,12 @@ public class MovieDTO {
 		this.duration = movie.getDuration();
 		this.description = movie.getDescription();	
 		this.id = movie.getId();
+		this.genre=movie.getGenre();
+		this.image=movie.getImage();
 	}
 	
-	public MovieDTO(String title, Double rating, String director, String actors, Integer duration, String description, Long id) {
+	public MovieDTO(String title, Double rating, String director, String actors, Integer duration, String description, 
+			Long id, String genre, String image) {
 		super();
 		this.title = title;
 		this.rating = rating;
@@ -30,6 +35,8 @@ public class MovieDTO {
 		this.duration = duration;
 		this.description = description;
 		this.id=id;
+		this.genre = genre;
+		this.image = image;
 	}
 	public String getTitle() {
 		return title;
@@ -82,6 +89,22 @@ public class MovieDTO {
 
 	public void setDuration(Integer duration) {
 		this.duration = duration;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

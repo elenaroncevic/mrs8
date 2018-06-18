@@ -45,7 +45,7 @@ angular.module('Application').controller(
 					$rootScope.cinemasShow={};
 					$http.get('/cinemas').success(function(data, status){
 							$rootScope.cinemasShow=data;
-							alert(data);
+							//alert(data);
 					});
 					$scope.reserve=false;
 					$scope.regular=true;
