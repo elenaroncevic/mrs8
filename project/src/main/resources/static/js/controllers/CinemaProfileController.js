@@ -9,7 +9,7 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $http, $location) {
 				$rootScope.currentCinema = JSON.parse(localStorage.getItem("currentCinema"));
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-				if($rootScope.currentUser != null){
+				if($rootScope.currentUser.email ){
 					$rootScope.noUser = true;
 					if($rootScope.currentUser.hasOwnProperty("cinemas")){
 						$rootScope.cinemaAdmin = true;
@@ -27,6 +27,7 @@ angular.module('Application').controller(
 					$rootScope.ru=false;
 					$rootScope.noUser=false;
 				}
+				alert($rootScope.cinemaAdmin);
 				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
