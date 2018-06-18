@@ -201,6 +201,13 @@ angular.module('Application').controller(
 				};
 				
 				
+				$scope.cancelAdminRegistration=function(){
+					$scope.admPass1="";
+					$scope.admPass2="";
+					$scope.admEmail="";
+				};
+				
+				
 				$scope.savePointScale=function(){
 					var copper = parseInt(document.getElementById("copper").value);
 					var silver = parseInt(document.getElementById("silver").value);
@@ -223,25 +230,36 @@ angular.module('Application').controller(
 					}
 				};
 				
+				$scope.cancelScaleChanges=function(){
+					$scope.scale=fill_scale();
+				};
+				
 				
 				$scope.registerBuilding=function(){		
 					var description=document.getElementById("buildingDescription").value;
+					var lat = document.getElementById("lat").value;
+					var lng = document.getElementById("lng").value;
+					
 					if (!description){
 						description="No description";
 					}
 					var name=document.getElementById("buildingName").value;
-					if (name && $scope.lat && $scope.lng){
+					if (name && lat && lng){
 						var index=document.getElementById("buildingType").selectedIndex;
 						var buildingType=document.getElementById("buildingType").options[index].value;
 						
 						var index2 = document.getElementById("buildingAdmin").selectedIndex;
 						var adminEmail = document.getElementById("buildingAdmin").options[index2].value;
-						$http.get('http://localhost:8181/system_admin/register_cinema/'+adminEmail+'/'+name+'/'+description+'/'$scope.lat+'/'+$scope.lng+'/'+buildingType).success(function(){
+						$http.get('http://localhost:8181/system_admin/register_cinema/'+adminEmail+'/'+name+'/'+description+'/'+lat+'/'+lng+'/'+buildingType).success(function(){
 							alert("successfuly registered building!");
 							document.getElementById("buildingName").value="";
 							document.getElementById("buildingDescription").value="";
+							document.getElementById("lat").value="";
+							document.getElementById("lng").value="";
+							$scope.marker=false;					
+							initMap();
 						}).error(function(){
-							alert("Couldn't register building");
+							alert("Building with the same name already exists");
 						});
 					}else{
 						alert("Name field and location can't be blank");
@@ -250,6 +268,14 @@ angular.module('Application').controller(
 					
 				};
 				
+				$scope.cancelBuildingRegistration=function(){
+					document.getElementById("buildingName").value="";
+					document.getElementById("buildingDescription").value="";
+					document.getElementById("lat").value="";
+					document.getElementById("lng").value="";
+					$scope.marker=false;					
+					initMap();
+				};
 	
 				
 				

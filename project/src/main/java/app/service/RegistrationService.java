@@ -78,7 +78,7 @@ public class RegistrationService {
         	admin=new SystemAdmin();
         	((SystemAdmin)admin).setDef(false);
         	((SystemAdmin)admin).setFirst_time(true);
-        	((SystemAdmin)admin).setImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png");
+        	((SystemAdmin)admin).setImage("http://theivykey.com/images/no-profile-image.png");
         	break;
         case "cinema":
         	admin=new CinemaAdmin();
@@ -86,7 +86,7 @@ public class RegistrationService {
         default:
         	admin=new FanZoneAdmin();
         	((FanZoneAdmin)admin).setFirst_time(true);
-        	((FanZoneAdmin)admin).setImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png");
+        	((FanZoneAdmin)admin).setImage("http://theivykey.com/images/no-profile-image.png");
         }
         
         admin.setEmail(email);

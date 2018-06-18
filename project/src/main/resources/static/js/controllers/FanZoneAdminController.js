@@ -113,7 +113,7 @@ angular.module('Application').controller(
 					for (var i = 0; i<$scope.cinemas_and_theaters.length; i++){
 					    var opt = document.createElement('option');
 					    opt.value = $scope.cinemas_and_theaters[i].id;
-					    opt.innerHTML = $scope.cinemas_and_theaters[i].name+" "+$scope.cinemas_and_theaters[i].location;
+					    opt.innerHTML = $scope.cinemas_and_theaters[i].name;
 					    select.appendChild(opt);
 					}
 					
@@ -121,7 +121,7 @@ angular.module('Application').controller(
 					for (var i = 0; i<$scope.cinemas_and_theaters.length; i++){
 					    var opt = document.createElement('option');
 					    opt.value = $scope.cinemas_and_theaters[i].id;
-					    opt.innerHTML = $scope.cinemas_and_theaters[i].name+" "+$scope.cinemas_and_theaters[i].location;			    
+					    opt.innerHTML = $scope.cinemas_and_theaters[i].name;			    
 					    select2.appendChild(opt);
 					}
 					

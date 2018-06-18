@@ -76,19 +76,28 @@ public class SystemAdminService {
 	}
 
 	public boolean registerBuilding(String adminEmail, String buildingName, String buildingType, Double latitude, Double longitude, String buildingDescription) {
-		Cinema cinema = new Cinema();
-		CinemaAdmin cinemaAdmin = (CinemaAdmin)userRepository.findOne(adminEmail);
-		cinema.setAdmin(cinemaAdmin);
-		cinema.setName(buildingName);
-		cinema.setDescription(buildingDescription);
-		if (buildingType.equals("cinema")){
-			cinema.setType(BuildingType.Cinema);
+		List<Cinema> cinemas=cinemaRepository.findByName(buildingName);
+		if (!cinemas.isEmpty()){
+			return false;
 		}else{
-			cinema.setType(BuildingType.Theater);
+			Cinema cinema=new Cinema();
+			CinemaAdmin cinemaAdmin = (CinemaAdmin)userRepository.findOne(adminEmail);
+			cinema.setAdmin(cinemaAdmin);
+			cinema.setName(buildingName);
+			cinema.setDescription(buildingDescription);
+			cinema.setLatitude(latitude);
+			cinema.setLongitude(longitude);
+			if (buildingType.equals("cinema")){
+				cinema.setType(BuildingType.Cinema);
+			}else{
+				cinema.setType(BuildingType.Theater);
+			}
+			
+			cinemaRepository.save(cinema);
+			return true;
 		}
 		
-		cinemaRepository.save(cinema);
-		return true;
+		
 		
 	}
 	

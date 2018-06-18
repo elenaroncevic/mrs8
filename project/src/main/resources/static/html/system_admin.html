@@ -59,6 +59,7 @@
 			Repeat admin password:
 			<input ng-model="admPass2" type="password" maxlength="30">		
 			<div align="right">
+				<input type="button" value="Cancel" ng-click=cancelAdminRegistration()>
 				<input type="button" value="Register admin" ng-click=registerAdmin()>
 			</div>
 		</div>	
@@ -66,7 +67,7 @@
 		
 		<!-- div za postavljanje point skale -->
 		<div id="set_scale" ng-show="show_div.div4" class="tabcontent">	
-			Copper user: 
+			Bronze user: 
 			<input type="number" id="copper" ng-model="scale.copper">
 			</br>
 			</br>
@@ -77,6 +78,7 @@
 			Golden user:
 			<input type="number" id="golden" ng-model="scale.golden">
 			<div align="right">
+				<input type="button" value="Reset scale" ng-click=cancelScaleChanges()>
 				<input type="button" value="Save scale" ng-click=savePointScale()>
 			</div>
 		</div>	
@@ -102,13 +104,14 @@
 			</br>
 			<input type="text" id="lat" hidden>
 			<input type="text" id="lng" hidden>
-			<div id="map" style="width:700; height:400"></div>
+			<div id="map"></div>
 			</br>			
 			</br>	
 			Admin:
 		    <select id="buildingAdmin"></select>	
 		    <div align="right">
-				<input type="button" value="Register building" ng-click=registerBuilding()>
+		    	<input type="button" value="Cancel" ng-click=cancelBuildingRegistration()>
+				<input type="button" value="Register building" ng-click=registerBuilding()>		
 			</div>
 		</div>
 

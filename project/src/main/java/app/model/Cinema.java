@@ -40,6 +40,9 @@ public class Cinema {
 	@Column(name="crating")
 	private Double rating;
 	
+	private Double latitude;
+	private Double longitude;
+	
 	@Id
 	@GeneratedValue
 	@Column(name="cid")
@@ -164,6 +167,29 @@ public class Cinema {
 		this.visitors = visitors;
 	}
 
+	
+
+
+	public Cinema(BuildingType type, String name, String location, String description, Double rating, Double latitude,
+			Double longitude, Long id, Set<Auditorium> auditoriums, CinemaAdmin admin, Set<PromoOfficial> promos,
+			Set<CinemaRate> rates, Set<Visitation> visitors, Set<Movie> movies) {
+		super();
+		this.type = type;
+		this.name = name;
+		this.location = location;
+		this.description = description;
+		this.rating = rating;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.id = id;
+		this.auditoriums = auditoriums;
+		this.admin = admin;
+		this.promos = promos;
+		this.rates = rates;
+		this.visitors = visitors;
+		this.movies = movies;
+	}
+
 
 
 
@@ -225,6 +251,34 @@ public class Cinema {
 
 	public void setRates(Set<CinemaRate> rates) {
 		this.rates = rates;
+	}
+
+
+
+
+	public Double getLatitude() {
+		return latitude;
+	}
+
+
+
+
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+
+
+
+
+	public Double getLongitude() {
+		return longitude;
+	}
+
+
+
+
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
 	}
 	
 	
