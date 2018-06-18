@@ -281,7 +281,7 @@ angular.module('Application').controller(
 				
 				initMap = function(){
 					var options={
-						zoom:8,
+						zoom:16,
 						center:{
 							lat:45.2671,lng:19.8335
 						}

@@ -284,6 +284,7 @@ angular.module('Application').controller(
 							$scope.currentUser = data;
 							document.getElementById("new_pass").value="";
 							document.getElementById("old_pass").value="";
+							document.getElementById("changing_user_image").value="";
 							alert("Successfuly changed info");
 						}).error(function(){
 							alert("Can't change fan zone admin info");

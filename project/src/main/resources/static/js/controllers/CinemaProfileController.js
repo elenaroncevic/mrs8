@@ -348,6 +348,24 @@ angular.module('Application').controller(
 				}
 				
 				
+				
+				
+				initMap=function(latitude, longitude){
+					var options={
+							zoom:16,
+							center:{
+								lat:latitude,lng:longitude
+							}
+						}
+					var map=new google.maps.Map(document.getElementById('map'),options);
+					
+					var marker=new google.maps.Marker({
+						position:{lat:latitude,lng:longitude},
+						map:map,						
+					});
+				};
+				
+				initMap($rootScope.currentCinema.latitude, $rootScope.currentCinema.longitude);
 			}
 		]
 	);
