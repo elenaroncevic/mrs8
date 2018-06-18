@@ -129,10 +129,15 @@ public class RegisteredUserService {
 		
 		//all and sectored seats
 		for(Row r : proj.getAuditorium().getRows()) {
+			if(r.getActive()==0) {
+				continue;
+			}
 			for(Seat s : r.getSeats()) {
-				listSeats.add(new SeatDTO(s));
-				if(s.getSector()!=null) {
-					unavailableSeats.add(new SeatDTO(s));
+				if(s.getActive().equals(Seat.SeatState.Active)) {
+					listSeats.add(new SeatDTO(s));
+					if(s.getSector()!=null) {
+						unavailableSeats.add(new SeatDTO(s));
+					}	
 				}
 			}
 		}
@@ -169,6 +174,9 @@ public class RegisteredUserService {
 		String comp = date.replace(",", "/");
 		List<ProjectionDTO> retValue = new ArrayList<ProjectionDTO>();
 		for(Projection proj : movie.getProjections()) {
+			if(proj.getActive()==0) {
+				continue;
+			}
 			lista = proj.getDate().split(" ");
 			if(lista[0].equals(comp)) {
 				retValue.add(new ProjectionDTO(proj));
