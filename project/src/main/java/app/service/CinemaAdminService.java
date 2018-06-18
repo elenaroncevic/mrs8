@@ -33,7 +33,7 @@ import app.repository.RowRepository;
 import app.repository.SeatRepository;
 import app.repository.TicketRepository;
 import app.repository.UserRepository;
-
+ 
 @Service
 public class CinemaAdminService {
 	@Autowired
