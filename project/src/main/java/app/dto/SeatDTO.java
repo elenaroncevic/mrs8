@@ -6,14 +6,14 @@ public class SeatDTO {
 	
 	private Long id;
 	private Integer number;
-	private Boolean active;
+	private Seat.SeatState active;
 	private Long rowNum;
 	
 	public SeatDTO() {
 		
 	}
 
-	public SeatDTO(Long id, Integer number, Boolean active, Long rowNum) {
+	public SeatDTO(Long id, Integer number, Seat.SeatState active, Long rowNum) {
 		super();
 		this.id = id;
 		this.number = number;
@@ -37,11 +37,11 @@ public class SeatDTO {
 		this.number = number;
 	}
 
-	public Boolean getActive() {
+	public Seat.SeatState getActive() {
 		return active;
 	}
 
-	public void setActive(Boolean active) {
+	public void setActive(Seat.SeatState active) {
 		this.active = active;
 	}
 

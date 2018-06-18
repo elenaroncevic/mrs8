@@ -20,6 +20,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name="Seat")
 public class Seat {
 	
+	public enum SeatState{
+		Active,
+		Deleted,
+		Disabled
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(name="seid")
@@ -37,7 +43,7 @@ public class Seat {
 	private Integer number;
 	
 	@Column(name = "s_active") 
-	public Boolean active;
+	public SeatState active;
 
 	
 	@OneToMany(mappedBy = "seat",cascade = CascadeType.REFRESH, fetch = FetchType.LAZY) 
@@ -88,14 +94,14 @@ public class Seat {
 	public void setRow(Row row) {
 		this.row = row;
 	}
-	public Boolean getActive() {
+	public SeatState getActive() {
 		return active;
 	}
-	public void setActive(Boolean active) {
+	public void setActive(SeatState active) {
 		this.active = active;
 	}
 	public Seat(){}
-	public Seat(Long id, Auditorium auditorium, Row row,Integer number, Set<Ticket> tickets, Sector sector,Boolean active ) {
+	public Seat(Long id, Auditorium auditorium, Row row,Integer number, Set<Ticket> tickets, Sector sector,SeatState active ) {
 		super();
 		this.id = id;
 		this.auditorium = auditorium;
@@ -105,7 +111,7 @@ public class Seat {
 		this.sector = sector;
 		this.active = active;
 	}
-	public Seat(Auditorium auditorium2, Row row2, Integer number2, boolean b) {
+	public Seat(Auditorium auditorium2, Row row2, Integer number2, SeatState b) {
 		super();
 		this.auditorium = auditorium2;
 		this.number = number2;

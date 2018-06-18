@@ -24,6 +24,8 @@ public class Row {
 	@Column(name="rid")
 	private Long id;
 	
+	private int active;
+	
 	@Column(name="rnumber")
 	private Long number;
 	
@@ -36,6 +38,14 @@ public class Row {
 	private Set<Seat> seats = new HashSet<Seat>();
 
 	
+
+	public int getActive() {
+		return active;
+	}
+
+	public void setActive(int active) {
+		this.active = active;
+	}
 
 	public Long getNumber() {
 		return number;
