@@ -124,4 +124,14 @@ public class FanZoneRegUserController {
 		}
 
 	}
+	
+	@RequestMapping(value="/reg_user/choose_winner/{bid}", method=RequestMethod.GET)
+	public ResponseEntity<Void> chooseWinnerPromoUsed(@PathVariable("bid") Long bid){
+		if (promoUsedService.chooseWinnerPromoUsed(bid)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);//
+		}
+
+	}
 }

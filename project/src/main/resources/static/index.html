@@ -44,6 +44,14 @@
 	<script src="js/dependencies/jquery.seat-charts.js"></script>
     <script src="js/dependencies/jquery.nicescroll.js"></script>
 	<script src="js/dependencies/scripts.js"></script>
+	
+	<style type="text/css">
+			#map{
+				height: 400px;
+				width:700px;
+			}
+	</style>
+	
 </head>
 
 <body ng-controller="ApplicationController">
@@ -51,6 +59,10 @@
 		<button type="button" style="float:right" class="bttn" ng-show="log_out_btn" ng-click="logout()"><i class="fa fa-close"></i>Log out</button>
         <div class="container" ng-view>
         </div>
+        
+        <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiiaaVU8XrTiTn8a3JDcLoc3gNKZnVuxg">
+    </script>
 </body>
 </html>
 

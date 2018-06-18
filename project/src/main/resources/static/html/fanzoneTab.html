@@ -225,6 +225,7 @@
 					</br>
 					Image:
 					<input type="text" ng-model="changing_promo.image" id="changing_promo_image">
+					<p> <img ng-src="{{ changing_promo.image }}" width="150" height="150"/> </p>
 				</div>
 				<div id="unable_to_change">
 					<p><b>Name: </b> {{changing_promo.name}} </p>
@@ -255,7 +256,7 @@
 						<tr ng-repeat="bid in bidsInLicitation">
 							<td>{{bid.bidder_email}}</td>
 							<td>{{ bid.price }}</td>
-							<td><button type="button" ng-click="choose_buyer(bid.id)" ng-show="can_choose_buyer">Choose buyer</button></td>
+							<td><button type="button" ng-click="choose_buyer(bid.id, changing_promo.ending_date, changing_promo.id)" ng-show="can_choose_buyer">Choose buyer</button></td>
 						</tr>			
 					</tbody>
 				</table>

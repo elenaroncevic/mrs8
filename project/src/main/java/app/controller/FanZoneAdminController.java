@@ -14,6 +14,7 @@ import org.springframework.web.context.request.WebRequest;
 import app.dto.PromoOfficialDTO;
 import app.dto.PromoUsedDTO;
 import app.model.PromoOfficial;
+import app.model.User;
 import app.service.FanZoneAdminService;
 import app.service.PromoUsedService;
 
@@ -90,5 +91,11 @@ public class FanZoneAdminController {
 		}else {      
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@RequestMapping(value = "/fan_zone_admin/change_user_info/{email}/{image}/{pass}", method = RequestMethod.POST)
+	public ResponseEntity<User> changeFanZoneAdminInfo(@PathVariable("email") String email, @PathVariable("image") String image, @PathVariable("pass") String pass) {
+		User changedUser = fanZoneAdminService.changeFanZoneAdminInfo(email, image, pass);
+		return new ResponseEntity<>(changedUser,HttpStatus.OK);	
 	}
 }

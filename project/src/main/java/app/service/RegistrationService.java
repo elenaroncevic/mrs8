@@ -77,17 +77,22 @@ public class RegistrationService {
         case "system":
         	admin=new SystemAdmin();
         	((SystemAdmin)admin).setDef(false);
+        	((SystemAdmin)admin).setFirst_time(true);
+        	((SystemAdmin)admin).setImage("http://theivykey.com/images/no-profile-image.png");
         	break;
         case "cinema":
         	admin=new CinemaAdmin();
         	break;
         default:
         	admin=new FanZoneAdmin();
+        	((FanZoneAdmin)admin).setFirst_time(true);
+        	((FanZoneAdmin)admin).setImage("http://theivykey.com/images/no-profile-image.png");
         }
         
         admin.setEmail(email);
         admin.setPassword(pass);
         admin.setActivated("no");
+        
         userRepository.save(admin);
         
         String token = UUID.randomUUID().toString();

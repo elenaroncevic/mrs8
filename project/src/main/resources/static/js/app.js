@@ -32,25 +32,10 @@ angular.module('Application', ['angular-jwt' ,'ngRoute']).config(
 				controller : 'CinemaListController'
 			}).when('/cinema_profile', {
 				templateUrl : 'html/cinema_profile.html',
-				controller : 'CinemaProfileController'
-			}).when('/system_admin/register_new_admin', {
-				templateUrl : 'html/register_new_admin.html',
-				controller : 'SystemAdminController'
-			}).when('/fan_zone_admin/add_po', {
-				templateUrl : 'html/add_promo_official.html',
-				controller : 'FanZoneAdminController'
+				controller : 'CinemaProfileController'						
 			}).when('/fan_zone_admin', {
 				templateUrl : 'html/fan_zone_admin.html',
-				controller : 'FanZoneAdminController'
-			}).when('/fan_zone_admin/list_po', {
-				templateUrl : 'html/list_promos_official_fz.html',
-				controller : 'FanZoneAdminController'
-			}).when('/fan_zone_admin/change_po', {
-				templateUrl : 'html/change_promo_official_fz.html',
-				controller : 'FanZoneAdminController'
-			}).when('/fan_zone_admin/list_pu_unapproved', {
-				templateUrl : 'html/list_pu_unapproved_fz.html',
-				controller : 'FanZoneAdminController'
+				controller : 'FanZoneAdminController'			
 			}).when('/system_admin', {
 				templateUrl: 'html/system_admin.html',
 				controller : 'SystemAdminController'

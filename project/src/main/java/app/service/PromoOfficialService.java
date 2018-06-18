@@ -21,7 +21,6 @@ public class PromoOfficialService {
 	private UserRepository userRepository;
 	
 	public List<PromoOfficialDTO> listUnreservedPromosOfficial() {
-		//List<PromoOfficial> listOfPromosOfficial = promoOfficialRepository.findPromoOfficialByActivity("unreserved");
 		
 		List<PromoOfficial> listOfPromosOfficial = promoOfficialRepository.findAll();
 		

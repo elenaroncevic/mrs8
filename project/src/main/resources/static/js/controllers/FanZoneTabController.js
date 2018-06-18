@@ -316,6 +316,25 @@ angular.module('Application').controller(
 					}
 				};
 				
+				$scope.choose_buyer = function(bid, ending_date, puid){
+					var lic_date = (ending_date).replace(' ','T');
+					lic_date=lic_date+"Z";
+					var licitations_date=new Date(lic_date);
+					var now = new Date();
+					if (now.getTime()<licitations_date.getTime()){
+						$http.get('http://localhost:8181/reg_user/choose_winner/'+bid).success(function(){
+							fill_changing_promo(puid);
+							fill_my_posted_promos_used();
+							alert('you\'ve successfuly chosen a winner');				
+						}).error(function(){
+							alert("couldn't choose a buyer");
+						});
+					}else{
+						alert("time for choosing winner is over");
+						fill_changing_promo(puid);
+					}
+				};
+				
 			}
 		]
 );
