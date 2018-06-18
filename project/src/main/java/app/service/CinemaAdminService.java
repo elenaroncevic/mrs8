@@ -140,50 +140,39 @@ public class CinemaAdminService {
 		Calendar now = Calendar.getInstance();
 		now.add(Calendar.DAY_OF_MONTH, 5);
 		if (now.getTime().after(projCalendar.getTime())){
-			//System.out.println("nasao");
 			return false;
 		}
-		Date date = new Date(projCalendar.getTimeInMillis());
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-		String s = df.format(date);
-		String time = df.format(date.getTime());
-		String d = date.toString();
-		//System.out.println("s: "+s);
-		//System.out.println("d: "+d);
-
-		Projection p = new Projection( s, price);
-		p.setActive(1);
+		Auditorium audi = audiRepository.findOne(aid);
 		Movie movie = movieRepository.findOne(movieId);
-		p.setMovie(movie);
-		Cinema cinema= cinemaRepository.findOne(id);
-		//System.out.println(id);
-		for(Auditorium auditorium : cinema.getAuditoriums()){
-			//System.out.println(id+" "+aid+" " +auditorium.getId());
-
-			if (auditorium.getId()==aid){
-				for(Projection proj : auditorium.getProjections()){
-					//System.out.println("proj: "+proj.getId());
-					Calendar pc = Calendar.getInstance();
-					try {
-						pc.setTime(df.parse(proj.getDate()));
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					//System.out.println(d+"\n"+proj.getDate()+"\n"+pc);
+		for(Projection proj : audi.getProjections()){
+			//System.out.println(": ");
+			if(proj.getActive()==1){
+				Calendar pc = Calendar.getInstance();
+				try {
+					pc.setTime(df.parse(proj.getDate()));
+					if(!dateOverlap(projCalendar, movie.getDuration(), pc, proj.getMovie().getDuration())){
+						return false;
+					}				
+				} catch (ParseException e) {
+					return false;
 				}
-				p.setAuditorium(auditorium);
 			}
-		}
-
-		p.setTime("2018-05-18 15:15:00");
+		}			
+		Projection p = new Projection();
+		p.setActive(1);
+		p.setMovie(movie);
+		p.setAuditorium(audi);
+		p.setTime(df.format(projCalendar.getTime()));
+		p.setDate(df.format(projCalendar.getTime()));
+		p.setPrice(price);
 		projectionRepository.save(p);
 		return true;
 	}
 	public boolean disableSeat(Long id) {
 		Seat seat = seatRepository.findOne(id);
 		for(Ticket t : seat.getTickets()){
-			if(t.getReservation().getState()==ReservationState.Active || t.getState()==Ticket.TicketState.Requested){
+			if(t.getState()==Ticket.TicketState.Requested || t.getReservation().getState()==ReservationState.Active ){
 				return false;
 			}
 		}
@@ -205,7 +194,7 @@ public class CinemaAdminService {
 			if(s.getActive()!=Seat.SeatState.Deleted)
 				num++;
 			for(Ticket t : s.getTickets()){
-				if(t.getReservation().getState()==ReservationState.Active || t.getState()==TicketState.Requested){
+				if(t.getState()==TicketState.Requested || t.getReservation().getState()==ReservationState.Active ){
 					return false;
 				}
 			}
@@ -227,7 +216,7 @@ public class CinemaAdminService {
 				num++;
 			}
 			for(Ticket t : s.getTickets()){
-				if(t.getReservation().getState()==ReservationState.Active || t.getState()==TicketState.Requested){
+				if(t.getState()==TicketState.Requested || t.getReservation().getState()==ReservationState.Active ){
 					return false;
 				}
 			}
@@ -257,7 +246,7 @@ public class CinemaAdminService {
 				num++;
 			}
 		}
-		row.setNumber(num);
+		row.setNumber(num+1);
 		row.setActive(1);
 		rowRepository.save(row);
 		for( i = 1; i<kol+1; i++){
@@ -271,7 +260,7 @@ public class CinemaAdminService {
 		Row row = rowRepository.findOne(row_id);
 		for(Seat s : row.getSeats()){			
 			for(Ticket t : s.getTickets()){
-				if(t.getReservation().getState()==ReservationState.Active || t.getState()==TicketState.Requested){
+				if(t.getState()==TicketState.Requested || t.getReservation().getState()==ReservationState.Active ){
 					return false;
 				}
 			}
@@ -309,6 +298,14 @@ public class CinemaAdminService {
 	public boolean qtAdd(Long proj_id, Long seat_id, Integer discount) {
 		Seat seat = seatRepository.findOne(seat_id);
 		Projection proj = projectionRepository.findOne(proj_id);
+		for(Ticket t: seat.getTickets()){
+			if(t.getState()==Ticket.TicketState.Requested || t.getReservation().getState() == ReservationState.Active){
+				Projection seatProj =t.getProjection();
+				if(!projOverlap(proj,seatProj)){
+					return false;
+				}	
+			}
+		}
 		QuickTicket qt = new QuickTicket();
 		qt.setProjection(proj);
 		qt.setSeat(seat);
@@ -335,5 +332,44 @@ public class CinemaAdminService {
 		user = userRepository.save(user);
 		return user;
 	}
+	public boolean projOverlap(Projection p1, Projection p2){
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		Calendar p1start = Calendar.getInstance();
+		Calendar p2start = Calendar.getInstance();
+		Calendar p1end = Calendar.getInstance();
+		Calendar p2end = Calendar.getInstance();
+		try {
+			p1start.setTime(df.parse(p1.getDate()));			
+			p2end.setTime(df.parse(p2.getDate()));
+			return dateOverlap( p1start,p1.getMovie().getDuration(), p2start, p2.getMovie().getDuration() );	
+		} catch (ParseException e) {
+			System.out.println("catch");
+			return false;
+		}
+	}
+	
+	public boolean dateOverlap(Calendar p1start, int duration1, Calendar p2start, int duration2){
+		Calendar p1end = Calendar.getInstance();
+		Calendar p2end = Calendar.getInstance();
+		p1end.setTime(p1start.getTime());
+		p2end.setTime(p2start.getTime());
+		p1end.add(Calendar.MINUTE, duration1);
+		p2end.add(Calendar.MINUTE, duration2);
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		
+		System.out.println("________\n"+df.format(p1start.getTime()));
+		System.out.println(df.format(p1end.getTime()));
+		System.out.println(df.format(p2start.getTime()));
+		System.out.println(df.format(p2end.getTime())+"\n____________");
+
+		if((p2start.after(p1start) && p1end.after(p2start)) ||
+			(p2end.after(p1start) && p1end.after(p2end)) ||
+			(p1start.after(p2start)&& p2end.after(p1end))){
+			System.out.println("overlap");
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
 }

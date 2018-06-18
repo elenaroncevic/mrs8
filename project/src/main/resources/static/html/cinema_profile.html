@@ -14,7 +14,7 @@
 	Projections:
 	<table class="table table-bordered" ng-init=refreshUser()>
 		<tbody>
-			<tr ng-repeat="projection in projections | orderBy:'date'">
+			<tr ng-repeat="projection in projections | orderBy:'date'" ng-show="projection.active==1">
 				<td><img ng-src="{{ projection.movie.image }}" width="150" height="150"/></td>
 				<td >
 					<table>
@@ -57,6 +57,10 @@
 						<tr>
 							<td>Price: </td>
 							<td>{{projection.price}}</td>
+						</tr>
+						<tr>
+							<td>Duration: </td>
+							<td>{{projection.movie.duration}}</td>
 						</tr>
 					</table>
 				</td>
