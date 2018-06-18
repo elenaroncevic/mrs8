@@ -34,7 +34,6 @@ public class Projection {
 	@Column(name="pdate")
 	private String date;
 	
-	private int active;
 	
 	@Column(name="ptime")
 	private String time;
@@ -126,18 +125,6 @@ public class Projection {
 
 	public void setTickets(Set<Ticket> tickets) {
 		this.tickets = tickets;
-	}
-
-
-
-	public int getActive() {
-		return active;
-	}
-
-
-
-	public void setActive(int active) {
-		this.active = active;
 	}
 
 

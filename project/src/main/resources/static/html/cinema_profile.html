@@ -89,7 +89,7 @@
 			
 		</thead>
 		<tbody>
-			<tr ng-repeat="qt in qtList | orderBy:'date'" >
+			<tr ng-repeat="qt in qtList | orderBy:'date'">
 				<td >{{qt.movieTitle}}</td>
 				<td >{{qt.date}}</td>
 				<td >{{qt.price}}</td>
@@ -107,64 +107,58 @@
 	Auditoriums:
 	<br>
 	<div  ng-repeat="audi in currentCinema.auditoriums | orderBy:'number'">
-		Auditorium {{audi.number}}
-		<table>
-			<tbody>
-				<tr ng-repeat="row in audi.rows | orderBy:'number'" ng-show="row.active == 1">
-					<td  ng-repeat="seat in row.seats | orderBy:'number'" ng-show="seat.active!='Deleted'">
-					<button type="button"  ng-click="disableSeat(seat)" > {{buttonValue(row,seat)}} </button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<br>
-		
-		<table ng-show=cinemaAdmin >
-			<tr>
-				<td>row:</td>	
-				<td>
-					<select ng-model="audi.rowAdd" id="1"> 
-						<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row.id}}" ng-show="row.active==1">
-							{{row.number}}
-						</option>
-					</select>
+	Auditorium {{audi.number}}
+	<table>
+		<tbody>
+			<tr ng-repeat="row in audi.rows | orderBy:'number'">
+				<td  ng-repeat="seat in row.seats | orderBy:'number'"> 
+				<button type="button"  ng-click="disableSeat(seat)"> {{buttonValue(row,seat)}} </button>
 				</td>
-				<td>number of seats</td>
-				<td><input type="number" ng-model="audi.seatAdd"></td>
-				<td><button type = "button" ng-click="addSeat(audi)">+</button></td>
 			</tr>
-			<tr>
-				<td>row:</td>	
-				<td>
-					<select ng-model="audi.rowRemove" id="2"> 
-						<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row}}" ng-show="row.active==1">
-							{{row.number}}
-						</option>
-					</select>
-				</td>
-				<td>number of seats</td>
-				<td><input type="number" ng-model="audi.seatRemove"></td>
-				<td><button type = "button" ng-click="removeSeat(audi)">X</button></td>
-			</tr>
-			<tr>
-				<td>number of seats</td>
-				<td><input type="number" ng-model="audi.addRow"></td>
-				<td><button type = "button" ng-click="addRow(audi)">Add a whole row</button></td>
-			</tr>
-			<tr><td>
-				<select ng-model="audi.removeRow" id="3"> 
-					<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row}}" ng-show="row.active==1">
-						{{row.number}}
-					</option>
+		</tbody>
+	</table>
+	<br>
+	
+	<table ng-show=cinemaAdmin >
+		<tr>
+			<td>row:</td>	
+			<td>
+				<select ng-model="audi.rowAdd" id="1"> 
+					<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row.id}}">{{row.number}}</option>
 				</select>
-				<td>
-				<td><button type = "button" ng-click="removeRow(audi)">remove whole row</button></td>
-			</tr>
-			
-		</table>
-		<br>
+			</td>
+			<td>number of seats</td>
+			<td><input type="number" ng-model="audi.seatAdd"></td>
+			<td><button type = "button" ng-click="addSeat(audi)">+</button></td>
+		</tr>
+		<tr>
+			<td>row:</td>	
+			<td>
+				<select ng-model="audi.rowRemove" id="2"> 
+					<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row}}">{{row.number}}</option>
+				</select>
+			</td>
+			<td>number of seats</td>
+			<td><input type="number" ng-model="audi.seatRemove"></td>
+			<td><button type = "button" ng-click="removeSeat(audi)">X</button></td>
+		</tr>
+		<tr>
+			<td>number of seats</td>
+			<td><input type="number" ng-model="audi.addRow"></td>
+			<td><button type = "button" ng-click="addRow(audi)">Add a whole row</button></td>
+		</tr>
+		<tr><td>
+			<select ng-model="audi.removeRow" id="3"> 
+				<option ng-repeat="row in audi.rows | orderBy:'number'" value="{{row}}">{{row.number}}</option>
+			</select>
+			<td>
+			<td><button type = "button" ng-click="removeRow(audi)">remove whole row</button></td>
+		</tr>
 		
-		<br>
-		<br>
+	</table>
+	<br>
+	
+	<br>
+	<br>
 	</div>
 </div>

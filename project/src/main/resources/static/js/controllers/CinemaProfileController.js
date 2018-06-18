@@ -196,18 +196,8 @@ angular.module('Application').controller(
 					//$scope.refreshUser();
 
 				};
-				
-				$scope.showRow = function(row){
-					return(row.active==0);
-				}
-				
-				$scope.showSeat=function(seat){
-					//alert(seat.active);
-					return (seat.active!="Deleted");
-				}
-				
 				$scope.buttonValue =function(row,seat){
-					if (seat.active=="Active"){
+					if (seat.active){
 						return row.number+'|'+seat.number;
 					}
 					else{

@@ -39,14 +39,8 @@ public class CinemaAdminController {
 	
 	@RequestMapping(value="/getProjectionMovie/{id}", method=RequestMethod.GET)
 	public ResponseEntity<MovieDTO> projectionMovie(@PathVariable("id") Long id) {
-		Movie m = cinemaAdminService.getProjectionMovie(id);
-		if(m!=null){
-			MovieDTO movie = new MovieDTO(cinemaAdminService.getProjectionMovie(id));
-			return new ResponseEntity<>( movie, HttpStatus.OK);
-		}
-		else{
-			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
-		}
+		MovieDTO movie = new MovieDTO(cinemaAdminService.getProjectionMovie(id));
+		return new ResponseEntity<>( movie, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/removeProjection/{id}", method=RequestMethod.GET)
