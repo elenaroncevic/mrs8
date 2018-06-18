@@ -133,11 +133,13 @@ public class RegisteredUserService {
 				continue;
 			}
 			for(Seat s : r.getSeats()) {
+				listSeats.add(new SeatDTO(s));
 				if(s.getActive().equals(Seat.SeatState.Active)) {
-					listSeats.add(new SeatDTO(s));
 					if(s.getSector()!=null) {
 						unavailableSeats.add(new SeatDTO(s));
 					}	
+				}else {
+					unavailableSeats.add(new SeatDTO(s));
 				}
 			}
 		}
