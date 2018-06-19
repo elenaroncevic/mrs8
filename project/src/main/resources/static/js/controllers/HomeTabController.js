@@ -10,6 +10,7 @@ angular.module('Application').controller(
 				$scope.home=true;
 				$scope.edit=false;
 				$scope.passChange=false;
+				$scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				
 				$scope.loadHistory=function(){
 					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
