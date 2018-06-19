@@ -26,7 +26,7 @@ angular.module('Application').controller(
 				
 				
 				$scope.close=function(){
-					$scope.showModal=false;
+					$rootScope.modal.show=false;
 				};
 				
 				loadSeats = function(chosenProjection){

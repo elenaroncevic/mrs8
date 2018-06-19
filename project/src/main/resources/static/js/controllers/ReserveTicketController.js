@@ -21,19 +21,22 @@ angular.module('Application').controller(
 				
 				$rootScope.refreshReservation=function(){
 					$("#datepicker").datepicker('disable');
-					var first = 1;
-				
-					//isprazni kombo
+					$scope.moviesShow={};
+					$scope.projShow={};
+					$scope.searchCinemaText="";
+					
+					$scope.cin="";
 					$scope.showContinue=false;
 					$scope.disMovCombo=true;
 					$scope.disProjCombo = true;
-					$rootSope.modal.show = false;
+					$rootScope.modal.show = false;
 				};
 				
 				
 				$scope.searchCinemas=function(){
-					if(first==1){
-						document.getElementById("cinemaCombo").remove(0);
+					if($scope.searchCinemaText==""){
+						alert('Please, input search text.');
+						return;
 					}
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
 					for(let i =0;i<op.length;i++){
@@ -46,9 +49,11 @@ angular.module('Application').controller(
 				};
 				
 				$scope.projectionAndDate=function(){
-					first=0;
 					let selCinema = document.getElementById("cinemaCombo").selectedIndex;
-					$scope.cinemaSelected = $scope.cinemasShow[selCinema];
+					if(selCinema==0){
+						return;
+					};
+					$scope.cinemaSelected = $scope.cinemasShow[selCinema-1];
 					
 					$http.get('/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						if(data.length==0){
@@ -56,6 +61,7 @@ angular.module('Application').controller(
 							$scope.moviesShow={};
 							$("#datepicker").datepicker('disable');
 							$scope.disMovCombo = true;
+							$scope.disProjCombo=true;
 						}else{
 							$scope.moviesShow=data;
 							document.getElementById("movieCombo").remove(0);

@@ -24,8 +24,12 @@ angular.module('Application').controller(
 				
 				$rootScope.refreshReservationTheater=function(){
 					$("#datepicker2").datepicker('disable');
-					var first = 1;
-				
+					
+					$scope.projsShow={};
+					$scope.perfShow={};
+					$scope.searchTheaterText="";
+					
+					$scope.the="";				
 					$scope.showContinueTheater=false;
 					$scope.disMovComboTheater=true;
 					$scope.disProjComboTheater = true;
@@ -33,9 +37,6 @@ angular.module('Application').controller(
 				};
 				
 				$scope.searchTheaters=function(){
-					if(first==1){
-						document.getElementById("theater").remove(0);
-					}
 					var op = document.getElementById("theaterCombo").getElementsByTagName("option");
 					for(let i =0;i<op.length;i++){
 						if(op[i].value.toLowerCase().includes($scope.searchTheaterText.toLowerCase())){
@@ -47,9 +48,11 @@ angular.module('Application').controller(
 				};
 				
 				$scope.showProjectionsDates=function(){
-					first=0;
 					let selTheater = document.getElementById("theaterCombo").selectedIndex;
-					$scope.theaterSelected = $scope.theatersShow[selTheater];
+					if(selTheater==0){
+						return;
+					};
+					$scope.theaterSelected = $scope.theatersShow[selTheater-1];
 					
 					$http.get('/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
 						if(data.length==0){

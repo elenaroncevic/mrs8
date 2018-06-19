@@ -8,6 +8,7 @@
 	
 	Theaters:
 	<select id="theaterCombo" ng-model="the" ng-change="showProjectionsDates()"> 
+		<option value=""></option>
 		<option ng-repeat="theater in theatersShow" value="{{theater.name}}">{{theater.name}}</option>
 	</select>
 	</div>
@@ -34,6 +35,4 @@
 			<option ng-repeat="perf in perfShow">{{perf.time +" (Room " + perf.audNum+")"}}</option>
 		</select>
 	</div>
-	
-	    <modal show-modal="modal.show" />
 </div>

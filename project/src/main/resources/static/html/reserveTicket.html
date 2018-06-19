@@ -7,6 +7,7 @@
 	</br>
 	Cinemas: 
 	<select id="cinemaCombo" ng-model="cin" ng-change="projectionAndDate()"> 
+		<option value=""></option>
 		<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
 	</select>
 	</div>
@@ -34,7 +35,6 @@
 		</select>		
 	</div>
 
-    <modal show-modal="modal.show" />
 
 </div>
 
