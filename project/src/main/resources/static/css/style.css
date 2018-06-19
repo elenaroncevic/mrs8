@@ -64,6 +64,7 @@ body{
   color: red;
 }
 
+
 .profile_info{
 	width : 30%;
 	float : left;
@@ -89,13 +90,13 @@ input, select{
 }
 
 .history{
-    margin-left : 50%;
+    overflow-x : scroll;
+	padding-top : 10px;
+    max-width : 50%;
+    float : right;
 }
 
-.history p{
-	color : #727272;
-	font-size : 20px;
-}
+
 
 .reservation{
 	line-height : 2;
@@ -133,12 +134,25 @@ input, select{
 
 
 #history_table{  
-  overflow-y: scroll;
     border-color: #D88A04;
     border-width: 1px;
     border-style: solid;
-    align : right;
+    margin-left: 0px;
+    padding-left: 0px;
+    max-width : 200px;
    }
+   
+ #history_table th{
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    background : #727272;
+    font-size: 14px;
+      padding: 10px 14px; 
+    text-align : center;
+    color : black;
+    width : 20px;
+ }
    
 #friend_reserv_table{
   border-color: black;
@@ -187,7 +201,7 @@ input, select{
     text-align : center;
     color : green;
  }
- #scrolltable th, #history_table th{
+ #scrolltable th{
     border-color: black;
     border-width: 1px;
     border-style: solid;

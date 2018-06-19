@@ -1,4 +1,4 @@
-<div ng-controller="HomeTabController" class="container">
+<div ng-controller="HomeTabController" class="homeTab">
 	<div ng-show="home" class="profile_info">
 		<h3><b>{{currentUser.firstName}} {{currentUser.lastName}}</b></h3>
 
@@ -13,17 +13,20 @@
 		<button type="button" class="profile-btn" ng-click="changePassword()">Change password</button>
 	</div>
 	<div ng-show="home" class="history">
-		<p>Visitation history:</p> 
 		<table ng-init="loadHistory()" id="history_table">
 			<thead>
-				<th>Name</th>
-				<th>Rating</th>
-				<th>Profile</th>
+				<th>Movie/Play name</th>
+				<th>Movie/Play rating</th>
+				<th>Theater/Cinema name</th>
+				<th>Theater/Cinema rating</th>
+				<th>Movie/Theater profile</th>
 			</thead>
 			<tbody>
 				<tr ng-repeat="hist in history">
-					<td>{{hist.name}}</td>
-					<td>{{hist.rating}}</td>
+					<td>{{hist.movie}}</td>
+					<td>{{hist.movieRating}}</td>
+					<td>{{hist.cinema}}</td>
+					<td>{{hist.cinemaRating}}</td>
 					<td><button class="table_button" type="button" ng-click="showCinema(hist)">View profile</button></td>
 				</tr>
 			</tbody>

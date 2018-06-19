@@ -122,6 +122,8 @@ public class RegistrationService {
 	    	return false;
 	    }
 	    user.setActivated("yes"); 
+	    ((RegisteredUser)user).setNumOfReservations(0);
+	    ((RegisteredUser)user).setUserMedal(RegisteredUser.Medal.None);
 	    userRepository.save(user);
 	    tokenRepository.delete(verificationToken.getId());
 	    return true;

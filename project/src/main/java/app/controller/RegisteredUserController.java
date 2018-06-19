@@ -12,16 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
 import app.dto.AuditoriumDTO;
-import app.dto.CinemaDTO;
 import app.dto.FriendshipDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
 import app.dto.ReservationDTO;
 import app.dto.SeatDTO;
+import app.dto.VisitationDTO;
 import app.model.Movie;
 import app.model.Projection;
-import app.model.Ticket;
 import app.model.User;
 import app.service.RegisteredUserService;
 
@@ -157,9 +156,10 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(reservs, HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping("/history/{email:.+}")
-	public ResponseEntity<List<CinemaDTO>> getHistory(@PathVariable("email") String email){
-		List<CinemaDTO> reservs = regUserService.getHistory(email);
+	public ResponseEntity<List<VisitationDTO>> getHistory(@PathVariable("email") String email){
+		List<VisitationDTO> reservs = regUserService.getHistory(email);
 		return new ResponseEntity<>(reservs, HttpStatus.OK);
 	}
 	

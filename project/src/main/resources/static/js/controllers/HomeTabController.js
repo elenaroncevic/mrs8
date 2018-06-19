@@ -14,6 +14,7 @@ angular.module('Application').controller(
 				$scope.loadHistory=function(){
 					$http.get('/reguser/history/'+$scope.currentUser.email).success(function(data, status){
 						$scope.history=data;
+						$rootScope.h=data;
 					});
 				};
 				$scope.editInfo=function(){
