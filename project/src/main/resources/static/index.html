@@ -25,6 +25,8 @@
     <script src="/js/controllers/HomeTabController.js"></script>
     <script src="/js/controllers/FriendsTabController.js"></script>
     <script src="/js/controllers/SeatsController.js"></script>
+    <script src="/js/controllers/PeopleController.js"></script>
+    <script src="/js/controllers/AlertController.js"></script>
     
     <link rel="stylesheet" href="/css/register_new_admin_css.css"/>
     
@@ -59,8 +61,12 @@
 		<button type="button" style="float:right" class="bttn" ng-show="log_out_btn" ng-click="logout()"><i class="fa fa-close"></i>Log out</button>
         <div class="container" ng-view>
         </div>
+        <div>
         <modal show-modal="modal.show" />
-        
+        </div>
+        <div>
+        <modal-alert show-alert="alertShow" />
+        </div>
         <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiiaaVU8XrTiTn8a3JDcLoc3gNKZnVuxg">
     </script>

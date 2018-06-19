@@ -25,7 +25,7 @@ var app = angular.module('Application').controller(
 					}
 					$rootScope.logout=function(){
 						localStorage.removeItem("currentUser");
-						alert('You have successfully logged out!');
+						$rootScope.alert('You have successfully logged out!');
 						$location.path('/home').replace();
 						$rootScope.home_btn=false;
 						$rootScope.log_out_btn=false;
@@ -50,6 +50,34 @@ app.directive('modal', function () {
     },
     templateUrl: 'html/seats.html',
     controller: 'SeatsController' ,
+
+  }
+});
+
+app.directive('modalPeople', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showPeopleModal: '='
+    },
+    templateUrl: 'html/people.html',
+    controller: 'PeopleController' ,
+
+  }
+});
+
+app.directive('modalAlert', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showAlert: '='
+    },
+    templateUrl: 'html/alert.html',
+    controller: 'AlertController' ,
 
   }
 });

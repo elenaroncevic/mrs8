@@ -10,11 +10,11 @@ angular.module('Application').controller(
 				$scope.home=true;
 				$scope.edit=false;
 				$scope.passChange=false;
-				$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
+				
 				$scope.loadHistory=function(){
-					$http.get('/reguser/history/'+$scope.currentUser.email).success(function(data, status){
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+					$http.get('/reguser/history/'+currentUser.email).success(function(data, status){
 						$scope.history=data;
-						$rootScope.h=data;
 					});
 				};
 				$scope.editInfo=function(){
@@ -22,9 +22,10 @@ angular.module('Application').controller(
 					$scope.home=false;
 				};
 				$scope.finishEdit=function(){
-					$http.post('/reguser/editInfo/'+$scope.currentUser.email+'/'+$scope.currentUser.firstName+'/'+$scope.currentUser.lastName+'/'+$scope.currentUser.city+'/'+$scope.currentUser.phone).success(function(data, status){
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+					$http.post('/reguser/editInfo/'+currentUser.email+'/'+currentUser.firstName+'/'+currentUser.lastName+'/'+currentUser.city+'/'+currentUser.phone).success(function(data, status){
 						localStorage.setItem("currentUser",angular.toJson(data));
-						alert('Info changed!');
+						$rootScope.alert('Info changed!');
 					});
 					$scope.edit=false;
 					$scope.home=true;
@@ -34,11 +35,12 @@ angular.module('Application').controller(
 					$scope.home=false;
 				};
 				$scope.finishPass=function(){
-					$http.post('/reguser/editPass/'+$scope.currentUser.email+'/'+$scope.oldPass+'/'+$scope.newPass+'/'+$scope.newPass2).success(function(data, status){
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+					$http.post('/reguser/editPass/'+currentUser.email+'/'+$scope.oldPass+'/'+$scope.newPass+'/'+$scope.newPass2).success(function(data, status){
 						localStorage.setItem("currentUser",angular.toJson(data));
-						alert('Password changed!');
+						$rootScope.alert('Password changed!');
 					}).error(function(data, status){
-						alert('Error with input data');
+						$rootScope.alert('Error with input data');
 					});
 					$scope.oldPass="";
 					$scope.newPass="";

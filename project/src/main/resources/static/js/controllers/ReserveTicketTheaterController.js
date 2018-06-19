@@ -56,7 +56,7 @@ angular.module('Application').controller(
 					
 					$http.get('/reguser/movies/'+$scope.theaterSelected.id).success(function(data,status){
 						if(data.length==0){
-							alert('Selected theater currently has no plays.');
+							$rootScope.alert('Selected theater currently has no plays.');
 							$scope.projsShow={};
 							$("#datepicker2").datepicker('disable');
 							$scope.disMovComboTheater = true;
@@ -79,7 +79,7 @@ angular.module('Application').controller(
 					var send = send.replace("/", ",");
 					$http.get('/reguser/projections/'+chosenPlay.id+'/'+send).success(function(data, status){
 						if(data.length==0){
-							alert('No projections for chosen movie and date');
+							$rootScope.alert('No projections for chosen movie and date');
 							$scope.perfShow={};
 							$scope.disProjComboTheater = true;
 						}else{

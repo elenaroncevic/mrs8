@@ -8,7 +8,6 @@ angular.module('Application').controller(
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
 				var projId;
-				var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				var friendsChosen=0;
 				var friendsSelected=[];
 				var selectedSeats=[];
@@ -21,6 +20,7 @@ angular.module('Application').controller(
 						$scope.friendsShow[x].invite=false;
 						$scope.frirendsShow[x].remove=true;
 					};
+					loadFriends();
 					loadSeats(chosenProjection);
 				};
 				
@@ -44,10 +44,11 @@ angular.module('Application').controller(
 					});
 				};
 				
-				$scope.loadFriends=function(){
+				loadFriends=function(){
 					let i = 0;
 					$scope.friends = [];
 					
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 					$http.get('/reguser/friends/'+currentUser.email).success(function(data, status){
 						for(let x in data){
 							let friend = {};		
@@ -63,13 +64,12 @@ angular.module('Application').controller(
 				
 				$scope.inviteFriends=function(){
 					if(selectedSeats.length<2){
-						alert('No enough seats selected for friends. Please, select more seats.');
+						$rootScope.alert('No enough seats selected for friends. Please, select more seats.');
 					}else{
 						for(let x in $scope.friends){
 							$scope.friends[x].invite = false;
 							$scope.friends[x].remove=true;
 						};
-						alert('hm');
 						$scope.seatsFriends=false;
 					}
 				};
@@ -114,9 +114,11 @@ angular.module('Application').controller(
 				
 				$scope.finishReservation=function(){
 					if(seatsSel==0){
-						alert('Cant make a reservation without any seats chosen. Please, choose your seats!');
+						$rootScope.alert("Can't make a reservation without any seats chosen. Please, choose your seats!");
 						return;
-					}
+					} 
+					
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 					$http.post('/reguser/makeReservation/'+currentUser.email).success(function(data, status){
 						$scope.reservId=data;
 						saveTickets();
@@ -183,7 +185,7 @@ angular.module('Application').controller(
 					};
 					
 					if(allSeats==[] || takenSeats==[]){
-						alert('no seats');
+						$rootScope.alert('no seats');
 						return;
 					}
 					
