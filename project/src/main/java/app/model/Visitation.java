@@ -96,11 +96,13 @@ public class Visitation {
 	}
 	
 	public boolean isValid(){
-		DateFormat df = new SimpleDateFormat(     );
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		Calendar now = Calendar.getInstance();
+		Calendar cal = Calendar.getInstance();
 		try {
 			Date proj = df.parse(ticket.getProjection().getDate());	
-			if(proj.before(now.getTime()) && ticket.getState() == TicketState.Active){
+			cal.setTime(proj);
+			if(cal.getTime().before(now.getTime()) && ticket.getState().equals(TicketState.Active)) {
 				return true;
 			}
 			else{

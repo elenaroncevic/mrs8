@@ -1,12 +1,14 @@
 <div ng-controller="FriendsTabController">
 
-	<button type="button" ng-click="people()" ng-show="!showBack">Explore people</button>
+	<button type="button" class="profile-btn" ng-click="people()">Explore people</button>
 	</br></br>
 	
-	<button type="button" ng-click="friends()" ng-show="!showBack">Explore friends</button>
+	<button type="button" class="profile-btn" ng-click="friends()">Explore friends</button>
 	</br></br>
 	
-	<button type="button" ng-click="back()" ng-show="showBack">Back</button>
+	<modal-people show-people-modal='noMore'/>
+	
+	
 	
 	<div ng-show="explore">
 		Search people(by first or last name):
@@ -29,6 +31,22 @@
 		<select id="friendsCombo">
 			<option ng-repeat="friend in friendsShow">{{friend.firstName+" "+friend.lastName}}</option>
 		</select>
-		<button type="button" ng-click="addFriend()" ng-selected="showRemoveButton">Remove from friends</button>		
+		<button type="button" ng-click="removeFriend()" ng-selected="showRemoveButton">Remove from friends</button>		
+	</div>
+	
+	
+	<div  ng-show="reqExists">
+		<table ng-init="loadRequests()" class="table table-bordered">
+			<thead>
+				<th>Name</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="req in requests">
+					<td>{{req.firstName+" " +req.lastName}}</td>
+					<td><button type="button" ng-click="acceptReq(req)">Confirm</button></td>
+					<td><button type="button" ng-click="declineReq(req)">Decline</button></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

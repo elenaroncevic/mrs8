@@ -30,7 +30,7 @@ angular.module('Application').controller(
 						localStorage.setItem("fzAdm",$rootScope.fanZoneAdmin);
 						
 						if(data.activated!="yes"){
-							alert("You haven't activated your account yet! Check your email!");
+							$rootScope.alert("You haven't activated your account yet! Check your email!");
 							$location.path('/home').replace();
 						}
 						else{
@@ -45,7 +45,7 @@ angular.module('Application').controller(
 							};
 						}
 				}).error(function(){
-					alert("Error with input data! Check your email address and password!");
+					$rootScope.alert("Error with input data! Check your email address and password!");
 				});
 				};
 			}

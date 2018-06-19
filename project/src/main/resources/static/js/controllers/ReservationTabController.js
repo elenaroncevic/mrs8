@@ -9,18 +9,18 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $location, $http) {
 				$rootScope.reservationsShow={};
 				
-				var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				
 				$scope.cancelReservation=function(reservation){
 					$http.delete('/reguser/deleteReservation/'+reservation.id).success(function(data, status){
-						alert('Reservation cancelled');
+						$rootScope.alert('Reservation cancelled');
 						var idx = $rootScope.reservationsShow.indexOf(reservation);
 						$rootScope.reservationsShow.splice(idx , 1);						
 					}).error(function(data, status){
-						alert('Reservation cannot be cancelled - less then 30 minutes until the show');
+						$rootScope.alert('Reservation cannot be cancelled - less then 30 minutes until the show');
 					});
 				};
 				$scope.loadReservations=function(){
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 					$http.get('/reguser/reservations/'+currentUser.email).success(function(data, status){
 						$rootScope.reservationsShow=data;
 					});

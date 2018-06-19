@@ -11,6 +11,7 @@ angular.module('Application').controller(
  				$rootScope.modal= {
     				show: false
  				};
+ 				
 				$('#datepicker').datepicker({
      				onSelect: function(d,i){
           				if(d !== i.lastVal){
@@ -37,7 +38,7 @@ angular.module('Application').controller(
 				
 				$scope.searchCinemas=function(){
 					if($scope.searchCinemaText==""){
-						alert('Please, input search text.');
+						$rootScope.alert('Please, input search text.');
 						return;
 					}
 					var op = document.getElementById("cinemaCombo").getElementsByTagName("option");
@@ -59,7 +60,7 @@ angular.module('Application').controller(
 					
 					$http.get('/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						if(data.length==0){
-							alert('Selected cinema currently has no movies.');
+							$rootScope.alert('Selected cinema currently has no movies.');
 							$scope.moviesShow={};
 							$("#datepicker").datepicker('disable');
 							$scope.disMovCombo = true;
@@ -83,7 +84,7 @@ angular.module('Application').controller(
 					var send = send.replace("/", ",");
 					$http.get('/reguser/projections/'+chosenMovie.id+'/'+send).success(function(data, status){
 						if(data.length==0){
-							alert('No projections for chosen movie and date');
+							$rootScope.alert('No projections for chosen movie and date');
 							$scope.projShow={};
 							$scope.disProjCombo = true;
 						}else{

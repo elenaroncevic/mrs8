@@ -23,11 +23,13 @@ import app.dto.ProjectionDTO;
 import app.dto.RegisteredUserDTO;
 import app.dto.ReservationDTO;
 import app.dto.SeatDTO;
+import app.dto.VisitationDTO;
 import app.model.Auditorium;
 import app.model.ConfirmationToken;
 import app.model.Friendship;
 import app.model.Friendship.FriendshipState;
 import app.model.Movie;
+import app.model.PointScale;
 import app.model.Projection;
 import app.model.QuickTicket;
 import app.model.RegisteredUser;
@@ -43,6 +45,7 @@ import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
 import app.repository.FriendshipRepository;
 import app.repository.MovieRepository;
+import app.repository.PointScaleRepository;
 import app.repository.ProjectionRepository;
 import app.repository.ReservationRepository;
 import app.repository.SeatRepository;
@@ -82,6 +85,9 @@ public class RegisteredUserService {
 	
 	@Autowired
 	FriendshipRepository friendRep;
+	
+	@Autowired
+	private PointScaleRepository pointScaleRepository;
 	
     @Autowired
     private JavaMailSender mailSender;
@@ -227,9 +233,17 @@ public class RegisteredUserService {
 	
 	//needed
 	public Long makeReservation(String email) {
+		RegisteredUser user = (RegisteredUser) userRep.findOne(email);
 		Reservation reserv = new Reservation();
 		reserv.setState(Reservation.ReservationState.Active);
-		reserv.setBuyer((RegisteredUser)userRep.findOne(email));
+		reserv.setBuyer(user);
+		user.setNumOfReservations(user.getNumOfReservations()+1);
+		String id="1";
+		PointScale ps = pointScaleRepository.findOne(Long.parseLong(id));
+		user.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
+		
+		userRep.save(user);
+		
 		Reservation saved = reservRep.save(reserv);
 		return saved.getId();
 	}
@@ -373,6 +387,15 @@ public class RegisteredUserService {
 		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && now.getTime().before(cal.getTime())) {
 			reserv.setState(Reservation.ReservationState.Cancelled);
 			reservRep.save(reserv);
+			
+			RegisteredUser ru = reserv.getBuyer();
+			ru.setNumOfReservations(ru.getNumOfReservations()-1);
+			
+			PointScale ps = pointScaleRepository.findOne(Long.parseLong("1"));
+			ru.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
+			
+			userRep.save(ru);
+			
 			for(Ticket tick : reserv.getTickets()) {
 				if(tick.getState().equals(Ticket.TicketState.Requested)) {
 					ConfirmationToken ct = ctRep.findByTicket(tick);
@@ -398,12 +421,15 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
-	public List<CinemaDTO> getHistory(String email){
+	//needed
+	public List<VisitationDTO> getHistory(String email){
 		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
-		List<CinemaDTO> retValue = new ArrayList<CinemaDTO>();
+		List<VisitationDTO> retValue = new ArrayList<VisitationDTO>();
 		for(Visitation visit : ru.getVisits()) {
-			//promena
-			retValue.add(new CinemaDTO(visit.getTicket().getSeat().getAuditorium().getCinema()));
+			if(visit.isValid()) {
+				System.out.println("tue");
+				retValue.add(new VisitationDTO(visit));
+			}
 		}
 		return retValue;
 	}
@@ -531,8 +557,6 @@ public class RegisteredUserService {
 		visitationRepository.save(visit);
 		//visi
 		//reservRep.s
-		
-		
 		return true;
 		
 	}
