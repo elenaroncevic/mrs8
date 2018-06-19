@@ -16,6 +16,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class RegisteredUser extends User {
+	public enum Medal{
+		Copper,
+		Silver,
+		Golden, 
+		None
+	}
+	
+	private Integer numOfReservations;
+	private Medal userMedal;
 	
 	@Column(name="ruFirstName")
 	private String firstName;
@@ -131,6 +140,31 @@ public class RegisteredUser extends User {
 		this.promoUsed = promoUsed;
 		this.visits = visits;
 	}
+	
+	
+
+
+	public RegisteredUser(Integer numOfReservations, Medal userMedal, String firstName, String lastName, String city,
+			String phone, Set<Friendship> friendsAdded, Set<Friendship> friendsAccepted, Set<CinemaRate> cinemaRates,
+			Set<MovieRate> movieRates, Set<Reservation> reservations, Set<Bid> bids, Set<PromoOfficial> promoOfficials,
+			Set<PromoUsed> promoUsed, Set<Visitation> visits) {
+		super();
+		this.numOfReservations = numOfReservations;
+		this.userMedal = userMedal;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.city = city;
+		this.phone = phone;
+		this.friendsAdded = friendsAdded;
+		this.friendsAccepted = friendsAccepted;
+		this.cinemaRates = cinemaRates;
+		this.movieRates = movieRates;
+		this.reservations = reservations;
+		this.bids = bids;
+		this.promoOfficials = promoOfficials;
+		this.promoUsed = promoUsed;
+		this.visits = visits;
+	}
 
 
 	public Set<Reservation> getReservations() {
@@ -218,6 +252,41 @@ public class RegisteredUser extends User {
 	public void setVisits(Set<Visitation> visits) {
 		this.visits = visits;
 	}
+
+
+	public Integer getNumOfReservations() {
+		return numOfReservations;
+	}
+
+
+	public void setNumOfReservations(Integer numOfReservations) {
+		this.numOfReservations = numOfReservations;
+	}
+
+
+	public Medal getUserMedal() {
+		return userMedal;
+	}
+
+	
+
+	public void setUserMedal(Medal userMedal) {
+		this.userMedal = userMedal;
+	}
+
+
+	public void setUserMedal(int copper, int silver, int golden) {
+		if (this.numOfReservations < copper){
+			this.userMedal=Medal.None;
+		}else if (copper <= this.numOfReservations && this.numOfReservations < silver){
+			this.userMedal=Medal.Copper;
+		}else if (silver <= this.numOfReservations && this.numOfReservations < golden){
+			this.userMedal=Medal.Silver;
+		}else{
+			this.userMedal=Medal.Golden;
+		}
+	}
+	
 	
 	
 }
