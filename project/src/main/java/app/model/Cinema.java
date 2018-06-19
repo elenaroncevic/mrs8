@@ -65,10 +65,10 @@ public class Cinema {
 	@JsonManagedReference
 	private Set<CinemaRate> rates = new HashSet<CinemaRate>();	
 	
-	@OneToMany (mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
+	/*@OneToMany (mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
 	@JsonManagedReference
 	private Set<Visitation> visitors = new HashSet<Visitation>();
-
+*/
 	@OneToMany(mappedBy = "cinema",fetch = FetchType.LAZY, cascade = CascadeType.REFRESH) 
 	@JsonManagedReference
 	private Set<Movie> movies = new HashSet<Movie>();
@@ -135,7 +135,7 @@ public class Cinema {
 
 
 
-
+/*
 	public Set<Visitation> getVisitors() {
 		return visitors;
 	}
@@ -146,7 +146,7 @@ public class Cinema {
 	public void setVisitors(Set<Visitation> visitors) {
 		this.visitors = visitors;
 	}
-
+*/
 
 
 
@@ -164,15 +164,15 @@ public class Cinema {
 		this.admin = admin;
 		this.promos = promos;
 		this.rates = rates;
-		this.visitors = visitors;
+		//this.visitors = visitors;
 	}
 
 	
 
-
+	//fali visit
 	public Cinema(BuildingType type, String name, String location, String description, Double rating, Double latitude,
 			Double longitude, Long id, Set<Auditorium> auditoriums, CinemaAdmin admin, Set<PromoOfficial> promos,
-			Set<CinemaRate> rates, Set<Visitation> visitors, Set<Movie> movies) {
+			Set<CinemaRate> rates,  Set<Movie> movies) {
 		super();
 		this.type = type;
 		this.name = name;
@@ -186,7 +186,7 @@ public class Cinema {
 		this.admin = admin;
 		this.promos = promos;
 		this.rates = rates;
-		this.visitors = visitors;
+		//this.visitors = visitors;
 		this.movies = movies;
 	}
 

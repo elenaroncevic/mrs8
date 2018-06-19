@@ -37,6 +37,7 @@ import app.model.Seat;
 import app.model.Ticket;
 import app.model.User;
 import app.model.Visitation;
+import app.model.Visitation.VisitationType;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.ConfirmationTokenRepository;
@@ -47,6 +48,7 @@ import app.repository.ReservationRepository;
 import app.repository.SeatRepository;
 import app.repository.TicketRepository;
 import app.repository.UserRepository;
+import app.repository.VisitationRepository;
 
 @Service
 public class RegisteredUserService {
@@ -83,6 +85,9 @@ public class RegisteredUserService {
 	
     @Autowired
     private JavaMailSender mailSender;
+    
+    @Autowired
+    private VisitationRepository visitationRepository;
     
 	public Projection getProjection(Long id) {
 		return projRep.findOne(id);
@@ -387,7 +392,8 @@ public class RegisteredUserService {
 		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
 		List<CinemaDTO> retValue = new ArrayList<CinemaDTO>();
 		for(Visitation visit : ru.getVisits()) {
-			retValue.add(new CinemaDTO(visit.getCinema()));
+			//promena
+			retValue.add(new CinemaDTO(visit.getTicket().getSeat().getAuditorium().getCinema()));
 		}
 		return retValue;
 	}
@@ -511,6 +517,9 @@ public class RegisteredUserService {
 		qt.setState(Ticket.TicketState.Active);
 		qt.setReservation(res);
 		ticketRep.save(qt);
+		Visitation visit = new Visitation(qt, user,VisitationType.Wait );
+		visitationRepository.save(visit);
+		//visi
 		//reservRep.s
 		
 		
