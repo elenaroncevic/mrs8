@@ -65,12 +65,15 @@ public class SystemAdminService {
 		return ps;
 	}
 
-	public PointScale updatePointScale(Integer copper, Integer silver, Integer golden) {
+	public PointScale updatePointScale(Integer copper, Integer silver, Integer golden, Integer copper_discount, Integer silver_discount, Integer golden_discount) {
 		String id="1";
 		PointScale ps = pointScaleRepository.findOne(Long.parseLong(id));
 		ps.setCopper(copper);
 		ps.setSilver(silver);
 		ps.setGolden(golden);
+		ps.setCopper_discount(copper_discount);
+		ps.setSilver_discount(silver_discount);
+		ps.setGolden_discount(golden_discount);
 		ps = pointScaleRepository.save(ps);
 		return ps;
 	}

@@ -56,9 +56,9 @@ public class SystemAdminController {
 		return new ResponseEntity<>(pointScale, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/system_admin/update_scale/{copper}/{silver}/{golden}", method = RequestMethod.GET)
-	public ResponseEntity<PointScale> updatePointScale(@PathVariable("copper") Integer copper, @PathVariable("silver") Integer silver, @PathVariable("golden") Integer golden) {
-		PointScale pointScale = systemAdminService.updatePointScale(copper, silver, golden);
+	@RequestMapping(value = "/system_admin/update_scale/{copper}/{silver}/{golden}/{copper_discount}/{silver_discount}/{golden_discount}", method = RequestMethod.GET)
+	public ResponseEntity<PointScale> updatePointScale(@PathVariable("copper") Integer copper, @PathVariable("silver") Integer silver, @PathVariable("golden") Integer golden, @PathVariable("copper_discount") Integer copper_discount, @PathVariable("silver_discount") Integer silver_discount, @PathVariable("golden_discount") Integer golden_discount) {
+		PointScale pointScale = systemAdminService.updatePointScale(copper, silver, golden, copper_discount, silver_discount, golden_discount);
 		return new ResponseEntity<>(pointScale,HttpStatus.OK);	
 	}
 	

@@ -36,7 +36,7 @@ angular.module('Application').controller(
 				
 				//dodatne funkcije
 				fill_unreserved_promos_official=function(){
-					$http.get('http://localhost:8181/reg_user/list_unreserved_po').success(function(data, status){
+					$http.get('/reg_user/list_unreserved_po').success(function(data, status){
 						$scope.unreservedPromosOfficial=data;
 					}).error(function(){
 						alert("couldn't list unreserved official promos");
@@ -44,7 +44,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_my_reserved_promos_official=function(){
-					$http.get('http://localhost:8181/reg_user/list_reserved_po/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+					$http.get('/reg_user/list_reserved_po/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 						$scope.myReservedPromosOfficial=data;
 					}).error(function(){
 						alert("couldn't list my reserved official promos");
@@ -52,7 +52,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_others_promos_used=function(){
-					$http.get('http://localhost:8181/reg_user/list_others_approved_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+					$http.get('/reg_user/list_others_approved_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 						$scope.othersPromosUsed=data;
 					}).error(function(){
 						alert("couldn't list others used promos");
@@ -61,7 +61,7 @@ angular.module('Application').controller(
 				
 				
 				fill_my_bidded_promos_used=function(){
-					$http.get('http://localhost:8181/reg_user/list_my_bids_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+					$http.get('/reg_user/list_my_bids_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 						$scope.myBiddedPromosUsed=data;
 					}).error(function(){
 						alert("couldn't list my bidded promos");
@@ -69,7 +69,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_my_posted_promos_used=function(){
-					$http.get('http://localhost:8181/reg_user/list_my_posted_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+					$http.get('/reg_user/list_my_posted_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 						$scope.myPostedPromosUsed=data;
 					}).error(function(){
 						alert("couldn't list my posted promos");
@@ -77,7 +77,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_my_won_promos_used=function(){
-					$http.get('http://localhost:8181/reg_user/list_my_won_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
+					$http.get('/reg_user/list_my_won_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 						$scope.myWonPromosUsed=data;
 					}).error(function(){
 						alert("couldn't list my won promos");
@@ -87,7 +87,7 @@ angular.module('Application').controller(
 				
 				
 				fill_licitation=function(pu_id){
-					$http.get('http://localhost:8181/reg_user/get_pu/'+pu_id).success(function(data, status){
+					$http.get('/reg_user/get_pu/'+pu_id).success(function(data, status){
 						$scope.licitation=data;
 						
 						var lic_date=($scope.licitation.ending_date).replace(' ','T');
@@ -106,7 +106,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_bids_in_licitation=function(pu_id){
-					$http.get('http://localhost:8181/reg_user/list_bids/'+pu_id).success(function(data, status){
+					$http.get('/reg_user/list_bids/'+pu_id).success(function(data, status){
 						$scope.bidsInLicitation=data;
 					}).error(function(){
 						alert("couldn't list bids in promo used");
@@ -114,7 +114,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_changing_promo=function(pu_id){
-					$http.get('http://localhost:8181/reg_user/get_pu/'+pu_id).success(function(data, status){
+					$http.get('/reg_user/get_pu/'+pu_id).success(function(data, status){
 						$scope.changing_promo=data;
 						
 						var lic_date=($scope.changing_promo.ending_date).replace(' ','T');
@@ -200,7 +200,7 @@ angular.module('Application').controller(
 							puImage = puImage.replace(/\?/g, "*");
 							
 							
-							$http.get('http://localhost:8181/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date).success(function(){
+							$http.get('/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date).success(function(){
 								alert('successfuly added a product');
 								$scope.puName="";
 								$scope.puDescription="";
@@ -215,7 +215,7 @@ angular.module('Application').controller(
 				};
 				
 				$scope.reserve_po=function(id){
-					$http.get('http://localhost:8181/reg_user/reserve_po/'+$scope.currentUser.email+'/'+id).success(function(){
+					$http.get('/reg_user/reserve_po/'+$scope.currentUser.email+'/'+id).success(function(){
 						fill_unreserved_promos_official();
 						fill_my_reserved_promos_official();
 						alert('successfuly reserved a product');				
@@ -226,7 +226,7 @@ angular.module('Application').controller(
 				
 				
 				$scope.unreserve_po=function(id){
-					$http.get('http://localhost:8181/reg_user/unreserve_po/'+id).success(function(){
+					$http.get('/reg_user/unreserve_po/'+id).success(function(){
 						fill_my_reserved_promos_official();
 						fill_unreserved_promos_official();
 						alert('successfuly unreserved a product');				
@@ -251,7 +251,7 @@ angular.module('Application').controller(
 					var now = new Date();
 					if (!isNaN(offer) && offer>=0 && now.getTime()<licitations_date.getTime()){
 						//dodavanje/update bida
-						$http.get('http://localhost:8181/reg_user/update_bid/'+$scope.currentUser.email+'/'+offer+'/'+id).success(function(){
+						$http.get('/reg_user/update_bid/'+$scope.currentUser.email+'/'+offer+'/'+id).success(function(){
 							fill_licitation(id);
 							fill_bids_in_licitation(id);
 							fill_my_bidded_promos_used();
@@ -290,7 +290,7 @@ angular.module('Application').controller(
 						image = image.replace(/\//g, "+");
 						image = image.replace(/\?/g, "*");
 						
-						$http.get('http://localhost:8181/reg_user/update_pu/'+puid+'/'+name+'/'+image+'/'+description).success(function(){
+						$http.get('/reg_user/update_pu/'+puid+'/'+name+'/'+image+'/'+description).success(function(){
 							fill_changing_promo(puid);
 							fill_my_posted_promos_used();
 							alert('successfuly updated a product');				
@@ -322,7 +322,7 @@ angular.module('Application').controller(
 					var licitations_date=new Date(lic_date);
 					var now = new Date();
 					if (now.getTime()<licitations_date.getTime()){
-						$http.get('http://localhost:8181/reg_user/choose_winner/'+bid).success(function(){
+						$http.get('/reg_user/choose_winner/'+bid).success(function(){
 							fill_changing_promo(puid);
 							fill_my_posted_promos_used();					
 							alert('you\'ve successfuly chosen a winner');	
@@ -337,7 +337,7 @@ angular.module('Application').controller(
 				};
 				
 				mailWinnerAndLosers=function(bid){
-					$http.get('http://localhost:8181/reg_user/mail_winner_and_losers/'+bid).success(function(){	
+					$http.get('/reg_user/mail_winner_and_losers/'+bid).success(function(){	
 					}).error(function(){
 						alert("couldn't mail about win and loss");
 					});

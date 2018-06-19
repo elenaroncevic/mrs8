@@ -57,7 +57,7 @@ angular.module('Application').controller(
 				
 				//dodatne funkcije
 				fill_cinema_admins=function(){
-					$http.get('http://localhost:8181/system_admin/list_cinema_admins').success(function(data, status){
+					$http.get('/system_admin/list_cinema_admins').success(function(data, status){
 						$scope.cinema_admins=data;
 						add_options_cinema_admins();
 					}).error(function(){
@@ -78,7 +78,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_scale=function(){
-					$http.get('http://localhost:8181/system_admin/get_scale').success(function(data, status){
+					$http.get('/system_admin/get_scale').success(function(data, status){
 						$scope.scale=data;
 					}).error(function(){
 						alert("error getting point scale");
@@ -115,7 +115,7 @@ angular.module('Application').controller(
 						new_pass=$scope.currentUser.password;
 						new_image = new_image.replace(/\//g, "+");
 						new_image = new_image.replace(/\?/g, "*");
-						$http.post('http://localhost:8181/system_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
+						$http.post('/system_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
 							localStorage.setItem("currentUser",angular.toJson(data));
 							$scope.currentUser = data;
 							document.getElementById("new_pass").value="";
@@ -133,7 +133,7 @@ angular.module('Application').controller(
 							}
 							new_image = new_image.replace(/\//g, "+");
 							new_image = new_image.replace(/\?/g, "*");
-							$http.post('http://localhost:8181/system_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
+							$http.post('/system_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
 								localStorage.setItem("currentUser",angular.toJson(data));
 								$scope.currentUser = data;
 								document.getElementById("new_pass").value="";
@@ -179,7 +179,7 @@ angular.module('Application').controller(
 							if (strUser=="cinema/theater"){
 								strUser="cinema";
 							}
-							$http.post('http://localhost:8181/system_admin/register_new_admin/'+ $scope.admEmail+'/'+ $scope.admPass1+'/'+strUser).success(function(){
+							$http.post('/system_admin/register_new_admin/'+ $scope.admEmail+'/'+ $scope.admPass1+'/'+strUser).success(function(){
 								alert("Successfuly registered admin");
 								$scope.admPass1="";
 								$scope.admPass2="";
@@ -213,21 +213,22 @@ angular.module('Application').controller(
 					var silver = parseInt(document.getElementById("silver").value);
 					var golden = parseInt(document.getElementById("golden").value);
 					
-					if (!isNaN(copper) || !isNaN(silver) || !isNaN(golden)){
-						if (golden <= silver || golden <= copper || silver <= copper || golden<0 || silver<0 || copper<0 || !Number.isInteger(golden) || !Number.isInteger(silver) || !Number.isInteger(copper)){
-							$scope.scale=fill_scale();
-							alert("the comparison must be: copper < silver < golden and all medals must be positive and integer");
-						}else{
-							$http.get('http://localhost:8181/system_admin/update_scale/'+copper+'/'+silver+'/'+golden).success(function(data, status){
-								$scope.scale=data;
-								alert("Successfuly updated point scale");
-							}).error(function(){
-								alert("Unsuccessful scale update");
-							});
-						}
+					var copper_discount = parseInt(document.getElementById("copper_discount").value);
+					var silver_discount = parseInt(document.getElementById("silver_discount").value);
+					var golden_discount = parseInt(document.getElementById("golden_discount").value);
+					
+					if (golden <= silver || golden <= copper || silver <= copper || golden<0 || silver<0 || copper<0 || golden_discount<=silver_discount || golden_discount<=copper_discount || silver_discount<=copper_discount || golden_discount<0 || silver_discount<0 || copper_discount<0){
+						$scope.scale=fill_scale();
+						alert("the comparison must be: copper < silver < golden and copper discount < silver discount < golden discount and all medals must be positive");
 					}else{
-						alert("Medals must be integers!");
+						$http.get('/system_admin/update_scale/'+copper+'/'+silver+'/'+golden+'/'+copper_discount+'/'+silver_discount+'/'+golden_discount).success(function(data, status){
+							$scope.scale=data;
+							alert("Successfuly updated point scale");
+						}).error(function(){
+							alert("Unsuccessful scale update");
+						});
 					}
+
 				};
 				
 				$scope.cancelScaleChanges=function(){
@@ -250,7 +251,7 @@ angular.module('Application').controller(
 						
 						var index2 = document.getElementById("buildingAdmin").selectedIndex;
 						var adminEmail = document.getElementById("buildingAdmin").options[index2].value;
-						$http.get('http://localhost:8181/system_admin/register_cinema/'+adminEmail+'/'+name+'/'+description+'/'+lat+'/'+lng+'/'+buildingType).success(function(){
+						$http.get('/system_admin/register_cinema/'+adminEmail+'/'+name+'/'+description+'/'+lat+'/'+lng+'/'+buildingType).success(function(){
 							alert("successfuly registered building!");
 							document.getElementById("buildingName").value="";
 							document.getElementById("buildingDescription").value="";

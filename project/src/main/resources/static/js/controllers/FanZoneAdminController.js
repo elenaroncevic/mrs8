@@ -46,7 +46,7 @@ angular.module('Application').controller(
 				
 				//dodatne funkcije
 				fill_promos_official=function(){
-					$http.get('http://localhost:8181/fan_zone_admin/list_promos_official').success(function(data, status){
+					$http.get('/fan_zone_admin/list_promos_official').success(function(data, status){
 						$scope.promosOfficial=data;
 					}).error(function(){
 						alert("couldn't list official promos");
@@ -54,7 +54,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_unapproved_promos_used=function(){
-					$http.get('http://localhost:8181/fan_zone_admin/list_promos_unapproved').success(function(data, status){
+					$http.get('/fan_zone_admin/list_promos_unapproved').success(function(data, status){
 						$scope.unapprovedPromosUsed=data;
 					}).error(function(){
 						alert("couldn't list unapproved used promos");
@@ -63,7 +63,7 @@ angular.module('Application').controller(
 				
 				
 				fill_changing_promo=function(po_id){
-					$http.get('http://localhost:8181/fan_zone_admin/get_promo_official/'+po_id).success(function(data, status){
+					$http.get('/fan_zone_admin/get_promo_official/'+po_id).success(function(data, status){
 						$scope.changing_promo=data;
 						
 						if ($scope.changing_promo.activity=="reserved"){ //ne moze da menja jer vec postoji buyer ili je proslo vreme
@@ -85,7 +85,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_cinemas=function(){
-					$http.get('http://localhost:8181/cinemas').success(function(data, status){
+					$http.get('/cinemas').success(function(data, status){
 						var count=data.length;
 						for (var i=0; i<count;i++){
 							$scope.cinemas_and_theaters.push(data[i]);
@@ -97,7 +97,7 @@ angular.module('Application').controller(
 				};
 				
 				fill_theaters=function(){
-					$http.get('http://localhost:8181/theaters').success(function(data, status){
+					$http.get('/theaters').success(function(data, status){
 						var count=data.length;
 						for (var i=0; i<count;i++){
 							$scope.cinemas_and_theaters.push(data[i]);
@@ -164,7 +164,7 @@ angular.module('Application').controller(
 							poImage = poImage.replace(/\?/g, "*");
 							var e = document.getElementById("cinemas");
 							var cId = e.options[e.selectedIndex].value;
-							$http.get('http://localhost:8181/fan_zone_admin/add_promo_official/'+ $scope.poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId).success(function(){
+							$http.get('/fan_zone_admin/add_promo_official/'+ $scope.poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId).success(function(){
 								$scope.poName="";
 								$scope.poDescription="";
 								$scope.poPrice="";
@@ -185,12 +185,12 @@ angular.module('Application').controller(
 				};
 				
 				$scope.delete_po=function(poid){
-					$http.get('http://localhost:8181/fan_zone_admin/get_promo_official/'+poid).success(function(data, status){
+					$http.get('/fan_zone_admin/get_promo_official/'+poid).success(function(data, status){
 						var promo=data;
 						if (promo.buyer_email!="none"){
 							alert("Can't delete a product which has a buyer");							
 						}else{
-							$http.get('http://localhost:8181/fan_zone_admin/delete_promo_official/'+poid).success(function(){
+							$http.get('/fan_zone_admin/delete_promo_official/'+poid).success(function(){
 								fill_promos_official();
 								alert("successfuly deleted a product");
 							}).error(function(){
@@ -224,7 +224,7 @@ angular.module('Application').controller(
 							poImage = poImage.replace(/\?/g, "*");
 							var e = document.getElementById("cinemas_changing");
 							var cId = e.options[e.selectedIndex].value;
-							$http.get('http://localhost:8181/fan_zone_admin/update_promo_official/'+ poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId+'/'+poid).success(function(){
+							$http.get('/fan_zone_admin/update_promo_official/'+ poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId+'/'+poid).success(function(){
 								fill_changing_promo(poid);
 								fill_promos_official();
 								alert("you've successfuly updated a product");
@@ -246,7 +246,7 @@ angular.module('Application').controller(
 				};
 				
 				$scope.approve_pu=function(poid){
-					$http.get('http://localhost:8181/fan_zone_admin/approve_promo_used/'+poid).success(function(){
+					$http.get('/fan_zone_admin/approve_promo_used/'+poid).success(function(){
 						fill_unapproved_promos_used();
 					}).error(function(){
 						alert("Couldn't approve official promo");
@@ -254,7 +254,7 @@ angular.module('Application').controller(
 				};
 				
 				$scope.disapprove_pu=function(poid){
-					$http.get('http://localhost:8181/fan_zone_admin/delete_promo_used/'+poid).success(function(){			
+					$http.get('/fan_zone_admin/delete_promo_used/'+poid).success(function(){			
 						fill_unapproved_promos_used();
 						alert("successfully disapproved product");
 					}).error(function(){
@@ -279,7 +279,7 @@ angular.module('Application').controller(
 						new_pass=$scope.currentUser.password;
 						new_image = new_image.replace(/\//g, "+");
 						new_image = new_image.replace(/\?/g, "*");
-						$http.post('http://localhost:8181/fan_zone_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
+						$http.post('/fan_zone_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
 							localStorage.setItem("currentUser",angular.toJson(data));
 							$scope.currentUser = data;
 							document.getElementById("new_pass").value="";
@@ -297,7 +297,7 @@ angular.module('Application').controller(
 							}
 							new_image = new_image.replace(/\//g, "+");
 							new_image = new_image.replace(/\?/g, "*");
-							$http.post('http://localhost:8181/fan_zone_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
+							$http.post('/fan_zone_admin/change_user_info/'+$scope.currentUser.email+'/'+new_image+'/'+new_pass).success(function(data, status){
 								localStorage.setItem("currentUser",angular.toJson(data));
 								$scope.currentUser = data;
 								document.getElementById("new_pass").value="";
