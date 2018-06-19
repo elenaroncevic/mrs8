@@ -29,6 +29,11 @@ var app = angular.module('Application').controller(
 						$location.path('/home').replace();
 						$rootScope.home_btn=false;
 						$rootScope.log_out_btn=false;
+						
+						localStorage.removeItem("regUser");
+						localStorage.removeItem("sysAdm");
+						localStorage.removeItem("cinAdm");
+						localStorage.removeItem("fzAdm");
 					};
 				}
 		]

@@ -23,6 +23,12 @@ angular.module('Application').controller(
 						$rootScope.cinemaAdmin=data.hasOwnProperty("cinemas");
 						$rootScope.systemAdmin=data.hasOwnProperty("def");
 						$rootScope.fanZoneAdmin=!($rootScope.ru || $rootScope.cinemaAdmin || $rootScope.systemAdmin);
+						
+						localStorage.setItem("regUser",$rootScope.ru);
+						localStorage.setItem("cinAdm",$rootScope.cinemaAdmin);
+						localStorage.setItem("sysAdm",$rootScope.systemAdmin);
+						localStorage.setItem("fzAdm",$rootScope.fanZoneAdmin);
+						
 						if(data.activated!="yes"){
 							alert("You haven't activated your account yet! Check your email!");
 							$location.path('/home').replace();
