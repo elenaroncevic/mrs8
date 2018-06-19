@@ -387,6 +387,15 @@ public class RegisteredUserService {
 		if(reserv!=null && reserv.getState()==Reservation.ReservationState.Active && now.getTime().before(cal.getTime())) {
 			reserv.setState(Reservation.ReservationState.Cancelled);
 			reservRep.save(reserv);
+			
+			RegisteredUser ru = reserv.getBuyer();
+			ru.setNumOfReservations(ru.getNumOfReservations()-1);
+			
+			PointScale ps = pointScaleRepository.findOne(Long.parseLong("1"));
+			ru.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
+			
+			userRep.save(ru);
+			
 			for(Ticket tick : reserv.getTickets()) {
 				if(tick.getState().equals(Ticket.TicketState.Requested)) {
 					ConfirmationToken ct = ctRep.findByTicket(tick);
