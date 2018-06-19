@@ -7,8 +7,21 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
+			
+				$rootScope.modal= {
+    				show: false
+ 				};
+ 				
 				$rootScope.currentCinema = JSON.parse(localStorage.getItem("currentCinema"));
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+				
+				$scope.reservation=function(chosenProjection){
+					$http.get('/reguser/getSingleProjection/'+chosenProjection.id).success(function(data, status){
+						$rootScope.modal.show = true;
+						$rootScope.loadModal(data);
+					});
+				};
+				
 				if($rootScope.currentUser.email ){
 					$rootScope.noUser = true;
 					if($rootScope.currentUser.hasOwnProperty("cinemas")){

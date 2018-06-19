@@ -8,7 +8,9 @@ angular.module('Application').controller(
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
 			
- 				
+ 				$rootScope.modal= {
+    				show: false
+ 				};
 				$('#datepicker').datepicker({
      				onSelect: function(d,i){
           				if(d !== i.lastVal){

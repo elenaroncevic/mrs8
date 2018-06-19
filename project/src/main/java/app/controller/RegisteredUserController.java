@@ -38,6 +38,13 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(projection, HttpStatus.OK);
 	}
 	
+	//needed
+	@RequestMapping("/getSingleProjection/{id}")
+	public ResponseEntity<ProjectionDTO> getSingleProjection(@PathVariable Long id){
+		ProjectionDTO projection = regUserService.getSingleProjection(id);
+		return new ResponseEntity<>(projection, HttpStatus.OK);
+	}
+	
 	@RequestMapping("/movie/{id}")
 	public ResponseEntity<Movie> getMovie(@PathVariable Long id){
 		Movie movie = regUserService.getMovie(id);

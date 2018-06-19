@@ -66,6 +66,9 @@
 						</tr>
 					</table>
 				</td>
+				<td ng-show="!cinemaAdmin">
+					<button class="table_button" ng-click="reservation(projection)">Make a reservation</button>
+				</td>
 				<td ng-show=cinemaAdmin>
 					<table>
 						<tr>

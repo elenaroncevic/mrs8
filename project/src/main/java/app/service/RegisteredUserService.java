@@ -127,6 +127,16 @@ public class RegisteredUserService {
 	}
 	
 	//needed
+	public ProjectionDTO getSingleProjection(Long id) {
+		Projection p = projRep.findOne(id);
+		if(p==null) {
+			return null;
+		}else {
+			return new ProjectionDTO(p);
+		}
+	}
+	
+	//needed
 	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
 		Projection proj = getProjection(id);
 		List<SeatDTO> listSeats = new ArrayList<SeatDTO>();
