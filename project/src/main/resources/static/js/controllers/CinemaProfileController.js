@@ -7,7 +7,6 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
-			
 				$rootScope.modal= {
     				show: false
  				};
@@ -359,9 +358,93 @@ angular.module('Application').controller(
 						return "X";
 					}
 				}
+				$scope.showAttGraph=function(){
+					$location.path("/show_attendance").replace();
+				}
 				
+				$scope.getAttData=function(){
+					
+				}
 				
+				$scope.showAttendance = function(){
+					$location.path("/show_attendance").replace();
+				}
 				
+				google.charts.load('current', {packages: ['corechart', 'bar']});
+				google.charts.setOnLoadCallback(drawMultSeries(1));
+				
+				function drawMultSeries(d) {
+					if(document.getElementById('attendance')){
+					$http.get('/attGet/'+ $rootScope.currentCinema.id+'/'+d).success(function(ret, status){
+						console.log(ret);
+						var data = new google.visualization.DataTable();
+						data.addColumn('string', 'Time of Day');
+					    data.addColumn('number', 'Attendance');
+					    data.addRows(ret);
+					    console.log(data);
+					    var options = {
+					    		width: 800,
+					            height: 500,
+						        title: 'dnevno',
+						        hAxis: {
+						          title: 'Time of Day'
+						          
+		
+						        },
+						        vAxis: {
+						          title: 'Rating (scale of 1-10)'
+						        }
+						      };
+
+				      var chart = new google.visualization.ColumnChart(
+				        document.getElementById('attendance'));
+
+				      chart.draw(data, options);
+						
+					}).error(function(){
+						alert("nesto je fejl u attGet");
+						var data = new google.visualization.DataTable();
+					      data.addColumn('timeofday', 'Time of Day');
+					      data.addColumn('number', 'Motivation Level');
+					      data.addColumn('number', 'Energy Level');
+
+					      data.addRows([
+					        [{v: [8, 0, 0], f: '8 am'}, 1, .25],
+					        [{v: [9, 0, 0], f: '9 am'}, 2, .5],
+					        [{v: [10, 0, 0], f:'10 am'}, 3, 1],
+					        [{v: [11, 0, 0], f: '11 am'}, 4, 2.25],
+					        [{v: [12, 0, 0], f: '12 pm'}, 5, 2.25],
+					        [{v: [13, 0, 0], f: '1 pm'}, 6, 3],
+					        [{v: [14, 0, 0], f: '2 pm'}, 7, 4],
+					        [{v: [15, 0, 0], f: '3 pm'}, 8, 5.25],
+					        [{v: [16, 0, 0], f: '4 pm'}, 9, 7.5],
+					        [{v: [17, 0, 0], f: '5 pm'}, 10, 10],
+					      ]);
+
+					      var options = {
+					        title: 'Motivation and Energy Level Throughout the Day',
+					        hAxis: {
+					          title: 'Time of Day',
+					          format: 'h:mm a',
+					          viewWindow: {
+					            min: [7, 30, 0],
+					            max: [17, 30, 0]
+					          }
+					        },
+					        vAxis: {
+					          title: 'Rating (scale of 1-10)'
+					        }
+					      };
+
+					      var chart = new google.visualization.ColumnChart(
+					        document.getElementById('attendance'));
+
+					      chart.draw(data, options);
+					    
+
+					});	
+					}
+				}
 				
 				initMap=function(latitude, longitude){
 					var options={
@@ -370,12 +453,14 @@ angular.module('Application').controller(
 								lat:latitude,lng:longitude
 							}
 						}
+					if(document.getElementById('map')){
 					var map=new google.maps.Map(document.getElementById('map'),options);
 					
 					var marker=new google.maps.Marker({
 						position:{lat:latitude,lng:longitude},
 						map:map,						
 					});
+					}
 				};
 				
 				initMap($rootScope.currentCinema.latitude, $rootScope.currentCinema.longitude);

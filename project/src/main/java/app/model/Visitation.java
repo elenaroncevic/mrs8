@@ -96,7 +96,7 @@ public class Visitation {
 	}
 	
 	public boolean isValid(){
-		DateFormat df = new SimpleDateFormat();
+		DateFormat df = new SimpleDateFormat(     );
 		Calendar now = Calendar.getInstance();
 		try {
 			Date proj = df.parse(ticket.getProjection().getDate());	

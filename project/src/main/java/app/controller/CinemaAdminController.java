@@ -196,7 +196,15 @@ public class CinemaAdminController {
 		User user = cinemaAdminService.changePass(email,pass );
 		return new ResponseEntity<>(user,HttpStatus.OK);
 	}
-	
+	//$http.get('/attGet/'+ $rootScope.currentCinema.id+'/'+d).success(function(ret, status){
+	@RequestMapping(value="/attGet/{cinemaId}/{dtype}", method=RequestMethod.GET)
+	public ResponseEntity<List<List<Object>>> attGet(@PathVariable("cinemaId") Long cid, @PathVariable("dtype") Integer dtype){
+		System.out.println("pocetak");
+		List<List<Object>> qts = cinemaAdminService.attGet(cid, dtype);
+		System.out.println("pred kraj");
+		return new ResponseEntity<>(qts, HttpStatus.OK);
+		
+	}
 	
 }
 

@@ -1,6 +1,5 @@
 package app.service;
  
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,17 +13,16 @@ import org.springframework.stereotype.Service;
 import app.dto.QuickTicketDTO;
 import app.model.Auditorium;
 import app.model.Cinema;
-import app.model.CinemaAdmin;
 import app.model.Movie;
 import app.model.Projection;
 import app.model.QuickTicket;
 import app.model.Reservation.ReservationState;
 import app.model.Row;
 import app.model.Seat;
-import app.model.Seat.SeatState;
 import app.model.Ticket;
 import app.model.Ticket.TicketState;
 import app.model.User;
+import app.model.Visitation;
 import app.repository.AuditoriumRepository;
 import app.repository.CinemaRepository;
 import app.repository.MovieRepository;
@@ -33,6 +31,7 @@ import app.repository.RowRepository;
 import app.repository.SeatRepository;
 import app.repository.TicketRepository;
 import app.repository.UserRepository;
+import app.repository.VisitationRepository;
 
 @Service
 public class CinemaAdminService {
@@ -59,6 +58,9 @@ public class CinemaAdminService {
 	
 	@Autowired
 	private TicketRepository ticketRepository;
+	
+	@Autowired
+	private VisitationRepository visitationRepository;
 	
 	public Cinema editCinemaBasic(Long id, String name, String location, String description){
 		Cinema cinema = cinemaRepository.findOne(id);
@@ -366,5 +368,57 @@ public class CinemaAdminService {
 		else{
 			return true;
 		}
+	}
+	public List<List<Object>> attGet(Long cid, int dtype) {
+
+		Calendar help = Calendar.getInstance();
+		Calendar begin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		begin.set(Calendar.MINUTE,0);
+		begin.set(Calendar.SECOND, 0);
+		end.set(Calendar.HOUR_OF_DAY, 23);
+		end.set(Calendar.MINUTE,59);
+		end.set(Calendar.SECOND, 59);
+		DateFormat df = new SimpleDateFormat("HH:mm:ss");
+		DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+		List<List<Object>> ret = new ArrayList<List<Object>>();
+		ArrayList<String> vreme = new ArrayList<String>();
+		ArrayList<Integer> broj = new ArrayList<Integer>();
+		for(int i = 0; i<24; i++){
+			Calendar now = Calendar.getInstance();
+			ArrayList<Object> inner = new ArrayList<Object>();
+			now.set(Calendar.HOUR_OF_DAY, i);
+			now.set(Calendar.MINUTE,0);
+			now.set(Calendar.SECOND, 0);
+			inner.add(0, df.format(now.getTime()));
+			inner.add(1, i);
+			ret.add(inner);
+		}
+		
+		for(Visitation v : visitationRepository.findAll()){
+			if(v.getTicket().getSeat().getAuditorium().getCinema().getId() == cid){
+				try {
+					help.setTime(df2.parse(v.getTicket().getProjection().getDate()));			
+					if(help.before(end.getTime()) && help.after(begin.getTime()));
+						for(int i = 0; i < 24; i++){
+							Calendar now = Calendar.getInstance();
+							now.set(Calendar.HOUR_OF_DAY, i);
+							now.set(Calendar.MINUTE,0);
+							now.set(Calendar.SECOND, 0);
+							if(dateOverlap(help,v.getTicket().getProjection().getMovie().getDuration(),now,60)){
+								Integer a =(Integer)ret.get(i).get(1);
+								a = a+1;
+								ret.get(i).set(1, a);
+							}
+						}
+				} catch (ParseException e) {
+					System.out.println("catch");
+					return null;
+				}
+			}
+		}
+		System.out.println("vraca");
+		return ret;
 	}
 }
