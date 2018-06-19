@@ -9,8 +9,10 @@ public class SeatDTO {
 	private Seat.SeatState active;
 	private Long rowNum;
 	
-	public SeatDTO() {
-		
+	public SeatDTO(Long row, Integer num) {
+		this.id = (long) -1;
+		this.rowNum = row;
+		this.number=num;
 	}
 
 	public SeatDTO(Long id, Integer number, Seat.SeatState active, Long rowNum) {

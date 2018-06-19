@@ -210,45 +210,101 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
-	public Long makeReservation(String email, Long projId, Long seatId) {
+	//needed
+	public Long makeReservation(String email) {
 		Reservation reserv = new Reservation();
 		reserv.setState(Reservation.ReservationState.Active);
 		reserv.setBuyer((RegisteredUser)userRep.findOne(email));
 		Reservation saved = reservRep.save(reserv);
-		makeTicket(null, saved.getId(), projId, seatId, Ticket.TicketState.Active, null);
 		return saved.getId();
 	}
 	
-	public boolean makeTicket(String email, Long resId, Long projId, Long seatId, Ticket.TicketState state, WebRequest request) {
-		Ticket tick = new Ticket();
+	//needed
+	public boolean makeTicket(Long resId, Long projId, String seats, int num) {
+		String[] seatsList = seats.split(",");
 		Reservation r = reservRep.findOne(resId);
-		tick.setState(state);
-		tick.setProjection(projRep.findOne(projId));
-		tick.setReservation(r);
-		tick.setSeat(seatRep.findOne(seatId));
-		Ticket saved = ticketRep.save(tick);
-		if(request!=null) {
-			String appUrl = request.getContextPath();
-	        String token = UUID.randomUUID().toString();
-	        ConfirmationToken ct = new ConfirmationToken();
-	        ct.setTicket(tick);
-	        ct.setToken(token);
-	        String subject = "Invitation to a movie";
-	        String text = "Your friend "+r.getBuyer().getFirstName()+" "+r.getBuyer().getLastName()+" wants you to go see a movie with him. Click on the link below if you accept his invitation!";
-	        String confirmationUrl = appUrl + "/acceptInvitation.html?token=" + token;
-	        String declinationUrl = appUrl + "/declineInvitation.html?token=" +token;
-	        
-	        ctRep.save(ct);
-	        
-	        SimpleMailMessage eMail = new SimpleMailMessage();
-	        eMail.setTo(email);
-	        eMail.setSubject(subject);
-	        eMail.setText(text+"\n"+"http://localhost:8181" + confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n"+declinationUrl);
-	        mailSender.send(eMail);
+		Ticket.TicketState state = Ticket.TicketState.Requested;
+		for(int i = 0;i<seatsList.length;i++) {
+			if(i==num) {
+				state = Ticket.TicketState.Active;
+			}
+			Ticket tick = new Ticket();
+			tick.setState(state);
+			
+			tick.setProjection(projRep.findOne(projId));
+			tick.setReservation(r);
+			tick.setSeat(seatRep.findOne(Long.parseLong(seatsList[i])));
+			ticketRep.save(tick);	
 		}
 		return true;
 	}
 	
+	//needed
+	public ReservationDTO sendEmails(Long reservId, String emails, WebRequest req) {
+		Reservation r = reservRep.findOne(reservId);
+		String[] emailsList = emails.split(",");
+		int emailCounter = 0;
+		
+		String appUrl = req.getContextPath();
+		
+		for(Ticket tick : r.getTickets()) {
+			if(tick.getState().equals(Ticket.TicketState.Requested)) {
+				System.out.println("1");
+		        String token = UUID.randomUUID().toString();
+		        ConfirmationToken ct = new ConfirmationToken();
+		        ct.setTicket(tick);
+		        ct.setToken(token);
+		        String subject = "Invitation to a movie";
+		        String text = "Your friend "+r.getBuyer().getFirstName()+" "+r.getBuyer().getLastName()+" wants you to go see a movie with him. Click on the link below if you accept his invitation!";
+		        String confirmationUrl = appUrl + "/acceptInvitation.html?token=" + token;
+		        String declinationUrl = appUrl + "/declineInvitation.html?token=" +token;
+		        
+		        ctRep.save(ct);
+		        
+		        SimpleMailMessage eMail = new SimpleMailMessage();
+		        eMail.setTo(emailsList[emailCounter]);
+		        System.out.println(emailsList[emailCounter]+" "+emailCounter+"\n");
+		        emailCounter++;
+		        eMail.setSubject(subject);
+		        eMail.setText(text+"\n"+"http://localhost:8181" + confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n"+declinationUrl);
+		        mailSender.send(eMail);
+			}
+		}
+        return sendEmail(reservId);
+		
+	}
+	
+	//needed
+	public ReservationDTO sendEmail(Long resId) {
+		Reservation r = reservRep.findOne(resId);
+		
+		String seats = "";
+		for(Ticket tick : r.getTickets()) {
+			seats=seats+tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber()+",";
+		}
+		seats = seats.substring(0, seats.length()-1);
+		
+		
+        SimpleMailMessage eMail = new SimpleMailMessage();
+        eMail.setTo(r.getBuyer().getEmail());
+        eMail.setSubject("Information about reservation");
+        
+        Projection proj = r.getTickets().iterator().next().getProjection();
+        String text = "Dear, " +r.getBuyer().getFirstName()+" " +r.getBuyer().getLastName()+",\n\n you have successfully reserved ticket(s) using our app. Details of your purchase:\n"; 
+        text=text+"\nPlace: "+proj.getAuditorium().getCinema().getName();
+        text=text+"\nShow: " +proj.getMovie().getTitle();
+        text=text+"\nDate and time: " + proj.getDate();
+        text=text+"\nAuditorium: "+proj.getAuditorium().getNumber();
+        text=text+"\nNumber of tickets: "+proj.getTickets().size();
+        text=text+"\nSeats: "+seats;
+        text=text+"\n\nThank you for using TheCinApp!\n\n\nBest regards, \nTheCinTeam";
+        eMail.setText(text);
+        mailSender.send(eMail);
+        
+        return new ReservationDTO(r);
+	}
+	
+	//needed
 	public boolean acceptInvitation(String token) {
 		ConfirmationToken ct = ctRep.findByToken(token);
 		if(ct==null) {
@@ -264,6 +320,7 @@ public class RegisteredUserService {
 		return true;
 	}
 	
+	//needed
 	public boolean declineInvitation(String token) {
 		ConfirmationToken ct = ctRep.findByToken(token);
 		if(ct==null) {
@@ -302,6 +359,10 @@ public class RegisteredUserService {
 			reserv.setState(Reservation.ReservationState.Cancelled);
 			reservRep.save(reserv);
 			for(Ticket tick : reserv.getTickets()) {
+				if(tick.getState().equals(Ticket.TicketState.Requested)) {
+					ConfirmationToken ct = ctRep.findByTicket(tick);
+					ctRep.delete(ct);
+				}
 				tick.setState(Ticket.TicketState.Cancelled);
 				ticketRep.save(tick);
 			}

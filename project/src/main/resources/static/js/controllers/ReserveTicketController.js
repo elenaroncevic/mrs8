@@ -7,9 +7,8 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
-				$scope.modal= {
-    				show: false
- 				};
+			
+ 				
 				$('#datepicker').datepicker({
      				onSelect: function(d,i){
           				if(d !== i.lastVal){
@@ -19,18 +18,18 @@ angular.module('Application').controller(
      				minDate: 0,
      				defaultDate: null
 				});
-				$("#datepicker").datepicker('disable');
-				var first = 1;
-				$scope.showSeatsPreview=false;
-				$scope.friendsBox=false;
 				
-				$scope.disMovCombo=true;
-				$scope.disProjCombo = true;
+				$rootScope.refreshReservation=function(){
+					$("#datepicker").datepicker('disable');
+					var first = 1;
 				
+					//isprazni kombo
+					$scope.showContinue=false;
+					$scope.disMovCombo=true;
+					$scope.disProjCombo = true;
+					$rootSope.modal.show = false;
+				};
 				
-
-				
-				$scope.disableButtons=false;
 				
 				$scope.searchCinemas=function(){
 					if(first==1){
@@ -51,7 +50,7 @@ angular.module('Application').controller(
 					let selCinema = document.getElementById("cinemaCombo").selectedIndex;
 					$scope.cinemaSelected = $scope.cinemasShow[selCinema];
 					
-					$http.get('http://localhost:8181/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
+					$http.get('/reguser/movies/'+$scope.cinemaSelected.id).success(function(data,status){
 						if(data.length==0){
 							alert('Selected cinema currently has no movies.');
 							$scope.moviesShow={};
@@ -81,10 +80,15 @@ angular.module('Application').controller(
 							$scope.disProjCombo = true;
 						}else{
 							$scope.projShow=data;
+							$scope.proj="";
 							$scope.disProjCombo = false;
 						}
 					});
 					
+				};
+				
+				$scope.continueReservation=function(){
+					$rootScope.modal.show = true;
 				};
  				
 				$scope.projectionChanged=function(){
@@ -93,9 +97,9 @@ angular.module('Application').controller(
 						return;
 					}
 					var chosenProjection = $scope.projShow[idx-1];
-					$scope.modal.show = true;
-					$rootScope.loadSeats(chosenProjection);
-
+					$rootScope.modal.show = true;
+					$scope.showContinue = true;
+					$rootScope.loadModal(chosenProjection);
 				};
 			}
 		]

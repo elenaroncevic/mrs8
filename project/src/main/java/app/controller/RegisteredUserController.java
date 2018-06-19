@@ -96,16 +96,32 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(friends, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/makeReservation/{email}/{seatId}/{projId}", method=RequestMethod.POST)
-	public ResponseEntity<Long> makeReservation(@PathVariable("email") String email, @PathVariable("seatId") Long seatId, @PathVariable("projId") Long projId){
-		Long reserv = regUserService.makeReservation(email, projId, seatId);
+	//needed
+	@RequestMapping(value="/makeReservation/{email:.+}", method=RequestMethod.POST)
+	public ResponseEntity<Long> makeReservation(@PathVariable("email") String email){
+		Long reserv = regUserService.makeReservation(email);
 		return new ResponseEntity<>(reserv, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/makeTicket/{email}/{projId}/{resId}/{seatId}", method=RequestMethod.POST)
-	public ResponseEntity<Void> makeTicket(@PathVariable("email") String email, @PathVariable("projId") Long projId, @PathVariable("resId") Long resId, @PathVariable("seatId") Long seatId, WebRequest req){
-		regUserService.makeTicket(email, resId, projId, seatId, Ticket.TicketState.Requested, req);
+	//needed
+	@RequestMapping(value="/makeTicket/{projId}/{resId}/{seats}/{num}", method=RequestMethod.POST)
+	public ResponseEntity<Void> makeTicket(@PathVariable("projId") Long projId, @PathVariable("resId") Long resId, @PathVariable("seats") String seats, @PathVariable("num") int num){
+		regUserService.makeTicket(resId, projId, seats, num);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	//needed
+	@RequestMapping(value="/sendEmails/{emails}/{resId}", method=RequestMethod.POST)
+	public ResponseEntity<ReservationDTO> sendEmails(@PathVariable("emails") String emails, @PathVariable("resId") Long resId, WebRequest req){
+		ReservationDTO reserv = regUserService.sendEmails(resId, emails, req);
+		return new ResponseEntity<ReservationDTO>(reserv, HttpStatus.OK);
+	}
+	
+	//needed
+	@RequestMapping(value="/sendEmail/{resId}", method=RequestMethod.POST)
+	public ResponseEntity<ReservationDTO> sendEmail(@PathVariable("resId") Long resId){
+		ReservationDTO reserv = regUserService.sendEmail(resId);
+		return new ResponseEntity<ReservationDTO>(reserv, HttpStatus.OK);
 	}
 	
 	@RequestMapping("/acceptInvitation/{token}")

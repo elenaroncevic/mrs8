@@ -39,6 +39,7 @@ var app = angular.module('Application').controller(
 		]
 );
 
+
 app.directive('modal', function () {
   
   return {
@@ -49,12 +50,6 @@ app.directive('modal', function () {
     },
     templateUrl: 'html/seats.html',
     controller: 'SeatsController' ,
-     link: function (scope, element, attrs) {
-      
-      	
-      scope.modalClicked = function () {
-        scope.showModal = false;
-      }
-    }
+
   }
 });

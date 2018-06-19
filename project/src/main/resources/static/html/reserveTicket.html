@@ -1,4 +1,6 @@
-<div ng-controller="ReserveTicketController" class="reservation">
+<div ng-controller="ReserveTicketController" class="reservation" ng-init="refreshReservation()">
+
+	<div>
 	Search cinemas(name or part of it):
 	<input type="textfield" ng-model="searchCinemaText">
 	<button type="button" class="profile-btn" ng-click="searchCinemas()">Search</button>
@@ -7,13 +9,21 @@
 	<select id="cinemaCombo" ng-model="cin" ng-change="projectionAndDate()"> 
 		<option ng-repeat="cinema in cinemasShow" value="{{cinema.name}}">{{cinema.name}}</option>
 	</select>
-	<p>{{h}}</p>
-	<div>
+	</div>
+
+
+	<div class="big">
+		<div>
 		Movies:
 		<select id="movieCombo" ng-model="mov" ng-change="timeAndAud()" ng-disabled="disMovCombo"> 
 			<option ng-repeat="movie in moviesShow" value="{{movie.title}}">{{movie.title}}</option>
 		</select>
+		</div>
+		<div class="current-reservation">
+			<button id="btn" ng-click="continueReservation()" ng-show="showContinue">Continue reservation</button>
+		</div>
 		<div id="datepicker"></div>
+		
 	</div>
 	
 	<div>
@@ -23,7 +33,7 @@
 			<option ng-repeat="proj in projShow">{{proj.time +" (Room " + proj.audNum+")" }}</option>
 		</select>		
 	</div>
-	
+
     <modal show-modal="modal.show" />
 
 </div>

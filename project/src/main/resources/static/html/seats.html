@@ -1,35 +1,32 @@
 <div class='modal-backdrop' ng-show='showModal'></div>
 <div class='modal' ng-show='showModal'>
 	<div class="main">
-		<div class="demo">
-			<div id="seat-map">				
-			</div>
-			<div class="booking-details">	
-			
-				<button class="profile-btn" ng-click="finishReservation()">Finish Reservation</button>
-				<button class = "profile-btn" ng-click="close()">Close</button>
-			</div>
-			<div style="clear:both"></div>
-	    </div>
-	</div>
-	
-	<div ng-init="loadFriends()">
-		<div >
-		<table id="scrolltable">
-			<thead>
-				<th>Name</th>	
-				<th></th>
-				<th></th>			
-			</thead>
-			</tbody>
-				<tr ng-repeat="friend in friends">
-					<td>{{friend.name}}</td>
-					<td><button type="button" class="table_button" ng-click="inviteFriend(friend)" ng-disabled="friend.invite">Invite friend</button></td>
-					<td><button class="table_button" ng-click="removeFriend(friend)" ng-disabled="friend.remove">X</button></td>
-				</tr>
-			</tbody>
-		</table>
+		<div class = "reservation-modal">
+		<div id="seat-map" ng-show="seatsFriends">				
 		</div>
+		<div ng-init="loadFriends()" ng-show="!seatsFriends">
+			<table id="friend_reserv_table">
+				<thead>
+					<th>Name</th>	
+					<th>Invite</th>
+					<th>Remove</th>			
+				</thead>
+				</tbody>
+					<tr ng-repeat="friend in friends">
+						<td>{{friend.name}}</td>
+						<td><button type="button" class="table_button" ng-click="inviteFriend(friend)" ng-disabled="friend.invite">Add</button></td>
+						<td><button class="table_button" ng-click="removeFriend(friend)" ng-disabled="friend.remove">X</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		</div>
+								<div class="booking-details">	
+			
+				<button class = "reserv-btn" ng-click="inviteFriends()" ng-show="seatsFriends">Invite friends?</button>
+				<button class = "reserv-btn" ng-click="backToSeats()" ng-show="!seatsFriends">Choose different seats?</button>
+				<button class="reserv-btn" ng-click="finishReservation()">Finish Reservation</button>
+				<button class = "reserv-btn" ng-click="close()">Close</button>
+			</div>
 	</div>
-	
 </div>

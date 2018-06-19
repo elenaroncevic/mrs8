@@ -1,60 +1,39 @@
-<div ng-show="theaterReserve" ng-controller="ReserveTicketTheaterController">
-
+<div ng-controller="ReserveTicketTheaterController" ng-init="refreshReservationTheater()" class="reservation">
+	
+	<div>
 	Search theaters(name or part of it):
 	<input type="textfield" ng-model="searchTheaterText">
-	<button type="button" ng-click="searchTheaters()">Search</button>
+	<button type="button" class="profile-btn ng-click="searchTheaters()">Search</button>
 	</br>
 	
-	<select id="theaterCombo"> 
+	Theaters:
+	<select id="theaterCombo" ng-model="the" ng-change="showProjectionsDates()"> 
 		<option ng-repeat="theater in theatersShow" value="{{theater.name}}">{{theater.name}}</option>
 	</select>
-	<button type="button" ng-click="showProjectionsDates()">Select this theater</button>
+	</div>
 	
-	<div ng-show="showProjCombo">
-		<select id="projsCombo">
+	<div class="big">
+		<div>
+		Plays:
+		<select id="projsCombo" ng-model="mov" ng-change="showAvailable()" ng-disabled="disMovComboTheater">
 			<option ng-repeat="projection in projsShow">{{projection.title}}</option>
 		</select>
+		</div>
+		
+		<div class="current-reservation">
+			<button id="btn" ng-click="continueReservationTheater()" ng-show="showContinueTheater">Continue reservation</button>
+		</div>
 		<div id="datepicker2"></div>
-		<button type="button" ng-click="showAvailable()">See available time and rooms</button>
+		
 	</div>
 	
-	<div ng-show="dates">
-		<select id="timeRoom">
+	<div>
+		Time(room):
+		<select id="timeRoom" ng-model="perf" ng-change="projectionChangedTheater()" ng-disabled="disProjComboTheater">
+			<option></option>
 			<option ng-repeat="perf in perfShow">{{perf.time +" (Room " + perf.audNum+")"}}</option>
 		</select>
-		<button type="button" ng-click="loadSeatsT()">Choose your seats</button>
 	</div>
 	
-	<div class="main" ng-show="showingSeats">
-		<div class="demo">
-			<div id="seat-map2">				
-			</div>
-			<div class="booking-details">
-				<p>Movie: {{chosenPerformance.title}}</p>
-				<p>Time: {{chosenProjection.date}}</p>
-				<p>Room: {{chosenProjection.audNum}}</p>
-				<div class="clear"></div>
-				<ul id="selected-seats2" class="scrollbar scrollbar1"></ul>
-			
-						
-				<button class="checkout-button" ng-click="invitePeople()">Book Now</button>
-			</div>
-			<div style="clear:both"></div>
-	    </div>
-	</div>
-	
-	<div ng-show="friendsBoxT">
-		<table class="table table-bordered">
-			<thead>
-				<th>Name</th>				
-			</thead>
-			</tbody>
-				<tr ng-repeat="friend in friendsT">
-					<td>{{friend.firstName+" " + friend.lastName}}</td>
-					<td><button type="button" ng-click="inviteFriendT(friend)" ng-disabled="disableButtonsT">Invite friend</button></td>
-				</tr>
-			</tbody>
-		</table>
-		<button type="button" ng-click="finishThis()">Finish reservation</button>
-	</div>
+	    <modal show-modal="modal.show" />
 </div>

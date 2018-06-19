@@ -101,6 +101,37 @@ input, select{
 	line-height : 2;
 }
 
+.reservation-modal{
+	padding 30px, 30px;
+	overflow-y: scroll;
+  	height : 60%;
+}
+
+.big{
+	clear : both;
+	width : 50%;
+}
+
+.current-reservation{
+	float : right;
+}
+
+#btn{
+	background : red;
+	border : 2px solid black;
+	width : 150px;
+	height : 80px;
+	
+}
+
+#btn:hover{
+	background : darkred;
+}
+
+
+
+
+
 #history_table{  
   overflow-y: scroll;
     border-color: #D88A04;
@@ -108,6 +139,34 @@ input, select{
     border-style: solid;
     align : right;
    }
+   
+#friend_reserv_table{
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+}
+
+#friend_reserv_table th{
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    background : #727272;
+    font-size: 16px;
+      padding: 8px 11px; 
+    text-align : center;
+    color : black;
+ }
+ 
+ #friend_reserv_table td{
+ 	height : 15px;
+ 	font-size: 15px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    background : #bfbfbf;
+    text-align : center;
+    color : green;
+ }
    
 #scrolltable{
   overflow-y: scroll;
@@ -137,7 +196,6 @@ input, select{
       padding: 12px 16px; 
     text-align : center;
     color : black;
-    
  }
 #scrolltable th div { position: absolute; margin-top: -20px; }
 
@@ -152,15 +210,19 @@ input, select{
     cursor: pointer;
     background: grey;
     font-size: 16px; 
-    padding: 8px 12px; 
-    content: "\00d7";
+    padding: 8px 12px;
 }
 
-.profile-btn:hover{
+.reserv-btn{
+    cursor: pointer;
+    background: grey;
+    font-size: 16px; 
+    padding: 8px 12px;
+}
+
+.profile-btn:hover, .reserv-btn:hover{
     background: RoyalBlue;
 }
-
-
 
 
 h1,h2,h3,h4,h5,h6{
@@ -190,6 +252,7 @@ label{
 }
 .main{
     width: 45%;
+    height : 50%;
     margin: 45px auto;
     background:rgba(255, 255, 255, 0.88);
     padding: 30px 30px;
@@ -228,8 +291,8 @@ p.copy_rights a:hover{
     border-radius: 3px;
 	}
 .booking-details {
-    float: right;
-    width: 38%;
+    padding : 12px, 12px;
+	margin: 50px 5px 0 0;
 }
 .booking-details h3 {
 	margin: 5px 5px 0 0;
@@ -282,10 +345,6 @@ div.seatCharts-seat.unavailable {
 	cursor: not-allowed;
 	}
 div.seatCharts-container {
-    border-right: 1px solid #adadad;
-    width: 54%;
-    padding: 0 20px 0 0;
-    float: left;
 }
 div.seatCharts-legend {
 	padding-left: 0px;

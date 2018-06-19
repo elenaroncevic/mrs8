@@ -35,10 +35,11 @@ angular.module('Application').controller(
 				$scope.theaters=function(){
 					$scope.tabs = {"home":false, "theaters":true, "cinemas":false, "friends":false, "reservations":false, "settings":false, "fanzone":false};
 					$http.get('/theaters').success(function(data, status){
-						$rootScope.theatersShow=data;
+						$scope.theatersShow=data;
 					});
 					$scope.theaterReserve=false;
 					$scope.theaterRegular=true;
+					$rootScope.refreshReservationTheater();
 				};
 				$scope.cinemasShow={};
 				$scope.cinemas=function(){
@@ -49,6 +50,7 @@ angular.module('Application').controller(
 					});
 					$scope.reserve=false;
 					$scope.regular=true;
+					$rootScope.refreshReservation();
 				};
 				$scope.friends=function(){
 					$scope.tabs = {"home":false, "theaters":false, "cinemas":false, "friends":true, "reservations":false, "settings":false, "fanzone":false};
