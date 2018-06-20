@@ -9,6 +9,7 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $http, $location) {
 				$scope.login = function() {
 					$http.post('http://localhost:8181/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
+							alert('ipak');
 							$rootScope.currentUser=data;
 							if(data.activated=="yes"){
 								if('firstName' in data){

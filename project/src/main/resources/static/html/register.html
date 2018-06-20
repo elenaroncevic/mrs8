@@ -1,35 +1,36 @@
-<div>
-    <form ng-init="initUser()">
-    
-    	E-mail:
-    	<input type="text" ng-model="user.email">
+<div class='modal-backdrop' ng-show='showReg'></div>
+<div class='modal' ng-show='showReg'>    
+	<div class="registration">
+    	    	
+    	<p>E-mail:				<p>
+    	<input type="text" ng-model="email">
     	</br>
     	
-    	Password:
-    	<input type="password" ng-model="user.password">
+    	<p>Password:			</p>		
+    	<input type="password" ng-model="password">
     	</br>
     	
-    	Password(re-enter):
+    	<p>Password(re-enter):	</p>
     	<input type="password" ng-model="pass2">
     	</br>
     	
-    	First name: 
-		<input type="text" ng-model="user.firstName">
+    	<p>First name:			</p> 
+		<input type="text" ng-model="firstName">
 		</br>
 		
-		Last name: 
-		<input type="text" ng-model="user.lastName">
+		<p>Last name:			</p> 
+		<input type="text" ng-model="lastName">
 		</br>
 		
-		City: 
-		<input type="text" ng-model="user.city">
+		<p>City: 					</p>
+		<input type="text" ng-model="city">
 		</br>
 		
-		Phone number: 
-		<input type="text" ng-model="user.phone">
+		<p>Phone number: 			</p>
+		<input type="text" ng-model="phone">
 		</br>
 		
-		<button type="button" ng-click="register()">Make an account</button>
-		
-    </form>
+		<button type="button" class="profile-btn" ng-click="register()">Make an account</button>
+		<button type="button" class="profile-btn" ng-click="close()">Cancel</button>
+	</div>
 </div>

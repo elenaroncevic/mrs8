@@ -31,7 +31,7 @@
 		Time(room):
 		<select id="projCombo" ng-model="proj" ng-change="projectionChanged()" ng-disabled="disProjCombo">
 			<option value=""></option>
-			<option ng-repeat="proj in projShow">{{proj.time +" (Room " + proj.audNum+")" }}</option>
+			<option ng-repeat="proj in projShow">{{proj.date.split(" ")[1] +" (Room " + proj.audNum+")" }}</option>
 		</select>		
 	</div>
 

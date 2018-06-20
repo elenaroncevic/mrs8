@@ -12,7 +12,7 @@
 					<th>Remove</th>			
 				</thead>
 				</tbody>
-					<tr ng-repeat="friend in friends">
+					<tr ng-repeat="friend in friendsSeats">
 						<td>{{friend.name}}</td>
 						<td><button type="button" class="table_button" ng-click="inviteFriend(friend)" ng-disabled="friend.invite">Add</button></td>
 						<td><button class="table_button" ng-click="removeFriend(friend)" ng-disabled="friend.remove">X</button></td>

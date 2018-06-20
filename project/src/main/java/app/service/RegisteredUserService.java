@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.WebRequest;
 
 import app.dto.AuditoriumDTO;
-import app.dto.CinemaDTO;
 import app.dto.FriendshipDTO;
 import app.dto.MovieDTO;
 import app.dto.ProjectionDTO;
@@ -214,16 +214,19 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
+	//needed
 	public List<RegisteredUserDTO> getFriends(String email){
 		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
 		RegisteredUser current = (RegisteredUser) userRep.findOne(email);
 		
 		for(Friendship friendship : current.getFriendsAccepted()) {
+			System.out.println(friendship.getSender().getEmail());
 			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
 				retValue.add(new RegisteredUserDTO(friendship.getSender()));
 			}
 		}
 		for(Friendship friendship : current.getFriendsAdded()) {
+			System.out.println(friendship.getFriend().getEmail());
 			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
 				retValue.add(new RegisteredUserDTO(friendship.getFriend()));
 			}
@@ -237,7 +240,8 @@ public class RegisteredUserService {
 		Reservation reserv = new Reservation();
 		reserv.setState(Reservation.ReservationState.Active);
 		reserv.setBuyer(user);
-		user.setNumOfReservations(user.getNumOfReservations()+1);
+		Integer i = user.getNumOfReservations()+1;
+		user.setNumOfReservations(i);
 		String id="1";
 		PointScale ps = pointScaleRepository.findOne(Long.parseLong(id));
 		user.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
@@ -269,33 +273,35 @@ public class RegisteredUserService {
 	}
 	
 	//needed
-	public ReservationDTO sendEmails(Long reservId, String emails, WebRequest req) {
+	public ReservationDTO sendEmails(Long reservId, String emails, HttpServletRequest request) {
 		Reservation r = reservRep.findOne(reservId);
 		String[] emailsList = emails.split(",");
 		int emailCounter = 0;
 		
-		String appUrl = req.getContextPath();
+		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String ctx = request.getContextPath();
+		String base = url.substring(0, url.length() - uri.length() + ctx.length());
+		base=base+  "/";
 		
 		for(Ticket tick : r.getTickets()) {
 			if(tick.getState().equals(Ticket.TicketState.Requested)) {
-				System.out.println("1");
 		        String token = UUID.randomUUID().toString();
 		        ConfirmationToken ct = new ConfirmationToken();
 		        ct.setTicket(tick);
 		        ct.setToken(token);
 		        String subject = "Invitation to a movie";
 		        String text = "Your friend "+r.getBuyer().getFirstName()+" "+r.getBuyer().getLastName()+" wants you to go see a movie with him. Click on the link below if you accept his invitation!";
-		        String confirmationUrl = appUrl + "/acceptInvitation.html?token=" + token;
-		        String declinationUrl = appUrl + "/declineInvitation.html?token=" +token;
+		        String confirmationUrl = base + "reguser/acceptInvitation.html?token=" + token;
+		        String declinationUrl = base + "reguser/declineInvitation.html?token=" +token;
 		        
 		        ctRep.save(ct);
 		        
 		        SimpleMailMessage eMail = new SimpleMailMessage();
 		        eMail.setTo(emailsList[emailCounter]);
-		        System.out.println(emailsList[emailCounter]+" "+emailCounter+"\n");
 		        emailCounter++;
 		        eMail.setSubject(subject);
-		        eMail.setText(text+"\n"+"http://localhost:8181" + confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n"+declinationUrl);
+		        eMail.setText(text+"\n\n"+confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n\n"+declinationUrl+"\n\n\nBest regards, \\nTheCinTeam");
 		        mailSender.send(eMail);
 			}
 		}
@@ -324,13 +330,35 @@ public class RegisteredUserService {
         text=text+"\nShow: " +proj.getMovie().getTitle();
         text=text+"\nDate and time: " + proj.getDate();
         text=text+"\nAuditorium: "+proj.getAuditorium().getNumber();
-        text=text+"\nNumber of tickets: "+proj.getTickets().size();
-        text=text+"\nSeats: "+seats;
+        text=text+"\nNumber of tickets: "+r.getTickets().size();
+        text=text+"\nSeats: "+seats;      
+        
+        double price = r.getPrice();
+		int discount = getDiscount(r.getBuyer().getUserMedal());
+		double discountPrice = price-price*discount;
+		
+        
+        text=text+"\nPrice: " + price+" (with discount: "+discountPrice+")";
         text=text+"\n\nThank you for using TheCinApp!\n\n\nBest regards, \nTheCinTeam";
         eMail.setText(text);
         mailSender.send(eMail);
         
-        return new ReservationDTO(r);
+        return new ReservationDTO(r, discount);
+	}
+	
+	//needed
+	public int getDiscount(RegisteredUser.Medal medal) {
+		PointScale ps = pointScaleRepository.findOne(Long.parseLong("1"));
+		int discount=0;
+		
+		if(medal.equals(RegisteredUser.Medal.Copper)) {
+			discount = ps.getCopper_discount();
+		}else if(medal.equals(RegisteredUser.Medal.Silver)) {
+			discount=ps.getSilver_discount();
+		}else if(medal.equals(RegisteredUser.Medal.Golden)) {
+			discount=ps.getGolden_discount();
+		}
+		return discount;
 	}
 	
 	//needed
@@ -340,7 +368,7 @@ public class RegisteredUserService {
 			return false;
 		}
 		Ticket tick = ct.getTicket();
-		if(tick.getState()==Ticket.TicketState.Cancelled) {
+		if(tick.getState()==Ticket.TicketState.Cancelled || tick.getState()==Ticket.TicketState.Inactive) {
 			return false;
 		}
 		tick.setState(Ticket.TicketState.Active);
@@ -351,12 +379,13 @@ public class RegisteredUserService {
 	
 	//needed
 	public boolean declineInvitation(String token) {
+		System.out.println("opa");
 		ConfirmationToken ct = ctRep.findByToken(token);
 		if(ct==null) {
 			return false;
 		}
 		Ticket tick = ct.getTicket();
-		if(tick.getState()==Ticket.TicketState.Cancelled) {
+		if(tick.getState()==Ticket.TicketState.Cancelled || tick.getState()==Ticket.TicketState.Inactive) {
 			return false;
 		}
 		tick.setState(Ticket.TicketState.Cancelled);
@@ -389,7 +418,8 @@ public class RegisteredUserService {
 			reservRep.save(reserv);
 			
 			RegisteredUser ru = reserv.getBuyer();
-			ru.setNumOfReservations(ru.getNumOfReservations()-1);
+			Integer i = ru.getNumOfReservations()-1;
+			ru.setNumOfReservations(i);
 			
 			PointScale ps = pointScaleRepository.findOne(Long.parseLong("1"));
 			ru.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
@@ -415,7 +445,7 @@ public class RegisteredUserService {
 		RegisteredUser regU =(RegisteredUser) userRep.findOne(email);
 		for(Reservation r : regU.getReservations()) {
 			if(r.getState()==Reservation.ReservationState.Active) {
-				retValue.add(new ReservationDTO(r));
+				retValue.add(new ReservationDTO(r, getDiscount(r.getBuyer().getUserMedal())));
 			}
 		}
 		return retValue;
@@ -470,29 +500,42 @@ public class RegisteredUserService {
 				friends.add(friendship.getFriend());
 			}
 		}
+		
+		for(RegisteredUser fr : friends) {
+			System.out.println(fr.getEmail() +"    friend1");
+		}
+		
+		
+		boolean found=false;
 		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
 		for(User person : ppl){
-			if(person instanceof RegisteredUser && !email.equals(person.getEmail())) {
+			if(person.getActivated().equals("yes") && person instanceof RegisteredUser && !email.equals(person.getEmail())) {
 				RegisteredUserDTO potential = new RegisteredUserDTO((RegisteredUser)person);
 				if(friends.isEmpty()) {
 					retValue.add(potential);
 					continue;
 				}
+				found=false;
 					for(RegisteredUser friend : friends) {
-						if(!friend.getEmail().equals(potential.getEmail())) {
-							retValue.add(potential);
+						if(friend.getEmail().equals(potential.getEmail())) {
+							found=true;
 							break;
 						}
 					}
+				if(!found) {
+					retValue.add(potential);
+				}
 			}
 		}
 		return retValue;
 	}
 	
+	//needed
 	public List<FriendshipDTO> getRequests(String email){
 		List<FriendshipDTO> retValue = new ArrayList<FriendshipDTO>();
 		RegisteredUser ru = (RegisteredUser) userRep.findOne(email);
 		for(Friendship fr : ru.getFriendsAccepted()) {
+			System.out.println(fr.getState());
 			if(fr.getState()==FriendshipState.Requested) {
 				retValue.add(new FriendshipDTO(fr));
 			}
@@ -500,6 +543,7 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
+	//needed
 	public boolean acceptFriend(Long id) {
 		Friendship fr = friendRep.findOne(id);
 		fr.setState(Friendship.FriendshipState.Accepted);
@@ -507,13 +551,14 @@ public class RegisteredUserService {
 		return true;
 	}
 	
+	//needed
 	public boolean declineFriend(Long id) {
 		Friendship fr = friendRep.findOne(id);
-		fr.setState(Friendship.FriendshipState.Cancelled);
-		friendRep.save(fr);
+		friendRep.delete(fr);
 		return true;
 	}
 	
+	//needed
 	public boolean addFriend(String uEmail, String fEmail) {
 		Friendship fr = new Friendship();
 		fr.setSender((RegisteredUser) userRep.findOne(uEmail));
@@ -523,6 +568,7 @@ public class RegisteredUserService {
 		return true;
 	}
 	
+	//needed
 	public boolean removeFriend(String uEmail, String fEmail) {
 		RegisteredUser ru = (RegisteredUser) userRep.findOne(uEmail);
 		Friendship remove = null;
@@ -540,8 +586,7 @@ public class RegisteredUserService {
 				}
 			}
 		}
-		remove.setState(Friendship.FriendshipState.Cancelled);
-		friendRep.save(remove);
+		friendRep.delete(remove);
 		return true;
 	}
 

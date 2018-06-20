@@ -12,15 +12,32 @@ angular.module('Application').controller(
 				var friendsSelected=[];
 				var selectedSeats=[];
 			    var seatsSel=0;
+			    
+			    var first = 0;
+				var userChange = "";
 				
 				
 				$rootScope.loadModal=function(chosenProjection){
-					$scope.seatsFriends=true;
-					for(let x in $scope.friendsShow){
-						$scope.friendsShow[x].invite=false;
-						$scope.frirendsShow[x].remove=true;
+					
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+				
+					if(first==0 || currentUser.email==userChange){
+						$scope.friendsSeats=[];
+						loadFriendsSeats();
+						first=1;
+						userChange=currentUser.email;
+					}else{
+						for(let x in $scope.friendsSeats){
+							$scope.friendsSeats[x].invite = false;
+							$scope.friendsSeats[x].remove=true;
+						};
 					};
-					loadFriends();
+					friendsChosen=0;
+					friendsSelected=[];
+					selectedSeats=[];
+			    	seatsSel=0;
+					
+					$scope.seatsFriends=true;
 					loadSeats(chosenProjection);
 				};
 				
@@ -44,31 +61,51 @@ angular.module('Application').controller(
 					});
 				};
 				
-				loadFriends=function(){
+				$rootScope.changeInFriends=function(friend, del){
+					for(let x in $scope.friendsSeats){
+						$scope.friendsSeats[x].invite = false;
+						$scope.friendsSeats[x].remove=true;
+					};
+					
+					var cf = {"name":friend.firstName+" "+friend.lastName,"email":friend.email,"invite": false, "remove": true};
+					$rootScope.h=$scope.friendsSeats;
+					if(del==true){
+						var idx= $scope.friendsSeats.indexOf(cf);
+						$scope.friendsSeats.splice(idx,1);
+					}else{
+						$scope.friendsSeats.push(cf);
+					};
+				};
+				
+				loadFriendsSeats=function(){
 					let i = 0;
-					$scope.friends = [];
+					$scope.friendsSeats = [];
 					
 					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-					$http.get('/reguser/friends/'+currentUser.email).success(function(data, status){
-						for(let x in data){
+						for(let x in $rootScope.friends){
 							let friend = {};		
-							friend['name']=data[x].firstName+" " +data[x].lastName;
-							friend['email']=data[x].email;
+							friend['name']=$rootScope.friends[x].firstName+" " +$rootScope.friends[x].lastName;
+							friend['email']=$rootScope.friends[x].email;
 							friend['invite']=true;
 							friend['remove']=true;
-							$scope.friends[i] = friend;
+							$scope.friendsSeats[i] = friend;
 							i=i+1;
 						};
-					});
+						$rootScope.h=$scope.friendsSeats;
 				};
 				
 				$scope.inviteFriends=function(){
+					if($scope.friendsSeats.length==0){
+						$rootScope.alert('You have no friends. Sorry.');
+						return;
+					};
+					$rootScope.h=selectedSeats;
 					if(selectedSeats.length<2){
 						$rootScope.alert('No enough seats selected for friends. Please, select more seats.');
 					}else{
-						for(let x in $scope.friends){
-							$scope.friends[x].invite = false;
-							$scope.friends[x].remove=true;
+						for(let x in $scope.friendsSeats){
+							$scope.friendsSeats[x].invite = false;
+							$scope.friendsSeats[x].remove=true;
 						};
 						$scope.seatsFriends=false;
 					}
@@ -84,31 +121,32 @@ angular.module('Application').controller(
 				$scope.inviteFriend=function(friend){
 					friendsChosen=friendsChosen+1;
 					if(friendsChosen==seatsSel-1){
-						for(let x in $scope.friends){
-							$scope.friends[x].invite=true;
+						for(let x in $scope.friendsSeats){
+							$scope.friendsSeats[x].invite=true;
 						};
 					}
 					
-					var idx = $scope.friends.indexOf(friend);
-					$scope.friends[idx].invite = true;
-					$scope.friends[idx].remove=false;
+					var idx = $scope.friendsSeats.indexOf(friend);
+					$scope.friendsSeats[idx].invite = true;
+					$scope.friendsSeats[idx].remove=false;
 					friendsSelected.push(idx);
-					y=y+1;
 					
 				}
 				$scope.removeFriend=function(friend){
 					friendsChosen=friendsChosen-1;
 					if(friendsChosen==seatsSel-2){
-						for(let x in $scope.friends){
-							if($scope.friends[x].remove==true){
-								$scope.friends[x].invite=false;
+						for(let x in $scope.friendsSeats){
+							if($scope.friendsSeats[x].remove==true){
+								$scope.friendsSeats[x].invite=false;
 							}
 						};
 					}
-					var idx = $scope.friends.indexOf(friend);
-					$scope.friends[idx].remove = true;
-					$scope.friends[idx].invite=false;
-					friendsSelected.remove(idx);
+					var idx = $scope.friendsSeats.indexOf(friend);
+					$scope.friendsSeats[idx].remove = true;
+					$scope.friendsSeats[idx].invite=false;
+					
+					var remIdx = friendsSelected.indexOf(idx);
+					friendsSelected.splice(remIdx,1);
 				};
 				
 				
@@ -142,7 +180,11 @@ angular.module('Application').controller(
 				sendEmails=function(){
 					if(friendsSelected.length==0){
 						$http.post('/reguser/sendEmail/'+$scope.reservId).success(function(data, status){
-							$rootScope.refreshReservation();
+							if($rootScope.current=="cinema"){
+								$rootScope.refreshReservation();
+							}else{
+								$rootScope.refreshReservationTheater();
+							};						
 							$rootScope.reservationsShow.push(data);
 						});						
 						return;
@@ -150,13 +192,17 @@ angular.module('Application').controller(
 					var friendsStr = '';
 					for(let s in friendsSelected){
 						if(s==0){
-							friendsStr=friendsStr+$scope.friends[friendsSelected[s]].email;
+							friendsStr=friendsStr+$scope.friendsSeats[friendsSelected[s]].email;
 							continue;
 						}
-						friendsStr=friendsStr+','+$scope.friends[friendsSelected[s]].email;
+						friendsStr=friendsStr+','+$scope.friendsSeats[friendsSelected[s]].email;
 					};
 					$http.post('/reguser/sendEmails/'+friendsStr+'/'+$scope.reservId).success(function(data, status){
-						$rootScope.refreshReservation();
+							if($rootScope.current=="cinema"){
+								$rootScope.refreshReservation();
+							}else{
+								$rootScope.refreshReservationTheater();
+							};						
 						$rootScope.reservationsShow.push(data);
 					});
 					

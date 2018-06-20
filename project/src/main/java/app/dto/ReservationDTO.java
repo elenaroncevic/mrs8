@@ -11,21 +11,35 @@ public class ReservationDTO {
 	private int ticketNum;
 	private String seats;
 	private double totalPrice;
+	private double discountPrice;
 	
+	public double getDiscountPrice() {
+		return discountPrice;
+	}
+
+	public void setDiscountPrice(double discountPrice) {
+		this.discountPrice = discountPrice;
+	}
+
 	public ReservationDTO() {
 		
 	}
 	
-	public ReservationDTO(Reservation reservation) {
+	public ReservationDTO(Reservation reservation, int discount) {
 		Projection proj = null;
 		String seats="";
+		int counter=0;
+		
 		for(Ticket tick : reservation.getTickets()) {
-			if(proj==null) {
-				proj = tick.getProjection();
-				seats = seats+tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber();
-				continue;
-			}	
-			seats = seats + ", " +tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber();
+			if(tick.getState().equals(Ticket.TicketState.Active) || tick.getState().equals(Ticket.TicketState.Requested)) {
+				counter=counter+1;
+				if(proj==null) {
+					proj = tick.getProjection();
+					seats = seats+tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber();
+					continue;
+				}	
+				seats = seats + ", " +tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber();
+			}
 			
 		}
 		this.id = reservation.getId();
@@ -33,7 +47,10 @@ public class ReservationDTO {
 		this.date = proj.getDate();
 		this.ticketNum = reservation.getTickets().size();
 		this.seats=seats;
-		this.totalPrice = proj.getTickets().size()*proj.getPrice();
+
+		
+		this.totalPrice = counter*proj.getPrice();
+		this.discountPrice=this.totalPrice-this.totalPrice*discount;
 	}
 
 

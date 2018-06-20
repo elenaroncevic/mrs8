@@ -29,6 +29,7 @@ angular.module('Application').controller(
 					$scope.perfShow={};
 					$scope.searchTheaterText="";
 					
+					
 					$scope.the="";				
 					$scope.showContinueTheater=false;
 					$scope.disMovComboTheater=true;
@@ -101,6 +102,7 @@ angular.module('Application').controller(
 					}
 					var chosenProjection = $scope.perfShow[idx-1];
 					$rootScope.modal.show = true;
+					$rootScope.current="theater";
 					$scope.showContinueTheater = true;
 					$rootScope.loadModal(chosenProjection);
 				};

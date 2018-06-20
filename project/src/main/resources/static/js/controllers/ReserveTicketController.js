@@ -12,6 +12,7 @@ angular.module('Application').controller(
     				show: false
  				};
  				
+ 				
 				$('#datepicker').datepicker({
      				onSelect: function(d,i){
           				if(d !== i.lastVal){
@@ -107,6 +108,7 @@ angular.module('Application').controller(
 					}
 					var chosenProjection = $scope.projShow[idx-1];
 					$rootScope.modal.show = true;
+					$rootScope.current="cinema";
 					$scope.showContinue = true;
 					$rootScope.loadModal(chosenProjection);
 				};

@@ -86,5 +86,20 @@ public class Reservation {
 		this.state = state;
 	}
 	
+	public double getPrice() {
+		double retValue=0;
+		int counter = 0;
+		for(Ticket tick : this.tickets) {
+			if(counter==0) {
+				retValue=tick.getProjection().getPrice();
+			}
+			if(tick.getState().equals(Ticket.TicketState.Active) || tick.getState().equals(Ticket.TicketState.Requested)) {
+				counter=counter++;
+			}
+		}
+			
+		return retValue*counter;
+	}
+	
 	
 }

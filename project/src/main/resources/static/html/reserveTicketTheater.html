@@ -32,7 +32,7 @@
 		Time(room):
 		<select id="timeRoom" ng-model="perf" ng-change="projectionChangedTheater()" ng-disabled="disProjComboTheater">
 			<option></option>
-			<option ng-repeat="perf in perfShow">{{perf.time +" (Room " + perf.audNum+")"}}</option>
+			<option ng-repeat="perf in perfShow">{{perf.date.split(" ")[1] +" (Room " + perf.audNum+")"}}</option>
 		</select>
 	</div>
 </div>

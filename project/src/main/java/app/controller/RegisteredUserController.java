@@ -2,14 +2,16 @@ package app.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import app.dto.AuditoriumDTO;
 import app.dto.FriendshipDTO;
@@ -90,12 +92,14 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(aud, HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping("/friends/{email:.+}")
 	public ResponseEntity<List<RegisteredUserDTO>> getFriends(@PathVariable("email") String email){
 		List<RegisteredUserDTO> friends = regUserService.getFriends(email);
 		return new ResponseEntity<>(friends, HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping("/people/{email:.+}")
 	public ResponseEntity<List<RegisteredUserDTO>> getPeople(@PathVariable("email") String email){
 		List<RegisteredUserDTO> friends = regUserService.getPeople(email);
@@ -118,7 +122,7 @@ public class RegisteredUserController {
 
 	//needed
 	@RequestMapping(value="/sendEmails/{emails}/{resId}", method=RequestMethod.POST)
-	public ResponseEntity<ReservationDTO> sendEmails(@PathVariable("emails") String emails, @PathVariable("resId") Long resId, WebRequest req){
+	public ResponseEntity<ReservationDTO> sendEmails(@PathVariable("emails") String emails, @PathVariable("resId") Long resId, HttpServletRequest req){
 		ReservationDTO reserv = regUserService.sendEmails(resId, emails, req);
 		return new ResponseEntity<ReservationDTO>(reserv, HttpStatus.OK);
 	}
@@ -130,9 +134,20 @@ public class RegisteredUserController {
 		return new ResponseEntity<ReservationDTO>(reserv, HttpStatus.OK);
 	}
 	
-	@RequestMapping("/acceptInvitation/{token}")
-	public ResponseEntity<Void> acceptInvitation(@PathVariable("token") String token){
+	@RequestMapping(value="/acceptInvitation", method=RequestMethod.GET)
+	public ResponseEntity<Void> acceptInvitation(@RequestParam("token") String token){
+		System.out.println("tusam");
 		if(regUserService.acceptInvitation(token)) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@RequestMapping(value="/declineInvitation", method=RequestMethod.GET)
+	public ResponseEntity<Void> declineInvitation(@RequestParam("token") String token){
+		System.out.println("tusam");
+		if(regUserService.declineInvitation(token)) {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -191,30 +206,36 @@ public class RegisteredUserController {
 		else
 			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
 	}
+	
+	//needed
 	@RequestMapping("/friendReq/{email:.+}")
 	public ResponseEntity<List<FriendshipDTO>> getRequests(@PathVariable("email") String email){
 		List<FriendshipDTO> reqs = regUserService.getRequests(email);
 		return new ResponseEntity<> (reqs, HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping(value = "/acceptedReq/{id}", method = RequestMethod.POST)
 	public ResponseEntity<Void> acceptFriend(@PathVariable("id") Long id){
 		regUserService.acceptFriend(id);
 		return new ResponseEntity<> (HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping(value = "/declinedReq/{id}", method = RequestMethod.POST)
 	public ResponseEntity<Void> declineFriend(@PathVariable("id") Long id){
 		regUserService.declineFriend(id);
 		return new ResponseEntity<> (HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping(value="/addFriend/{userEmail}/{frEmail:.+}", method = RequestMethod.POST)
 	public ResponseEntity<Void> addFriend(@PathVariable("userEmail") String userEmail, @PathVariable("frEmail") String frEmail){
 		regUserService.addFriend(userEmail, frEmail);
 		return new ResponseEntity<> (HttpStatus.OK);
 	}
 	
+	//needed
 	@RequestMapping(value="/removeFriend/{userEmail}/{frEmail:.+}", method = RequestMethod.POST)
 	public ResponseEntity<Void> removeFriend(@PathVariable("userEmail") String userEmail, @PathVariable("frEmail") String frEmail){
 		regUserService.removeFriend(userEmail, frEmail);

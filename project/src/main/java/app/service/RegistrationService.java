@@ -1,7 +1,10 @@
 package app.service;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -32,12 +35,28 @@ public class RegistrationService {
     @Autowired
     private JavaMailSender mailSender;
 	
-	public boolean registration(String email, String pass, String firstName, String lastName, String city, String phone, WebRequest request) {
-        String appUrl = request.getContextPath();
-        if(userRepository.findOne(email)!=null) {
-        	return false;
+	public boolean registration(String email, String pass, String firstName, String lastName, String city, String phone, HttpServletRequest request) {
+		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String ctx = request.getContextPath();
+		String base = url.substring(0, url.length() - uri.length() + ctx.length());
+		base=base+  "/";
+
+        RegisteredUser ru = (RegisteredUser) userRepository.findOne(email);
+        if(ru!=null) {
+        	VerificationToken vt = tokenRepository.findByUser(ru);
+        	Calendar cal = Calendar.getInstance();
+        	Calendar now = Calendar.getInstance();
+        	cal.setTime(vt.getExpiryDate());
+        	
+        	if(now.before(cal)){
+        		return false;
+        	}else {
+        		tokenRepository.delete(vt);
+        	}
+        }else {
+        	ru=new RegisteredUser();
         }
-        RegisteredUser ru = new RegisteredUser();
         ru.setEmail(email);
         ru.setPassword(pass);
         ru.setFirstName(firstName);
@@ -47,18 +66,20 @@ public class RegistrationService {
         ru.setActivated("no");
         userRepository.save(ru);
         
+        
         String token = UUID.randomUUID().toString();
         VerificationToken myToken = new VerificationToken();
         myToken.setToken(token);
         myToken.setUser(ru);
         tokenRepository.save(myToken);
         String subject = "Registration Confirmation";
-        String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;
+        String confirmationUrl = base + "registrationConfirm.html?token=" + token;
+        
         
         SimpleMailMessage eMail = new SimpleMailMessage();
         eMail.setTo(email);
         eMail.setSubject(subject);
-        eMail.setText("http://localhost:8181" + confirmationUrl);
+        eMail.setText("Hello" +ru.getFirstName()+" "+ru.getLastName()+"!\n\n You have expressed interest in using our application. Please, clink on the link below and continue:\n\n"+confirmationUrl +"\n\n\nBest regards, \\nTheCinTeam");
         mailSender.send(eMail);
         
 		return true;

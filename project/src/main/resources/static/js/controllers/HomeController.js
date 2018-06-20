@@ -7,17 +7,26 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
-				$rootScope.a=true;
+				$scope.email="";
+				$scope.pass="";
+				
 				$scope.signup = function(){
-					$location.path('/signup').replace();
+					$scope.showReg=true;
 				};
+				
 				$scope.list_cinemas = function(){
 					$location.path('/list_cinemas').replace();
 				};
+				
 				$scope.login = function() {
-					$http.post('http://localhost:8181/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
+					if($scope.email.length==0 || $scope.pass.length==0){
+						$rootScope.alert('Input all fields!');
+						$scope.pass="";
+						return;
+					};
+					
+					$http.post('/loguser/'+ $scope.email+'/'+ $scope.pass).success(function(data, status){
 						localStorage.setItem("currentUser",angular.toJson(data));
-						//alert(JSON.parse(localStorage.getItem("currentUser"))
 						
 						$rootScope.ru=data.hasOwnProperty("firstName");
 						$rootScope.cinemaAdmin=data.hasOwnProperty("cinemas");
@@ -46,6 +55,7 @@ angular.module('Application').controller(
 						}
 				}).error(function(){
 					$rootScope.alert("Error with input data! Check your email address and password!");
+					$scope.pass="";
 				});
 				};
 			}

@@ -15,7 +15,7 @@ public class LoginService {
 	
 	public User findUser(String email, String pass) {
 		User user = userRepository.findOne(email);
-		if(user!=null && user.getPassword().equals(pass)) {
+		if(user!=null && user.getPassword().equals(pass) && user.getActivated().equals("yes")) {
 			return user;
 		}else {
 			return null;

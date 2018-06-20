@@ -64,6 +64,57 @@ body{
   color: red;
 }
 
+.registration{
+	margin : 70px 250px;
+	height:80%;
+	width:60%;
+	border:1px solid red;
+	padding : 50px 300px;
+	color : darkred;
+	background : AliceBlue;
+}
+
+
+
+
+
+
+.friends-table{
+    margin: 45px auto;
+    background:rgba(255, 255, 255, 0.88);
+    padding: 30px 30px;
+    width : 45%;
+}
+
+.friendsTabBtns{
+	display: block;
+}
+
+.req-container{
+	border : 2px solid red;
+	height : 300px;
+}
+
+.req-container p{
+  margin: 30px 450px;
+  font-size : 20px;
+}
+
+.ppl-table-container{
+	max-height : 350px;
+	overflow-y: scroll;
+}
+
+.ftable-container{
+	max-height : 190px;
+	overflow-y: scroll;
+}
+
+.table-container{
+	max-height : 350px;
+	overflow-y: scroll;
+}
+
 .alert-text{
     margin: 45px auto;
     background:rgba(255, 255, 255, 0.88);
@@ -106,6 +157,8 @@ input, select{
 	padding-top : 10px;
     max-width : 50%;
     float : right;
+	max-height : 190px;
+	overflow-y: scroll;
 }
 
 
@@ -195,15 +248,13 @@ input, select{
  }
    
 #scrolltable{
-  overflow-y: scroll;
-  max-height : 200px;
   margin: 45px auto;
   border-color: black;
   border-width: 1px;
   border-style: solid;
 }
 
-#scrolltable td, #history_table td{
+#scrolltable td, #history_table td, .friends-table td{
  	height : 30px;
  	font-size: 15px;
     border-color: black;
@@ -211,9 +262,10 @@ input, select{
     border-style: solid;
     background : #bfbfbf;
     text-align : center;
+	padding: 6px 6px; 
     color : green;
  }
- #scrolltable th{
+ #scrolltable th, .friends-table th{
     border-color: black;
     border-width: 1px;
     border-style: solid;

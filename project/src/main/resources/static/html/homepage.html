@@ -9,11 +9,13 @@
     		<input type="password" ng-model="pass">
     		</br>
 		
-			<button ng-click="login()">Login</button>
+			<button class="profile-btn" ng-click="login()">Login</button>
 		</form>
     	<p>Don't have an account? Sign up!</p> 
-    	<button type="button" ng-click="signup()">Register</button>
+    	<button class="profile-btn"  type="button" ng-click="signup()">Register</button>
     	<p>Or view cinemas!</p>
-    	<button type="button" ng-click="list_cinemas()">List</button>
+    	<button class="profile-btn"  type="button" ng-click="list_cinemas()">List</button>
+    	
+    	<modal-register show-reg="showReg" />
 </form>
 </div>

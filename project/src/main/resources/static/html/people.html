@@ -1,4 +1,20 @@
 <div class='modal-backdrop' ng-show='showPeopleModal'></div>
 <div class='modal' ng-show='showPeopleModal'>
-	<p>Kurvacha</p>
+	<div class="ppl-table-container">
+			<table class="friends-table" ng-init="load()">
+				<thead>
+					<th>Name</th>
+					<th ng-show="addBtn">Add as friend</th>
+					<th ng-show="!addBtn">Remove from friends</th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="person in showing">
+						<td>{{person.firstName+" " +person.lastName}}</td>
+						<td ng-show="addBtn"><button class="table_button" ng-click="addFriend(person)">Add</button></td>
+						<td ng-show="!addBtn"><button class="table_button" ng-click="removeFriend(person)">X</button></td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+	<button class="profile-btn" ng-click="close()">Close</button>
 </div>

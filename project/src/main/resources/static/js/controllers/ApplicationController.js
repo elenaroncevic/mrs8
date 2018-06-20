@@ -81,3 +81,17 @@ app.directive('modalAlert', function () {
 
   }
 });
+
+app.directive('modalRegister', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showReg: '='
+    },
+    templateUrl: 'html/register.html',
+    controller: 'RegisterController' ,
+
+  }
+});

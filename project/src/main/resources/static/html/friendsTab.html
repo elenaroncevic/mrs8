@@ -1,52 +1,31 @@
 <div ng-controller="FriendsTabController">
-
+	
 	<button type="button" class="profile-btn" ng-click="people()">Explore people</button>
 	</br></br>
 	
 	<button type="button" class="profile-btn" ng-click="friends()">Explore friends</button>
+	
 	</br></br>
-	
-	<modal-people show-people-modal='noMore'/>
-	
-	
-	
-	<div ng-show="explore">
-		Search people(by first or last name):
-		<input type="textfield" ng-model="searchUnknownText">
-		<button type="button" ng-click="searchUnknown()">Search</button>
-		</br>
-		
-		<select id="unknownCombo">
-			<option ng-repeat="person in unknownsShow">{{person.firstName+" "+person.lastName}}</option>
-		</select>
-		<button type="button" ng-click="addFriend()" ng-selected="showAddButton">Add a friend</button>
-	</div>
-	
-	<div ng-show="my">
-		Search friends(by first or last name):
-		<input type="textfield" ng-model="searchFriendsText">
-		<button type="button" ng-click="searchFriends()">Search</button>
-		</br>
-		
-		<select id="friendsCombo">
-			<option ng-repeat="friend in friendsShow">{{friend.firstName+" "+friend.lastName}}</option>
-		</select>
-		<button type="button" ng-click="removeFriend()" ng-selected="showRemoveButton">Remove from friends</button>		
-	</div>
-	
-	
-	<div  ng-show="reqExists">
-		<table ng-init="loadRequests()" class="table table-bordered">
+	<div class="req-container">
+		<p ng-show="reqs">Friend requests:</p>
+		<div class="ftable-container">
+		<table ng-init="loadRequests()" id="scrolltable" ng-show="reqs">
 			<thead>
 				<th>Name</th>
+				<th>Accept request</th>
+				<th>Decline request</th<
 			</thead>
+			<div >
 			<tbody>
 				<tr ng-repeat="req in requests">
-					<td>{{req.firstName+" " +req.lastName}}</td>
-					<td><button type="button" ng-click="acceptReq(req)">Confirm</button></td>
-					<td><button type="button" ng-click="declineReq(req)">Decline</button></td>
+					<td>{{req.firstName+" "+req.lastName}}</td>
+					<td><button class="table_button" ng-click="acceptRequest(req)">Accept</button></td>
+					<td><button class="table_button" ng-click="declineRequest(req)">X</button></td>
 				</tr>
 			</tbody>
-		</table>
+		</table></div>
+		<p ng-show="!reqs">No friend request!</p>
 	</div>
+	<modal-people show-people-modal='noMore'/>
+	
 </div>

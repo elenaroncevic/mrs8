@@ -15,6 +15,7 @@
 	<div class="tabcontent" ng-show="tabs.theaters">
 		<div ng-show="theaterRegular">
 			<button type="button" class="profile-btn" ng-click="reservationViewTheater()">Make a reservation</button>
+			<div class="table-container">
 			<table id="scrolltable">
 			<thead>
 				<th>Name</th>
@@ -33,12 +34,14 @@
 				</tr>
 			</tbody>		
 			</table>
+			</div>
 		</div>
 		<div data-ng-include src="'/html/reserveTicketTheater.html'" ng-show="theaterReserve"></div>
 	</div>	
 	<div class = "tabcontent" ng-show="tabs.cinemas">
 		<div ng-show="regular">
 			<button type="button" class="profile-btn" ng-click="reservationView()">Make a reservation</button>
+			<div class="table-container">
 			<table id="scrolltable">
 			<thead>
 				<th>Name</th>
@@ -57,6 +60,7 @@
 				</tr>
 			</tbody>		
 			</table>
+			</div>
 		</div>
 		<div data-ng-include src="'/html/reserveTicket.html'" ng-show="reserve"></div>
 	</div>
