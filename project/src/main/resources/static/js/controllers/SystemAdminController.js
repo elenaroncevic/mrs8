@@ -20,7 +20,7 @@ angular.module('Application').controller(
 				if (!$scope.currentUser){
 					$location.path('/home').replace();
 				}else if (localStorage.getItem("sysAdm")=="false"){
-					alert("You don't have privilege to see this account");
+					$rootScope.alert("You don't have privilege to see this account");
 					$location.path(path).replace();
 				}else{
 					if ($scope.currentUser.first_time){
@@ -64,7 +64,7 @@ angular.module('Application').controller(
 					$scope.show_div5=function(){
 						if ($scope.cinema_admins.length==0){
 							//$scope.show_adding_po=false;
-							alert("can't register cinema or theater when there are no cinema/theater admins");
+							$rootScope.alert("can't register cinema or theater when there are no cinema/theater admins");
 						}else{
 							$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":true};
 						}
@@ -76,7 +76,7 @@ angular.module('Application').controller(
 							$scope.cinema_admins=data;
 							add_options_cinema_admins();
 						}).error(function(){
-							alert("error finding cinema admins");
+							$rootScope.alert("error finding cinema admins");
 						});//
 					};
 					
@@ -96,7 +96,7 @@ angular.module('Application').controller(
 						$http.get('/system_admin/get_scale').success(function(data, status){
 							$scope.scale=data;
 						}).error(function(){
-							alert("error getting point scale");
+							$rootScope.alert("error getting point scale");
 						});
 					};
 					
@@ -124,7 +124,7 @@ angular.module('Application').controller(
 						if (!new_image && !new_pass){
 							document.getElementById("old_pass").value="";
 							$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
-							alert("Haven't made any changes");
+							$rootScope.alert("Haven't made any changes");
 						}
 						else if (!new_pass && new_image){
 							new_pass=$scope.currentUser.password;
@@ -136,9 +136,9 @@ angular.module('Application').controller(
 								document.getElementById("new_pass").value="";
 								document.getElementById("old_pass").value="";
 								document.getElementById("changing_user_image").value="";
-								alert("Successfuly changed info");
+								$rootScope.alert("Successfuly changed info");
 							}).error(function(){
-								alert("Can't change system admin info");
+								$rootScope.alert("Can't change system admin info");
 							});
 						}
 						else if (new_pass && old_pass){
@@ -158,20 +158,20 @@ angular.module('Application').controller(
 										document.getElementById("setting_scale").style.display="block";
 										document.getElementById("registering_cinemas").style.display="block";
 									}
-									alert("Successfuly changed info");
+									$rootScope.alert("Successfuly changed info");
 								}).error(function(){
-									alert("Can't change system admin info");
+									$rootScope.alert("Can't change system admin info");
 								});
 							}else{
 								document.getElementById("new_pass").value="";
 								document.getElementById("old_pass").value="";
-								alert("Old password doesn't match your real old password!");
+								$rootScope.alert("Old password doesn't match your real old password!");
 							}
 							
 						}
 							
 						else if (new_pass && !old_pass){
-							alert("Can't change password without knowing old password");
+							$rootScope.alert("Can't change password without knowing old password");
 							document.getElementById("new_pass").value="";
 							document.getElementById("old_pass").value="";
 						}		
@@ -195,21 +195,21 @@ angular.module('Application').controller(
 									strUser="cinema";
 								}
 								$http.post('/system_admin/register_new_admin/'+ $scope.admEmail+'/'+ $scope.admPass1+'/'+strUser).success(function(){
-									alert("Successfuly registered admin");
+									$rootScope.alert("Successfuly registered admin");
 									$scope.admPass1="";
 									$scope.admPass2="";
 									$scope.admEmail="";
 								}).error(function(){							
-									alert("Couldn't register this admin");
+									$rootScope.alert("Couldn't register this admin");
 								});
 							}else{
 								$scope.admPass1="";
 								$scope.admPass2="";
 								$scope.admEmail="";
-								alert("Passwords don't match! Try again!");
+								$rootScope.alert("Passwords don't match! Try again!");
 							}
 						}else{
-							alert("All fields are mandatory!");
+							$rootScope.alert("All fields are mandatory!");
 						}
 						
 
@@ -232,15 +232,15 @@ angular.module('Application').controller(
 						var silver_discount = parseInt(document.getElementById("silver_discount").value);
 						var golden_discount = parseInt(document.getElementById("golden_discount").value);
 						
-						if (golden <= silver || golden <= copper || silver <= copper || golden<0 || silver<0 || copper<0 || golden_discount<=silver_discount || golden_discount<=copper_discount || silver_discount<=copper_discount || golden_discount<0 || silver_discount<0 || copper_discount<0){
+						if (golden <= silver || golden <= copper || silver <= copper || golden<=0 || silver<=0 || copper<=0 || golden_discount<=silver_discount || golden_discount<=copper_discount || silver_discount<=copper_discount || golden_discount<0 || silver_discount<0 || copper_discount<0 || golden_discount>=100 || silver_discount>=100 || copper_discount>=100){
 							$scope.scale=fill_scale();
-							alert("the comparison must be: copper < silver < golden and copper discount < silver discount < golden discount and all medals must be positive");
+							$rootScope.alert("the comparison must be: copper < silver < golden and copper discount < silver discount < golden discount and all medals must be positive and all discounts must be >=0 and <100");
 						}else{
 							$http.get('/system_admin/update_scale/'+copper+'/'+silver+'/'+golden+'/'+copper_discount+'/'+silver_discount+'/'+golden_discount).success(function(data, status){
 								$scope.scale=data;
-								alert("Successfuly updated point scale");
+								$rootScope.alert("Successfuly updated point scale");
 							}).error(function(){
-								alert("Unsuccessful scale update");
+								$rootScope.alert("Unsuccessful scale update");
 							});
 						}
 
@@ -267,7 +267,7 @@ angular.module('Application').controller(
 							var index2 = document.getElementById("buildingAdmin").selectedIndex;
 							var adminEmail = document.getElementById("buildingAdmin").options[index2].value;
 							$http.get('/system_admin/register_cinema/'+adminEmail+'/'+name+'/'+description+'/'+lat+'/'+lng+'/'+buildingType).success(function(){
-								alert("successfuly registered building!");
+								$rootScope.alert("successfuly registered building!");
 								document.getElementById("buildingName").value="";
 								document.getElementById("buildingDescription").value="";
 								document.getElementById("lat").value="";
@@ -275,10 +275,10 @@ angular.module('Application').controller(
 								$scope.marker=false;					
 								initMap();
 							}).error(function(){
-								alert("Building with the same name already exists");
+								$rootScope.alert("Building with the same name already exists");
 							});
 						}else{
-							alert("Name field and location can't be blank");
+							$rootScope.alert("Name field and location can't be blank");
 						}
 						
 						

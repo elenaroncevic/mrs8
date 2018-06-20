@@ -19,7 +19,7 @@ angular.module('Application').controller(
 				if (!$scope.currentUser){
 					$location.path('/home').replace();
 				}else if (localStorage.getItem("fzAdm")=="false"){
-					alert("You don't have privilege to see this account");
+					$rootScope.alert("You don't have privilege to see this account");
 					$location.path(path).replace();
 				}else{
 					$rootScope.home_btn=true;
@@ -41,7 +41,7 @@ angular.module('Application').controller(
 					$scope.show_div2=function(){
 						if ($scope.cinemas_and_theaters.length==0){
 							//$scope.show_adding_po=false;
-							alert("can't add official product when there is no cinema");
+							$rootScope.alert("can't add official product when there is no cinema");
 						}else{
 							$scope.show_div = {"div1":false, "div2":true, "div3":false, "div4":false, "div5":false, "div6":false};
 						}					
@@ -63,7 +63,7 @@ angular.module('Application').controller(
 						$http.get('/fan_zone_admin/list_promos_official').success(function(data, status){
 							$scope.promosOfficial=data;
 						}).error(function(){
-							alert("couldn't list official promos");
+							$rootScope.alert("couldn't list official promos");
 						});
 					};
 					
@@ -71,7 +71,7 @@ angular.module('Application').controller(
 						$http.get('/fan_zone_admin/list_promos_unapproved').success(function(data, status){
 							$scope.unapprovedPromosUsed=data;
 						}).error(function(){
-							alert("couldn't list unapproved used promos");
+							$rootScope.alert("couldn't list unapproved used promos");
 						});
 					};
 					
@@ -81,7 +81,7 @@ angular.module('Application').controller(
 							$scope.changing_promo=data;
 							
 							if ($scope.changing_promo.activity=="reserved"){ //ne moze da menja jer vec postoji buyer ili je proslo vreme
-								alert("can't change reserved official product");
+								$rootScope.alert("can't change reserved official product");
 							}else{
 								var select = document.getElementById('cinemas_changing');	
 								for (var i = 0; i<$scope.cinemas_and_theaters.length; i++){
@@ -94,7 +94,7 @@ angular.module('Application').controller(
 								$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":true};
 							}				
 						}).error(function(){
-							alert("couldn't get changing promo");
+							$rootScope.alert("couldn't get changing promo");
 						});
 					};
 					
@@ -106,7 +106,7 @@ angular.module('Application').controller(
 							}
 							fill_theaters();
 						}).error(function(){
-							alert("error finding cinemas");
+							$rootScope.alert("error finding cinemas");
 						});//
 					};
 					
@@ -118,7 +118,7 @@ angular.module('Application').controller(
 							}
 							add_options_cinemas_and_theaters();
 						}).error(function(){
-							alert("error finding theaters");
+							$rootScope.alert("error finding theaters");
 						});//
 					};
 					
@@ -184,17 +184,17 @@ angular.module('Application').controller(
 									$scope.poPrice="";
 									$scope.poImage="";
 									fill_promos_official();
-									alert("successfuly added a product");
+									$rootScope.alert("successfuly added a product");
 								}).error(function(){
-									alert("Couldn't create this promo official");
+									$rootScope.alert("Couldn't create this promo official");
 									
 								});
 							}else{
-								alert("Wrong input in fields!");
+								$rootScope.alert("Wrong input in fields!");
 							}
 							
 						}else{
-							alert("Wrong input in fields!");
+							$rootScope.alert("Wrong input in fields!");
 						}
 					};
 					
@@ -202,17 +202,17 @@ angular.module('Application').controller(
 						$http.get('/fan_zone_admin/get_promo_official/'+poid).success(function(data, status){
 							var promo=data;
 							if (promo.buyer_email!="none"){
-								alert("Can't delete a product which has a buyer");							
+								$rootScope.alert("Can't delete a product which has a buyer");							
 							}else{
 								$http.get('/fan_zone_admin/delete_promo_official/'+poid).success(function(){
 									fill_promos_official();
-									alert("successfuly deleted a product");
+									$rootScope.alert("successfuly deleted a product");
 								}).error(function(){
-									alert("Couldn't delete official promo");
+									$rootScope.alert("Couldn't delete official promo");
 								});
 							}
 						}).error(function(){
-							alert("Couldn't find official promo");
+							$rootScope.alert("Couldn't find official promo");
 						});
 						
 					};
@@ -241,17 +241,17 @@ angular.module('Application').controller(
 								$http.get('/fan_zone_admin/update_promo_official/'+ poName+'/'+ poDescription+'/'+poImage+'/'+poPrice+'/'+cId+'/'+poid).success(function(){
 									fill_changing_promo(poid);
 									fill_promos_official();
-									alert("you've successfuly updated a product");
+									$rootScope.alert("you've successfuly updated a product");
 								}).error(function(){
-									alert("Couldn't update this promo official");
+									$rootScope.alert("Couldn't update this promo official");
 									
 								});
 							}else{
-								alert("Wrong input in fields!");
+								$rootScope.alert("Wrong input in fields!");
 							}
 							
 						}else{
-							alert("Wrong input in fields!");
+							$rootScope.alert("Wrong input in fields!");
 						}
 					};
 					
@@ -263,16 +263,16 @@ angular.module('Application').controller(
 						$http.get('/fan_zone_admin/approve_promo_used/'+poid).success(function(){
 							fill_unapproved_promos_used();
 						}).error(function(){
-							alert("Couldn't approve official promo");
+							$rootScope.alert("Couldn't approve official promo");
 						});
 					};
 					
 					$scope.disapprove_pu=function(poid){
 						$http.get('/fan_zone_admin/delete_promo_used/'+poid).success(function(){			
 							fill_unapproved_promos_used();
-							alert("successfully disapproved product");
+							$rootScope.alert("successfully disapproved product");
 						}).error(function(){
-							alert("Couldn't disapprove official promo");
+							$rootScope.alert("Couldn't disapprove official promo");
 						});
 					};
 					
@@ -287,7 +287,7 @@ angular.module('Application').controller(
 						if (!new_image && !new_pass){
 							document.getElementById("old_pass").value="";
 							$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
-							alert("Haven't made any changes");
+							$rootScope.alert("Haven't made any changes");
 						}
 						else if (!new_pass && new_image){
 							new_pass=$scope.currentUser.password;
@@ -299,9 +299,9 @@ angular.module('Application').controller(
 								document.getElementById("new_pass").value="";
 								document.getElementById("old_pass").value="";
 								document.getElementById("changing_user_image").value="";
-								alert("Successfuly changed info");
+								$rootScope.alert("Successfuly changed info");
 							}).error(function(){
-								alert("Can't change fan zone admin info");
+								$rootScope.alert("Can't change fan zone admin info");
 							});
 						}
 						else if (new_pass && old_pass){
@@ -322,20 +322,20 @@ angular.module('Application').controller(
 										document.getElementById("official_products").style.display="block";
 										document.getElementById("used_products").style.display="block";
 									}
-									alert("Successfuly changed info");
+									$rootScope.alert("Successfuly changed info");
 								}).error(function(){
-									alert("Can't change fan zone admin info");
+									$rootScope.alert("Can't change fan zone admin info");
 								});
 							}else{
 								document.getElementById("new_pass").value="";
 								document.getElementById("old_pass").value="";
-								alert("Old password doesn't match your real old password!");
+								$rootScope.alert("Old password doesn't match your real old password!");
 							}
 							
 						}
 							
 						else if (new_pass && !old_pass){
-							alert("Can't change password without knowing old password");
+							$rootScope.alert("Can't change password without knowing old password");
 							document.getElementById("new_pass").value="";
 							document.getElementById("old_pass").value="";
 						}		

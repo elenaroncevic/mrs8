@@ -20,7 +20,7 @@ angular.module('Application').controller(
 				if (!$scope.currentUser){
 					$location.path('/home').replace();
 				}else if (localStorage.getItem("regUser")=="false"){
-					alert("You don't have privilege to see this account");
+					$rootScope.alert("You don't have privilege to see this account");
 					$location.path(path).replace();
 				}else{
 					$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":false, "div9":false};
@@ -54,7 +54,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_unreserved_po').success(function(data, status){
 							$scope.unreservedPromosOfficial=data;
 						}).error(function(){
-							alert("couldn't list unreserved official promos");
+							$rootScope.alert("couldn't list unreserved official promos");
 						});
 					};
 					
@@ -62,7 +62,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_reserved_po/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 							$scope.myReservedPromosOfficial=data;
 						}).error(function(){
-							alert("couldn't list my reserved official promos");
+							$rootScope.alert("couldn't list my reserved official promos");
 						});
 					};
 					
@@ -70,7 +70,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_others_approved_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 							$scope.othersPromosUsed=data;
 						}).error(function(){
-							alert("couldn't list others used promos");
+							$rootScope.alert("couldn't list others used promos");
 						});
 					};
 					
@@ -79,7 +79,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_my_bids_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 							$scope.myBiddedPromosUsed=data;
 						}).error(function(){
-							alert("couldn't list my bidded promos");
+							$rootScope.alert("couldn't list my bidded promos");
 						});
 					};
 					
@@ -87,7 +87,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_my_posted_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 							$scope.myPostedPromosUsed=data;
 						}).error(function(){
-							alert("couldn't list my posted promos");
+							$rootScope.alert("couldn't list my posted promos");
 						});
 					};
 					
@@ -95,7 +95,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_my_won_pu/'+$scope.currentUser.email+'/nesto').success(function(data, status){
 							$scope.myWonPromosUsed=data;
 						}).error(function(){
-							alert("couldn't list my won promos");
+							$rootScope.alert("couldn't list my won promos");
 						});
 					};
 					
@@ -116,7 +116,7 @@ angular.module('Application').controller(
 							}
 							$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":true, "div9":false};
 						}).error(function(){
-							alert("couldn't get promo licitation");
+							$rootScope.alert("couldn't get promo licitation");
 						});
 					};
 					
@@ -124,7 +124,7 @@ angular.module('Application').controller(
 						$http.get('/reg_user/list_bids/'+pu_id).success(function(data, status){
 							$scope.bidsInLicitation=data;
 						}).error(function(){
-							alert("couldn't list bids in promo used");
+							$rootScope.alert("couldn't list bids in promo used");
 						});
 					};
 					
@@ -149,7 +149,7 @@ angular.module('Application').controller(
 							}
 							$scope.show_div = {"div1":false, "div2":false, "div3":false, "div4":false, "div5":false, "div6":false, "div7":false, "div8":false, "div9":true};
 						}).error(function(){
-							alert("couldn't get changing promo");
+							$rootScope.alert("couldn't get changing promo");
 						});
 					};
 					
@@ -201,7 +201,7 @@ angular.module('Application').controller(
 							var licitations_date=new Date(lic_date);
 							var now = new Date();
 							if (now.getTime()>licitations_date.getTime()){
-								alert("you must select date and time in the future");
+								$rootScope.alert("you must select date and time in the future");
 							}else{
 								var puDescription = $scope.puDescription;					
 								if (!puDescription){
@@ -216,16 +216,16 @@ angular.module('Application').controller(
 								
 								
 								$http.get('/reg_user/add_pu/'+$scope.currentUser.email+'/'+$scope.puName+'/'+puDescription+'/'+puImage+'/'+date).success(function(){
-									alert('successfuly added a product');
+									$rootScope.alert('successfuly added a product');
 									$scope.puName="";
 									$scope.puDescription="";
 									$scope.puImage="";
 								}).error(function(){
-									alert("couldn't create used product");
+									$rootScope.alert("couldn't create used product");
 								});
 							}	
 						}else{
-							alert("invalid data in fields");
+							$rootScope.alert("invalid data in fields");
 						}	
 					};
 					
@@ -233,9 +233,9 @@ angular.module('Application').controller(
 						$http.get('/reg_user/reserve_po/'+$scope.currentUser.email+'/'+id).success(function(){
 							fill_unreserved_promos_official();
 							fill_my_reserved_promos_official();
-							alert('successfuly reserved a product');				
+							$rootScope.alert('successfuly reserved a product');				
 						}).error(function(){
-							alert("couldn't create used product");
+							$rootScope.alert("couldn't create used product");
 						});
 					};
 					
@@ -244,9 +244,9 @@ angular.module('Application').controller(
 						$http.get('/reg_user/unreserve_po/'+id).success(function(){
 							fill_my_reserved_promos_official();
 							fill_unreserved_promos_official();
-							alert('successfuly unreserved a product');				
+							$rootScope.alert('successfuly unreserved a product');				
 						}).error(function(){
-							alert("couldn't create used product");
+							$rootScope.alert("couldn't create used product");
 						});
 					};
 					
@@ -271,12 +271,12 @@ angular.module('Application').controller(
 								fill_bids_in_licitation(id);
 								fill_my_bidded_promos_used();
 								document.getElementById("given_price").value="";
-								alert('successfuly given a bid');				
+								$rootScope.alert('successfuly given a bid');				
 							}).error(function(){
-								alert("couldn't give a bid");
+								$rootScope.alert("couldn't give a bid");
 							});
 						}else{
-							alert("time for bidding is over or you have wrong input in field");
+							$rootScope.alert("time for bidding is over or you have wrong input in field");
 							fill_licitation(id);
 						}
 					};
@@ -308,12 +308,12 @@ angular.module('Application').controller(
 							$http.get('/reg_user/update_pu/'+puid+'/'+name+'/'+image+'/'+description).success(function(){
 								fill_changing_promo(puid);
 								fill_my_posted_promos_used();
-								alert('successfuly updated a product');				
+								$rootScope.alert('successfuly updated a product');				
 							}).error(function(){
-								alert("couldn't update a product");
+								$rootScope.alert("couldn't update a product");
 							});
 						}else{
-							alert("time for changing promo is over or you have wrong input in field");
+							$rootScope.alert("time for changing promo is over or you have wrong input in field");
 							fill_changing_promo(puid);
 						}
 					};
@@ -326,7 +326,7 @@ angular.module('Application').controller(
 						if (now.getTime()<licitations_date.getTime()){
 							fill_changing_promo(puid);						
 						}else{
-							alert("time for changing promo is over or you have wrong input in field");
+							$rootScope.alert("time for changing promo is over or you have wrong input in field");
 							fill_changing_promo(puid);
 						}
 					};
@@ -340,13 +340,13 @@ angular.module('Application').controller(
 							$http.get('/reg_user/choose_winner/'+bid).success(function(){
 								fill_changing_promo(puid);
 								fill_my_posted_promos_used();					
-								alert('you\'ve successfuly chosen a winner');	
+								$rootScope.alert('you\'ve successfuly chosen a winner');	
 								mailWinnerAndLosers(bid);
 							}).error(function(){
-								alert("couldn't choose a buyer");
+								$rootScope.alert("couldn't choose a buyer");
 							});
 						}else{
-							alert("time for choosing winner is over");
+							$rootScope.alert("time for choosing winner is over");
 							fill_changing_promo(puid);
 						}
 					};
@@ -354,7 +354,7 @@ angular.module('Application').controller(
 					mailWinnerAndLosers=function(bid){
 						$http.get('/reg_user/mail_winner_and_losers/'+bid).success(function(){	
 						}).error(function(){
-							alert("couldn't mail about win and loss");
+							$rootScope.alert("couldn't mail about win and loss");
 						});
 					};
 				}

@@ -103,6 +103,7 @@ public class RegistrationService {
         	break;
         case "cinema":
         	admin=new CinemaAdmin();
+        	((CinemaAdmin)admin).setFirst_time(true);
         	break;
         default:
         	admin=new FanZoneAdmin();
