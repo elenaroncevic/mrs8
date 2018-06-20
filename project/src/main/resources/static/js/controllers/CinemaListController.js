@@ -11,10 +11,10 @@ angular.module('Application').controller(
 					$http.get('http://localhost:8181/cinemas').success(function(data, status){
 							$scope.cinemaList=data;
 							if(data.length==0){
-								alert("There is no cinemas yet");
+								$rootScope.alert("There is no cinemas yet");
 							}
 					}).error(function(){
-						alert("ima neki error");
+						$rootScope.alert("ima neki error");
 					});
 				};
 			
@@ -22,10 +22,10 @@ angular.module('Application').controller(
 					$http.get('http://localhost:8181/theaters').success(function(data, status){
 							$scope.theaterList=data;
 							if(data.length==0){
-								alert("There is no theaters yet");
+								$rootScope.alert("There is no theaters yet");
 							}
 					}).error(function(){
-						alert("ima neki error");
+						$rootScope.alert("ima neki error");
 					});
 				};
 				

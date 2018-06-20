@@ -11,13 +11,13 @@ angular.module('Application').controller(
 					if($scope.password == $rootScope.currentUser.password){
 						$http.post('http://localhost:8181/changeBasic/'+ $scope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(function( data,status){
 							$rootScope.currentCinema=data;
-							alert("gotovo");
+							$rootScope.alert("gotovo");
 						}).error(function(){
-							alert("Error with input data! Check your email address and password!");
+							$rootScope.alert("Error with input data! Check your email address and password!");
 						});
 					}
 					else{
-						alert("pogresan password!");
+						$rootScope.alert("pogresan password!");
 					}
 					$location.path("/cinema_profile").replace();
 				};

@@ -13,20 +13,21 @@ angular.module('Application').controller(
 				};
 				
 				$scope.changePass=function(){
-					if($scope.newPass == $scope.confirmedPass && $scope.oldPass==$rootScope.currentUser.password){
+					if($scope.newPass == $scope.confirmedPass && $scope.oldPass==$rootScope.currentUser.password 
+							&& $scope.newPass != $scope.oldPass){
 						$http.post('/changePass/'+$rootScope.currentUser.email+"/"+$scope.newPass).success(function( data,status){
 							localStorage.setItem("currentUser",angular.toJson(data));
 							$location.path("/cinema_admin").replace();
 
 						}).error(function(){
-							alert("Error in changePassword");
+							$rootScope.alert("Error in changePassword");
 							$location.path("/cinema_admin").replace();
 
 						});
 
 					}
 					else{
-						alert("wrong password!");
+						$rootScope.alert("wrong password!");
 					}
 				}
 				
@@ -48,6 +49,14 @@ angular.module('Application').controller(
 						
 					}
 				};
+				console.log($rootScope.currentUser.first_time);
+				console.log($rootScope.currentUser!=null);
+
+				if ($rootScope.currentUser!= null && $rootScope.currentUser.first_time){
+					$rootScope.alert("morate promeniti lozinku nakon prvog logina");
+					$location.path('cinema_admin/change_password').replace();
+
+				}
 			}
 		]
 );

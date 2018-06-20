@@ -18,7 +18,24 @@ public class CinemaAdmin extends User{
 	@JsonManagedReference
 	private Set<Cinema> cinemas = new HashSet<Cinema>();
 	
+	private Boolean first_time;
+
 	
+	
+	public Boolean getFirst_time() {
+		return first_time;
+	}
+
+
+
+
+	public void setFirst_time(Boolean first_time) {
+		this.first_time = first_time;
+	}
+
+
+
+
 	public CinemaAdmin() {
 		super();
 	}
@@ -28,6 +45,12 @@ public class CinemaAdmin extends User{
 	
 	public CinemaAdmin(Set<Cinema> cinemas) {
 		super();
+		this.cinemas = cinemas;
+	}
+	
+	public CinemaAdmin(Boolean first_time,Set<Cinema> cinemas) {
+		super();
+		this.first_time = first_time;
 		this.cinemas = cinemas;
 	}
 

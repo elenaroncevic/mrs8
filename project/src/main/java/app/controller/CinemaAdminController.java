@@ -200,7 +200,17 @@ public class CinemaAdminController {
 	@RequestMapping(value="/attGet/{cinemaId}/{dtype}", method=RequestMethod.GET)
 	public ResponseEntity<List<List<Object>>> attGet(@PathVariable("cinemaId") Long cid, @PathVariable("dtype") Integer dtype){
 		System.out.println("pocetak");
-		List<List<Object>> qts = cinemaAdminService.attGet(cid, dtype);
+		List<List<Object>> qts = cinemaAdminService.attGetDaily(cid, dtype,0,0,0);
+		System.out.println("pred kraj");
+		return new ResponseEntity<>(qts, HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value="/attGet/{cinemaId}/{dtype}/{year}/{month}/{day}", method=RequestMethod.GET)
+	public ResponseEntity<List<List<Object>>> attGetDate(@PathVariable("cinemaId") Long cid, @PathVariable("dtype") Integer dtype,
+			@PathVariable("year") Integer year,@PathVariable("month") Integer month,@PathVariable("day") Integer day){
+		System.out.println("pocetak "+dtype);
+		List<List<Object>> qts = cinemaAdminService.attGetDaily(cid, dtype,year,month,day);
 		System.out.println("pred kraj");
 		return new ResponseEntity<>(qts, HttpStatus.OK);
 		

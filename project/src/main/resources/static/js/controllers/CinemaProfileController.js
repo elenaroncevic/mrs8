@@ -20,8 +20,11 @@ angular.module('Application').controller(
 						$rootScope.loadModal(data);
 					});
 				};
+				if(($rootScope.currentCinema==null || !$rootScope.currentCinema.id)){
+					$location.path("/home").replace();
+				}
 				
-				if($rootScope.currentUser.email ){
+				if($rootScope.currentUser != null && $rootScope.currentUser.email ){
 					$rootScope.noUser = true;
 					if($rootScope.currentUser.hasOwnProperty("cinemas")){
 						$rootScope.cinemaAdmin = true;
@@ -39,72 +42,44 @@ angular.module('Application').controller(
 					$rootScope.ru=false;
 					$rootScope.noUser=false;
 				}
-				//alert($rootScope.currentCinema.id+"\n"+$rootScope.currentUser.email);
 				
 				$scope.refreshUser=function(){
 					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
-						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
-							$rootScope.currentCinema=data1;
-							//localStorage.setItem("currentUser",angular.toJson(data2));
-							//$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
-							//alert(data1.auditoriums[0].projections.length);
-							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
-							$scope.getProjections();
-							//alert("ovo je bio u refreshy");
-						//}).error(function(){
-							//alert("error refreshUser");
-						//});
+						$rootScope.currentCinema=data1;
+						localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
+						$scope.getProjections();
 					}).error(function(){
-						alert("error refreshCinema");
+						$rootScope.alert("error refreshCinema");
 					});						
 				}
 				$scope.refreshUserQT=function(){
 					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
-						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
-							$rootScope.currentCinema=data1;
-							//localStorage.setItem("currentUser",angular.toJson(data2));
-							//$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
-							//alert(data1.auditoriums[0].projections.length);
-							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
-							$scope.qtGet();
-							//alert("ovo je bio u refreshy");
-						}).error(function(){
-							alert("error refreshUser");
-						});
-					//}).error(function(){
-					//	alert("error refreshCinema");
-					//});						
+						$rootScope.currentCinema=data1;
+						localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
+						$scope.qtGet();
+					}).error(function(){
+						$rootScope.alert("error refreshUser QT");
+					});					
 				}
 				$scope.refreshUserAudi=function(){
 					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
-						//$http.get('http://localhost:8181/refreshUser/'+ $rootScope.currentUser.email).success(function( data2,status){
-							$rootScope.currentCinema=data1;
-							//localStorage.setItem("currentUser",angular.toJson(data2));
-							//$rootScope.currentCinema=$rootScope.currentUser.cinemas.find(x => x.id === $rootScope.currentCinema.id);
-							//alert(data1.auditoriums[0].projections.length);
-							localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
-							//$scope.getProjections();
-							//alert("ovo je bio u refreshy");
-						}).error(function(){
-							alert("error refreshUser");
-						});
-					//}).error(function(){
-					//	alert("error refreshCinema");
-					//});						
+						$rootScope.currentCinema=data1;
+						localStorage.setItem("currentCinema",angular.toJson($rootScope.currentCinema));
+					}).error(function(){
+						$rootScope.alert("error refreshUser");
+					});
 				}
 				$scope.getProjections= function(){
-					//alert("getP");
 					$scope.projections = [];
 					for ( let i in $rootScope.currentCinema.auditoriums) { 
 						for (let p in $rootScope.currentCinema.auditoriums[i].projections){
-							//alert(i+" "+p);
 							let projection = $rootScope.currentCinema.auditoriums[i].projections[p];
 							$http.get('/getProjectionMovie/'+ projection.id).success(function( data,status){
 								projection.auditorium = $rootScope.currentCinema.auditoriums[i];
 								projection.movie = data;
 								$scope.projections.push(projection);
 							}).error(function(){
-								alert("error movie");
+								
 							});  
 						}
 					}
@@ -115,11 +90,10 @@ angular.module('Application').controller(
 						$http.get('/removeProjection/'+ projection.id).success(function( status){
 							$scope.refreshUser();
 						}).error(function(){
-							alert("error remove");
 						});	
 					}
 					else{
-						alert("Ne moze, ma rezervacija!");
+						$rootScope.alert("Ne moze, ma rezervacija!");
 					}
 				};
 				$scope.drugo= function(){
@@ -137,7 +111,7 @@ angular.module('Application').controller(
 						$location.path("/cinema_profile").replace();
 
 					}).error(function(){
-						alert("Error in add movie");
+						$rootScope.alert("Error in add movie");
 						$location.path("/cinema_profile").replace();
 
 					});
@@ -148,64 +122,51 @@ angular.module('Application').controller(
 				};
 				$scope.changeBasic = function() {
 					if($scope.password == $rootScope.currentUser.password){
-						$http.post('/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ $scope.location +'/'+$scope.description).success(
-								function( data,status){
-							//$rootScope.currentCinema=data;
+						$http.post('/changeBasic/'+ $rootScope.currentCinema.id + '/' + $scope.name+'/'+ 
+								$scope.location +'/'+$scope.description).success(function( data,status){
 							$scope.refreshUser();
 							$location.path("/cinema_profile").replace();
 
 						}).error(function(){
-							alert("Error in change basic");
+							$rootScope.alert("Error in change basic");
 							$location.path("/cinema_profile").replace();
 
 						});
 					}
 					else{
-						alert("pogresan password basic!");
+						$rootScope.alert("pogresan password basic!");
 					}
-
-					//$location.path("/cinema_profile").replace();
 				};
 				$scope.getMovies = function(){
 					$http.get('/getMovies/'+$rootScope.currentCinema.id).success(function( data,status){
 						$scope.movies=data;
 					}).error(function(){
-						alert("Error in  movies");
 					});
 				};
 				$scope.addProjection=function(){
 					if($scope.proj_password == $rootScope.currentUser.password){
 						let id = $rootScope.currentCinema.id;
-						
 						let aidEl = document.getElementById("proj_auditorium")
 						let aid= JSON.parse(aidEl.options[aidEl.selectedIndex].value);
-						
 						let date =$scope.proj_date;
-				
 						let time = $scope.proj_time;
 						let price = $scope.proj_price;
 						let movieEl = document.getElementById("proj_movie");
 						movie = JSON.parse(movieEl.options[movieEl.selectedIndex].value);
-						//alert(date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +'/'+time.getMinutes());
-						$http.post('/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'+date.getDate() +'/'+time.getHours() +
+						$http.post('/addProjection/'+ id + '/' +aid.id+'/'+ date.getFullYear() +'/'+ date.getMonth() +'/'
+								+date.getDate() +'/'+time.getHours() +
 								'/'+time.getMinutes() + '/'+ price +'/'+ movie.id).success(function(data,status){
-							/*let projection = data;
-							projection.movie = movie;
-							aid.projections.push(data);*/
-							//$scope.refreshUser();
 							$location.path("/cinema_profile").replace();
 
 						}).error(function(){
-							alert("Invalid date");
+							$rootScope.alert("Invalid date");
 							$location.path("/cinema_profile").replace();
 
 						});
 					}
 					else{
-						alert("pogresan password projection ne znam kako!");
+						$rootScope.alert("pogresan password projection ne znam kako!");
 					}
-					//$scope.refreshUser();
-
 				};
 				
 				$scope.showRow = function(row){
@@ -213,7 +174,7 @@ angular.module('Application').controller(
 				}
 				
 				$scope.showSeat=function(seat){
-					//alert(seat.active);
+					//$rootScope.alert(seat.active);
 					return (seat.active!="Deleted");
 				}
 				
@@ -231,7 +192,7 @@ angular.module('Application').controller(
 							$scope.refreshUserAudi();
 	
 						}).error(function(){
-							alert("Seat has active reservations!");
+							$rootScope.alert("Seat has active reservations!");
 	
 						});
 					}
@@ -242,7 +203,7 @@ angular.module('Application').controller(
 						$scope.refreshUserAudi();
 
 					}).error(function(){
-						alert("Row has active reservations!");
+						$rootScope.alert("Row has active reservations!");
 
 					});	
 				};
@@ -253,12 +214,12 @@ angular.module('Application').controller(
 							$scope.refreshUserAudi();
 	
 						}).error(function(){
-							alert("Row has active reservations!");
+							$rootScope.alert("Row has active reservations!");
 	
 						});
 					}
 					else{
-						alert("Row is too short!");
+						$rootScope.alert("Row is too short!");
 					}
 				};
 				
@@ -267,8 +228,6 @@ angular.module('Application').controller(
 						$scope.refreshUserAudi();
 
 					}).error(function(){
-						//alert("row cann!");
-
 					});						
 				};
 				
@@ -278,7 +237,7 @@ angular.module('Application').controller(
 						$scope.refreshUserAudi();
 
 					}).error(function(){
-						alert("Row has active reservations!");
+						$rootScope.alert("Row has active reservations!");
 
 					});						
 				};
@@ -296,13 +255,13 @@ angular.module('Application').controller(
 				
 				//submit forme
 				$scope.qtAdd=function(projection){
-					//alert("cap");
+					//$rootScope.alert("cap");
 					$http.post('/qtAdd/'+ $scope.qtProjection.id +"/"+ $scope.qtSeat.id + "/"+ $scope.qtDiscount).success(function( status){
 						$scope.refreshUserAudi();
 						$location.path("/cinema_profile").replace();
 
 					}).error(function(){
-						alert("Seat has active reservations!");
+						$rootScope.alert("Seat has active reservations!");
 						$location.path("/cinema_profile").replace();
 
 					});		
@@ -321,7 +280,7 @@ angular.module('Application').controller(
 						//$scope.refreshUserAudi();
 						//console.log($scope.qtList);
 					}).error(function(){
-						alert("nesto je fejl");
+						$rootScope.alert("nesto je fejl");
 
 					});	
 				};
@@ -331,7 +290,7 @@ angular.module('Application').controller(
 						$http.post('/qtRemove/'+ qt.id).success(function(data, status){
 							$scope.refreshUserQT();
 						}).error(function(){
-							alert("nesto je fejl");
+							$rootScope.alert("nesto je fejl");
 	
 						});	
 					}
@@ -344,7 +303,7 @@ angular.module('Application').controller(
 					$http.post("/reguser/qtBuy/"+qt.id+"/"+$rootScope.currentUser.email ).success(function(data, status){
 						$scope.refreshUserQT();
 					}).error(function(){
-						alert("nesto je fejl u kupovini qt");
+						$rootScope.alert("nesto je fejl u kupovini qt");
 
 					});	
 					
@@ -365,21 +324,40 @@ angular.module('Application').controller(
 				$scope.getAttData=function(){
 					
 				}
-				
-				$scope.showAttendance = function(){
+				//$rootScope.chartType=0;
+				$scope.showAttendance = function(br){
+					
+					$rootScope.attDate2=$scope.attDate;
+					var string = '';
+					if($scope.attDate){
+						string='/'+$scope.attDate.getFullYear()+'/'+$scope.attDate.getMonth()+
+						'/'+$scope.attDate.getDate();
+					}
+				console.log("-"+string+"-");
+					$rootScope.chartType=br;
 					$location.path("/show_attendance").replace();
 				}
-				
+				$rootScope.chartType=1;
 				google.charts.load('current', {packages: ['corechart', 'bar']});
-				google.charts.setOnLoadCallback(drawMultSeries(1));
+				google.charts.setOnLoadCallback(drawMultSeries($rootScope.chartType));
 				
 				function drawMultSeries(d) {
+					if(!d){
+						d = 1;
+					}
 					if(document.getElementById('attendance')){
-					$http.get('/attGet/'+ $rootScope.currentCinema.id+'/'+d).success(function(ret, status){
+						var string = '';
+						if($rootScope.attDate2){
+							string='/'+$rootScope.attDate2.getFullYear()+'/'+$rootScope.attDate2.getMonth()+
+							'/'+$rootScope.attDate2.getDate();
+						}
+					console.log("*"+string+"*");
+					$http.get('/attGet/'+ $rootScope.currentCinema.id+'/'+d+string).success(function(ret, status){
 						console.log(ret);
 						var data = new google.visualization.DataTable();
 						data.addColumn('string', 'Time of Day');
 					    data.addColumn('number', 'Attendance');
+					    data.addColumn('number', 'Income');
 					    data.addRows(ret);
 					    console.log(data);
 					    var options = {
@@ -388,63 +366,21 @@ angular.module('Application').controller(
 						        title: 'dnevno',
 						        hAxis: {
 						          title: 'Time of Day'
-						          
-		
 						        },
 						        vAxis: {
-						          title: 'Rating (scale of 1-10)'
+						          title: 'Number of vistors'
 						        }
 						      };
-
 				      var chart = new google.visualization.ColumnChart(
 				        document.getElementById('attendance'));
 
 				      chart.draw(data, options);
 						
 					}).error(function(){
-						alert("nesto je fejl u attGet");
-						var data = new google.visualization.DataTable();
-					      data.addColumn('timeofday', 'Time of Day');
-					      data.addColumn('number', 'Motivation Level');
-					      data.addColumn('number', 'Energy Level');
-
-					      data.addRows([
-					        [{v: [8, 0, 0], f: '8 am'}, 1, .25],
-					        [{v: [9, 0, 0], f: '9 am'}, 2, .5],
-					        [{v: [10, 0, 0], f:'10 am'}, 3, 1],
-					        [{v: [11, 0, 0], f: '11 am'}, 4, 2.25],
-					        [{v: [12, 0, 0], f: '12 pm'}, 5, 2.25],
-					        [{v: [13, 0, 0], f: '1 pm'}, 6, 3],
-					        [{v: [14, 0, 0], f: '2 pm'}, 7, 4],
-					        [{v: [15, 0, 0], f: '3 pm'}, 8, 5.25],
-					        [{v: [16, 0, 0], f: '4 pm'}, 9, 7.5],
-					        [{v: [17, 0, 0], f: '5 pm'}, 10, 10],
-					      ]);
-
-					      var options = {
-					        title: 'Motivation and Energy Level Throughout the Day',
-					        hAxis: {
-					          title: 'Time of Day',
-					          format: 'h:mm a',
-					          viewWindow: {
-					            min: [7, 30, 0],
-					            max: [17, 30, 0]
-					          }
-					        },
-					        vAxis: {
-					          title: 'Rating (scale of 1-10)'
-					        }
-					      };
-
-					      var chart = new google.visualization.ColumnChart(
-					        document.getElementById('attendance'));
-
-					      chart.draw(data, options);
-					    
-
-					});	
-					}
+						$rootScope.alert("nesto je fejl u attGet");
+					})
 				}
+				};				
 				
 				initMap=function(latitude, longitude){
 					var options={

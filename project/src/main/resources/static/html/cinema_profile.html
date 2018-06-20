@@ -5,9 +5,15 @@
 	<br>
 	{{currentCinema.description}} 
 	<br>
-	<br>
-		<button ng-click=showAttendance() ng-show=cinemaAdmin>Show attendance chart</button>
-		<button ng-click=showIncome() ng-show=cinemaAdmin>Show income chart</button>
+	<br><form>
+		<button ng-click=showAttendance(1) ng-show=cinemaAdmin>Show attendance daily chart</button>
+		<button ng-click=showAttendance(2) ng-show=cinemaAdmin>Show attendance weekly chart</button>
+		<button ng-click=showAttendance(3) ng-show=cinemaAdmin>Show attendance monthly chart</button>
+		<button ng-click=showAttendance(4) ng-show=cinemaAdmin>Show income daily chart</button>
+		<button ng-click=showAttendance(5) ng-show=cinemaAdmin>Show income weekly chart</button>
+		<button ng-click=showAttendance(6) ng-show=cinemaAdmin>Show income monthly chart</button>
+		Choose date for chart: <input type="date" ng-model="attDate" />
+		</form>
 	<br>
 	<br>
 	<div id="map"></div>

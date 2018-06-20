@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import app.dto.QuickTicketDTO;
 import app.model.Auditorium;
 import app.model.Cinema;
+import app.model.CinemaAdmin;
 import app.model.Movie;
 import app.model.Projection;
 import app.model.QuickTicket;
@@ -329,8 +330,10 @@ public class CinemaAdminService {
 	}
 	
 	public User changePass(String email, String pass){
-		User user = userRepository.findOne(email);
+		CinemaAdmin user =(CinemaAdmin) userRepository.findOne(email);
 		user.setPassword(pass);
+		user.setFirst_time(false);
+		
 		user = userRepository.save(user);
 		return user;
 	}
@@ -369,48 +372,249 @@ public class CinemaAdminService {
 			return true;
 		}
 	}
-	public List<List<Object>> attGet(Long cid, int dtype) {
+	public List<List<Object>> attGetDaily(Long cid, int dtype, int year, int month, int day) {
+		System.out.println(dtype);
+		if(dtype!=1 && dtype!=4){
+			if(dtype==2 || dtype==5){
+				return attGetWeekly(cid,dtype,year,month,day);
+			}
+			else {
+				return attGetMonthly(cid,dtype,year,month,day);
+			}
+		}
+		else{
+			System.out.println("1");
+			Calendar help = Calendar.getInstance();
+			Calendar begin = Calendar.getInstance();
+			begin.set(Calendar.HOUR_OF_DAY, 0);
+			begin.set(Calendar.MINUTE,0);
+			begin.set(Calendar.SECOND, 0);
+			Calendar now = Calendar.getInstance();
+			if(year!=0 && month!=0 && day!=0){
+				begin.set(year,month,day);
+				now.set(year, month, day);
+			}
+			Calendar end = Calendar.getInstance();
+			end.setTime(begin.getTime());
+			end.add(Calendar.DAY_OF_MONTH, 1);
+			DateFormat df = new SimpleDateFormat("HH:mm:ss");
+			DateFormat df2 = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+			List<List<Object>> ret = new ArrayList<List<Object>>();
+			ArrayList<String> vreme = new ArrayList<String>();
+			ArrayList<Integer> broj = new ArrayList<Integer>();
+			for(int i = 0; i<24; i++){
+				ArrayList<Object> inner = new ArrayList<Object>();
+				help.set(Calendar.HOUR_OF_DAY,i);
+				help.set(Calendar.MINUTE,0);
+				help.set(Calendar.SECOND, 0);
+				inner.add(0, df.format(help.getTime()));
+				inner.add(1, 0.0);
+				inner.add(2,0.0);
+				ret.add(inner);
+			}
 
+			for(Visitation v : visitationRepository.findAll()){
+				if(v.getTicket().getSeat().getAuditorium().getCinema().getId() == cid){
+					System.out.println("legalna visita");
+					try {
+						help.setTime(df2.parse(v.getTicket().getProjection().getDate()));	
+						System.out.println("____\n"+df2.format(help.getTime()));
+						System.out.println(df2.format(begin.getTime())+" - "+df2.format(end.getTime())+"\n____");
+						if(help.before(end.getTime()) && help.after(begin.getTime()));
+						System.out.println("taj dan");
+							for(int i = 0; i < 24; i++){
+								now.set(Calendar.HOUR_OF_DAY, i);
+								now.set(Calendar.MINUTE,0);
+								now.set(Calendar.SECOND, 0);
+								double a =(Double)ret.get(i).get(1);
+								double b = (Double)ret.get(i).get(2);
+								if(!dateOverlap(help,v.getTicket().getProjection().getMovie().getDuration(),now,60)){
+									a=a+1;
+								}
+								if(help.after(now)&&dtype==4){
+									now.add(Calendar.HOUR_OF_DAY, 1);
+									if(help.before(now)){
+										if(v.getTicket() instanceof QuickTicket){
+											QuickTicket q = (QuickTicket)v.getTicket();
+											b=b+(q.getProjection().getPrice()-((q.getDiscount()/100.0)*q.getProjection().getPrice()));
+										}
+										else{
+											b=b+v.getTicket().getProjection().getPrice();													
+										}
+
+									}
+								}
+								ret.get(i).set(1, a);
+								ret.get(i).set(2, b);
+							}
+					} catch (ParseException e) {
+						System.out.println("catch");
+						return null;
+					}
+				}
+			}
+			System.out.println("vraca");
+			return ret;
+		}
+	}
+	
+	
+	public List<List<Object>> attGetWeekly(Long cid, int dtype, int year, int month, int day) {
 		Calendar help = Calendar.getInstance();
 		Calendar begin = Calendar.getInstance();
 		Calendar end = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		//now.add(Calendar.DAY_OF_MONTH, -1);
+		now.set(Calendar.MINUTE,0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.HOUR_OF_DAY,0);
+	
+		help.setFirstDayOfWeek(Calendar.MONDAY);
+		now.setFirstDayOfWeek(Calendar.MONDAY);
+		begin.setFirstDayOfWeek(Calendar.MONDAY);
+		end.setFirstDayOfWeek(Calendar.MONDAY);
+	
 		begin.set(Calendar.HOUR_OF_DAY, 0);
 		begin.set(Calendar.MINUTE,0);
 		begin.set(Calendar.SECOND, 0);
-		end.set(Calendar.HOUR_OF_DAY, 23);
-		end.set(Calendar.MINUTE,59);
-		end.set(Calendar.SECOND, 59);
-		DateFormat df = new SimpleDateFormat("HH:mm:ss");
-		DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+		if(year!=0 && month!=0 && day!=0){
+			begin.set(year,month,day);
+			now.set(year, month, day);
+		}
+		System.out.println("dan: "+begin.get(Calendar.DAY_OF_WEEK));
+		begin.add(Calendar.DAY_OF_MONTH, -(begin.get(Calendar.DAY_OF_WEEK)));
+		end.setTime(begin.getTime());
+		end.add(Calendar.DAY_OF_MONTH, 7);
+		
+		DateFormat df = new SimpleDateFormat("EEE");
+		DateFormat df2 = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		List<List<Object>> ret = new ArrayList<List<Object>>();
 		ArrayList<String> vreme = new ArrayList<String>();
 		ArrayList<Integer> broj = new ArrayList<Integer>();
-		for(int i = 0; i<24; i++){
-			Calendar now = Calendar.getInstance();
+		for(int i = 0; i<7; i++){
 			ArrayList<Object> inner = new ArrayList<Object>();
-			now.set(Calendar.HOUR_OF_DAY, i);
-			now.set(Calendar.MINUTE,0);
-			now.set(Calendar.SECOND, 0);
-			inner.add(0, df.format(now.getTime()));
-			inner.add(1, i);
+			help.set(Calendar.DAY_OF_WEEK, i);		
+			inner.add(0, df.format(help.getTime()));
+			inner.add(1, 0.0);
+			inner.add(2, 0.0);
 			ret.add(inner);
 		}
-		
+	
 		for(Visitation v : visitationRepository.findAll()){
 			if(v.getTicket().getSeat().getAuditorium().getCinema().getId() == cid){
+				System.out.println("legalna visita");
 				try {
-					help.setTime(df2.parse(v.getTicket().getProjection().getDate()));			
+					help.setTime(df2.parse(v.getTicket().getProjection().getDate()));	
+					System.out.println("____\n"+df2.format(help.getTime()));
+					System.out.println(df2.format(begin.getTime())+" - "+df2.format(end.getTime())+"\n____");
 					if(help.before(end.getTime()) && help.after(begin.getTime()));
-						for(int i = 0; i < 24; i++){
-							Calendar now = Calendar.getInstance();
-							now.set(Calendar.HOUR_OF_DAY, i);
-							now.set(Calendar.MINUTE,0);
-							now.set(Calendar.SECOND, 0);
-							if(dateOverlap(help,v.getTicket().getProjection().getMovie().getDuration(),now,60)){
-								Integer a =(Integer)ret.get(i).get(1);
-								a = a+1;
-								ret.get(i).set(1, a);
+					System.out.println("taj dan");
+						for(int i = 0; i < 7; i++){
+							now.setTime(begin.getTime());
+							now.add(Calendar.DAY_OF_MONTH, i);
+							double a =(Double)ret.get(i).get(1);
+							double b =(Double)ret.get(i).get(2);
+							if(!dateOverlap(help,v.getTicket().getProjection().getMovie().getDuration(),now,60*24)){
+								a=a+1;
 							}
+							if(help.after(now)){
+								now.add(Calendar.DAY_OF_MONTH, 1);
+								if(help.before(now)){
+									if(v.getTicket() instanceof QuickTicket){
+										QuickTicket q = (QuickTicket)v.getTicket();
+										b=b+(q.getProjection().getPrice()-((q.getDiscount()/100.0)*q.getProjection().getPrice()));
+									}
+									else{
+										b=b+v.getTicket().getProjection().getPrice();													
+									}
+	
+								}
+							}
+							ret.get(i).set(1, a);
+							ret.get(i).set(2, b);
+						}
+				} catch (ParseException e) {
+					System.out.println("catch");
+					return null;
+				}
+			}
+		}
+		System.out.println("vraca");
+		return ret;
+	}
+	
+	public List<List<Object>> attGetMonthly(Long cid, int dtype, int year, int month, int day) {
+		Calendar help = Calendar.getInstance();
+		Calendar begin = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		Calendar now = Calendar.getInstance();
+		now.set(Calendar.MINUTE,0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.HOUR_OF_DAY,0);
+	
+		begin.set(Calendar.HOUR_OF_DAY, 0);
+		begin.set(Calendar.MINUTE,0);
+		begin.set(Calendar.SECOND, 0);
+		if(year!=0 && month!=0 && day!=0){
+			begin.set(year,month,day);
+			now.set(year, month, day);
+		}
+		System.out.println("dan: "+begin.get(Calendar.DAY_OF_WEEK));
+		begin.set(Calendar.DAY_OF_MONTH, 1);
+		end.setTime(begin.getTime());
+		end.add(Calendar.MONTH, 1);
+		
+		Calendar last = Calendar.getInstance();
+		last.setTime(end.getTime());
+		last.add(Calendar.DAY_OF_MONTH, -1);
+		int numDays = last.get(Calendar.DAY_OF_MONTH);
+		
+		DateFormat df = new SimpleDateFormat("d");
+		DateFormat df2 = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		List<List<Object>> ret = new ArrayList<List<Object>>();
+		ArrayList<String> vreme = new ArrayList<String>();
+		ArrayList<Integer> broj = new ArrayList<Integer>();
+		for(int i = 1; i<=numDays; i++){
+			ArrayList<Object> inner = new ArrayList<Object>();
+			help.set(Calendar.DAY_OF_MONTH, i);		
+			inner.add(0, df.format(help.getTime()));
+			inner.add(1, 0.0);
+			inner.add(2, 0.0);
+			ret.add(inner);
+		}
+	
+		for(Visitation v : visitationRepository.findAll()){
+			if(v.getTicket().getSeat().getAuditorium().getCinema().getId() == cid){
+				System.out.println("legalna visita");
+				try {
+					help.setTime(df2.parse(v.getTicket().getProjection().getDate()));	
+					System.out.println("____\n"+df2.format(help.getTime()));
+					System.out.println(df2.format(begin.getTime())+" - "+df2.format(end.getTime())+"\n____");
+					if(help.before(end.getTime()) && help.after(begin.getTime()));
+					System.out.println("taj dan");
+						for(int i = 0; i < numDays; i++){
+							now.setTime(begin.getTime());
+							now.add(Calendar.DAY_OF_MONTH, i);
+							double a =(Double)ret.get(i).get(1);
+							double b =(Double)ret.get(i).get(2);
+							if(!dateOverlap(help,v.getTicket().getProjection().getMovie().getDuration(),now,60*24)){
+								a=a+1;
+							}
+							if(help.after(now)){
+								now.add(Calendar.DAY_OF_MONTH, 1);
+								if(help.before(now)){
+									if(v.getTicket() instanceof QuickTicket){
+										QuickTicket q = (QuickTicket)v.getTicket();
+										b=b+(q.getProjection().getPrice()-((q.getDiscount()/100.0)*q.getProjection().getPrice()));
+									}
+									else{
+										b=b+v.getTicket().getProjection().getPrice();													
+									}
+	
+								}
+							}
+							ret.get(i).set(1, a);
+							ret.get(i).set(2, b);
 						}
 				} catch (ParseException e) {
 					System.out.println("catch");
