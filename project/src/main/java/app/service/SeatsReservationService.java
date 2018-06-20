@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.dto.SeatDTO;
 import app.model.PointScale;
@@ -27,10 +28,12 @@ import app.repository.ReservationRepository;
 import app.repository.SeatRepository;
 import app.repository.TicketRepository;
 import app.repository.UserRepository;
-import app.repository.VisitationRepository;
 
+
+@Transactional
 @Service
 public class SeatsReservationService {
+
 	
 	@Autowired
 	ProjectionRepository projRep;
@@ -65,12 +68,11 @@ public class SeatsReservationService {
 	@Autowired
 	private PointScaleRepository pointScaleRepository;
 
-    
-    @Autowired
-    private VisitationRepository visitationRepository;
 
 	//needed
+	@Transactional(readOnly = true)
 	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
+		
 		Projection proj = projRep.findOne(id);
 		List<SeatDTO> listSeats = new ArrayList<SeatDTO>();
 		List<SeatDTO> unavailableSeats = new ArrayList<SeatDTO>();
@@ -107,27 +109,27 @@ public class SeatsReservationService {
 	}
 	
 	//needed
-	public Long makeReservation(String email) {
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
+	public Long makeReservation(String email, Long projId, String seats, int num) {
+		
 		RegisteredUser user = (RegisteredUser) userRep.findOne(email);
+		
 		Reservation reserv = new Reservation();
 		reserv.setState(Reservation.ReservationState.Active);
 		reserv.setBuyer(user);
-		Integer i = user.getNumOfReservations()+1;
-		user.setNumOfReservations(i);
+		Integer n = user.getNumOfReservations()+1;
+		user.setNumOfReservations(n);
 		String id="1";
+		
 		PointScale ps = pointScaleRepository.findOne(Long.parseLong(id));
+		
 		user.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
 		
 		userRep.save(user);
 		
 		Reservation saved = reservRep.save(reserv);
-		return saved.getId();
-	}
-	
-	//needed
-	public boolean makeTicket(Long resId, Long projId, String seats, int num) {
+		
 		String[] seatsList = seats.split(",");
-		Reservation r = reservRep.findOne(resId);
 		Ticket.TicketState state = Ticket.TicketState.Requested;
 		for(int i = 0;i<seatsList.length;i++) {
 			if(i==num) {
@@ -143,10 +145,13 @@ public class SeatsReservationService {
 			}
 			
 			tick.setProjection(projRep.findOne(projId));
-			tick.setReservation(r);
+			
+			tick.setReservation(saved);
+			
 			tick.setSeat(seatRep.findOne(Long.parseLong(seatsList[i])));
+			
 			ticketRep.save(tick);	
 		}
-		return true;
+		return saved.getId();
 	}
 }

@@ -183,6 +183,7 @@ public class RegisteredUserService {
 		        
 		        Visitation visit = visits.get(emailCounter);
 		        visit.setVisitor((RegisteredUser)userRep.findOne(emailsList[emailCounter]));
+		        visit.setTicket(tick);
 		        visitationRepository.save(visit);
 		        
 		        emailCounter++;
@@ -201,7 +202,9 @@ public class RegisteredUserService {
 		Reservation r = reservRep.findOne(resId);
 		
 		String seats = "";
+		double price =0;
 		for(Ticket tick : r.getTickets()) {
+			price=tick.getProjection().getPrice();
 			seats=seats+tick.getSeat().getRow().getNumber()+tick.getSeat().getNumber()+",";
 		}
 		seats = seats.substring(0, seats.length()-1);
@@ -220,7 +223,7 @@ public class RegisteredUserService {
         text=text+"\nNumber of tickets: "+r.getTickets().size();
         text=text+"\nSeats: "+seats;      
         
-        double price = r.getPrice();
+        
 		int discount = getDiscount(r.getBuyer().getUserMedal());
 		double discountPrice = price-price*discount*0.01;
 		

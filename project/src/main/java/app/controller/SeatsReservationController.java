@@ -27,17 +27,14 @@ public class SeatsReservationController {
 	}
 	
 	//needed
-	@RequestMapping(value="/makeReservation/{email:.+}", method=RequestMethod.POST)
-	public ResponseEntity<Long> makeReservation(@PathVariable("email") String email){
-		Long reserv = seatReservService.makeReservation(email);
-		return new ResponseEntity<>(reserv, HttpStatus.OK);
+	@RequestMapping(value="/makeReservation/{email}/{projId}/{seats}/{num}", method=RequestMethod.POST)
+	public ResponseEntity<Long> makeReservation(@PathVariable("email") String email, @PathVariable("projId") Long projId, @PathVariable("seats") String seats, @PathVariable("num") int num){
+		Long i = seatReservService.makeReservation(email, projId, seats, num);
+		return new ResponseEntity<>(i, HttpStatus.OK);
+
+		
 	}
 	
-	//needed
-	@RequestMapping(value="/makeTicket/{projId}/{resId}/{seats}/{num}", method=RequestMethod.POST)
-	public ResponseEntity<Void> makeTicket(@PathVariable("projId") Long projId, @PathVariable("resId") Long resId, @PathVariable("seats") String seats, @PathVariable("num") int num){
-		seatReservService.makeTicket(resId, projId, seats, num);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+
 
 }

@@ -156,14 +156,7 @@ angular.module('Application').controller(
 						return;
 					} 
 					
-					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-					$http.post('/seatreserv/makeReservation/'+currentUser.email).success(function(data, status){
-						$scope.reservId=data;
-						saveTickets();
-					});
-				};
-				
-				saveTickets=function(){
+					
 					var seatsStr = '';
 					for(let s in selectedSeats){
 						if(s==0){
@@ -172,12 +165,26 @@ angular.module('Application').controller(
 						}
 						seatsStr = seatsStr+','+selectedSeats[s].id;
 					};
-					$http.post('/seatreserv/makeTicket/'+projId+'/'+$scope.reservId+'/'+seatsStr+'/'+friendsSelected.length).success(function(data, status){
-							sendEmails();
-					});									
-				};				
+					
+					
+					
+					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+					$http.post('/seatreserv/makeReservation/'+currentUser.email+'/'+projId+'/'+seatsStr+'/'+friendsSelected.length).success(function(data, status){
+						$scope.reservId=data;
+						sendEmails();
+						$rootScope.h=data;
+					}).error(function(){
+						$rootScope.alert('There was a problem with your reservation, please try again.');
+						if($rootScope.current=="cinema"){
+							$rootScope.refreshReservation();
+						}else{
+							$rootScope.refreshReservationTheater();
+						};						
+					});
+				};
+							
 				
-				sendEmails=function(){
+				sendEmails=function(data){
 					if(friendsSelected.length==0){
 						$http.post('/reguser/sendEmail/'+$scope.reservId).success(function(data, status){
 							if($rootScope.current=="cinema"){
