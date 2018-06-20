@@ -86,8 +86,13 @@ public class RegistrationService {
 	}
 	
 	
-	public boolean registrationAdmins(String email, String pass, String type, WebRequest request) {
-        String appUrl = request.getContextPath();
+	public boolean registrationAdmins(String email, String pass, String type, HttpServletRequest request) {
+		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String ctx = request.getContextPath();
+		String base = url.substring(0, url.length() - uri.length() + ctx.length());
+		base=base+  "/";
+		
         if(userRepository.findOne(email)!=null) {
         	return false;
         }
@@ -123,7 +128,7 @@ public class RegistrationService {
         myToken.setUser(admin);
         tokenRepository.save(myToken);
         String subject = "Registration Confirmation";
-        String confirmationUrl = appUrl + "/registrationConfirm.html?token=" + token;
+        String confirmationUrl = base+"registrationConfirm.html?token="+token;
         
         SimpleMailMessage eMail = new SimpleMailMessage();
         eMail.setTo(email);

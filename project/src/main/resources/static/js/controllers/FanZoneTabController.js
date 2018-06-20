@@ -10,8 +10,8 @@ angular.module('Application').controller(
 				$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
 				
 				var path;
-				if (localStorage.getItem("regUser")=="true"){
-					path="/profile";
+				if (localStorage.getItem("fzAdm")=="true"){
+					path="/fan_zone_admin";
 				}else if (localStorage.getItem("sysAdm")=="true"){
 					path="/system_admin";
 				}else if (localStorage.getItem("cinAdm")=="true"){

@@ -12,8 +12,8 @@ angular.module('Application').controller(
 				var path;
 				if (localStorage.getItem("regUser")=="true"){
 					path="/profile";
-				}else if (localStorage.getItem("sysAdm")=="true"){
-					path="/system_admin";
+				}else if (localStorage.getItem("fzAdm")=="true"){
+					path="/fan_zone_admin";
 				}else if (localStorage.getItem("cinAdm")=="true"){
 					path="/cinema_admin";
 				}
