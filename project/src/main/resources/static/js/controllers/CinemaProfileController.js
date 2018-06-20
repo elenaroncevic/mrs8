@@ -10,7 +10,8 @@ angular.module('Application').controller(
 				$rootScope.modal= {
     				show: false
  				};
- 				
+				$rootScope.home_btn=true;
+				$rootScope.log_out_btn=true;
 				$rootScope.currentCinema = JSON.parse(localStorage.getItem("currentCinema"));
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				
@@ -23,7 +24,16 @@ angular.module('Application').controller(
 				if(($rootScope.currentCinema==null || !$rootScope.currentCinema.id)){
 					$location.path("/home").replace();
 				}
-				
+				else{
+					if($rootScope.type=="Cinema"){
+						$rootScope.movie_show="Movie";
+					}
+					else{
+						$rootScope.movie_show="Show";
+
+					}
+				}
+				console.log($rootScope.movie_show);
 				if($rootScope.currentUser != null && $rootScope.currentUser.email ){
 					$rootScope.noUser = true;
 					if($rootScope.currentUser.hasOwnProperty("cinemas")){
@@ -42,7 +52,9 @@ angular.module('Application').controller(
 					$rootScope.ru=false;
 					$rootScope.noUser=false;
 				}
-				
+				console.log($rootScope.ru);
+				console.log($rootScope.cinemaAdmin);
+				console.log($rootScope.noUser);
 				$scope.refreshUser=function(){
 					$http.get('/refreshCinema/'+ $rootScope.currentCinema.id).success(function( data1,status){
 						$rootScope.currentCinema=data1;

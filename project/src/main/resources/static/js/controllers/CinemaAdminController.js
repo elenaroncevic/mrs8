@@ -7,7 +7,8 @@ angular.module('Application').controller(
 			'$location', 
 			'$http',
 			function($rootScope, $scope, $window, $location, $http) {
-				
+				$rootScope.home_btn=true;
+				$rootScope.log_out_btn=true;
 				$scope.changeInfo=function(){
 					$location.path('cinema_admin/change_password').replace();
 				};
@@ -37,6 +38,9 @@ angular.module('Application').controller(
 					$location.path('/cinema_profile').replace();
 				};
 				$rootScope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+				if (!($rootScope.currentUser!= null && $rootScope.currentUser.hasOwnProperty("cinemas"))){
+					$location.path("/home").replace();
+				}
 				$scope.cinemaList = [];
 				$scope.theaterList = [];
 				var all = $rootScope.currentUser.cinemas;

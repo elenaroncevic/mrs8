@@ -14,11 +14,11 @@ var app = angular.module('Application').controller(
 					$rootScope.log_out_btn=false;
 					$rootScope.return_home=function(){
 						var current = JSON.parse(localStorage.getItem("currentUser"));
-						if(current.hasOwnProperty("firstName")){
+						if(current!=null &&current.hasOwnProperty("firstName")){
 							$location.path('/profile').replace();
-						}else if(current.hasOwnProperty("def")){
+						}else if(current!=null &&current.hasOwnProperty("def")){
 							$location.path('/system_admin').replace();
-						}else if(current.hasOwnProperty("cinemas")){
+						}else if(current!=null && current.hasOwnProperty("cinemas")){
 							$location.path('/cinema_admin').replace();
 						}else{
 							$location.path('/fan_zone_admin').replace();
@@ -26,6 +26,7 @@ var app = angular.module('Application').controller(
 					}
 					$rootScope.logout=function(){
 						localStorage.removeItem("currentUser");
+						localStorage.removeItem("currentCinema");
 						$rootScope.alert('You have successfully logged out!');
 						$location.path('/home').replace();
 						$rootScope.home_btn=false;

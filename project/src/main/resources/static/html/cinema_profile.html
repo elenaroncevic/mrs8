@@ -5,13 +5,10 @@
 	<br>
 	{{currentCinema.description}} 
 	<br>
-	<br><form>
-		<button ng-click=showAttendance(1) ng-show=cinemaAdmin>Show attendance daily chart</button>
-		<button ng-click=showAttendance(2) ng-show=cinemaAdmin>Show attendance weekly chart</button>
-		<button ng-click=showAttendance(3) ng-show=cinemaAdmin>Show attendance monthly chart</button>
-		<button ng-click=showAttendance(4) ng-show=cinemaAdmin>Show income daily chart</button>
-		<button ng-click=showAttendance(5) ng-show=cinemaAdmin>Show income weekly chart</button>
-		<button ng-click=showAttendance(6) ng-show=cinemaAdmin>Show income monthly chart</button>
+	<br><form ng-show=cinemaAdmin>
+		<button ng-click=showAttendance(1) ng-show=cinemaAdmin>Show daily report</button>
+		<button ng-click=showAttendance(5) ng-show=cinemaAdmin>Show weekly report</button>
+		<button ng-click=showAttendance(6) ng-show=cinemaAdmin>Show monthly report</button>
 		Choose date for chart: <input type="date" ng-model="attDate" />
 		</form>
 	<br>
@@ -31,7 +28,7 @@
 				<td >
 					<table>
 						<tr>
-							<td>Title: </td>
+							<td>{{movie_show}}: </td>
 							<td>{{projection.movie.title}}</td>
 						</tr>
 						<tr>
@@ -76,7 +73,7 @@
 						</tr>
 					</table>
 				</td>
-				<td ng-show="!cinemaAdmin">
+				<td ng-show="ru">
 					<button class="table_button" ng-click="reservation(projection)">Make a reservation</button>
 				</td>
 				<td ng-show=cinemaAdmin>
@@ -98,7 +95,7 @@
 	Quick tickets:
 	<table class="table table-bordered" ng-init=qtGet()>
 		<thead>
-			<th>Moive</th>
+			<th>{{movie_show}}</th>
 			<th>date</th>
 			<th>price</th>
 			<th>discount</th>
