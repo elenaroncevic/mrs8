@@ -179,58 +179,9 @@ public class RegisteredUserService {
 		return retValue;
 	}
 	
-	public List<SeatDTO> getSeatsFromReservation(Long id) {
-		Reservation reserv = reservRep.findOne(id);
-		List<SeatDTO> retValue = new ArrayList<SeatDTO>();
-		for(Ticket tick : reserv.getTickets()) {
-			if(tick.getState()==Ticket.TicketState.Active || tick.getState()==Ticket.TicketState.Requested) {
-				retValue.add(new SeatDTO(tick.getSeat()));
-			}
-		}
-		return retValue;
-	}
-	
-	//needed
-	public List<ProjectionDTO> getProjectionsFromMovie(Long id, String date){
-		Movie movie = movieRep.findOne(id);
-		String[] lista = null;
-		String comp = date.replace(",", "/");
-		List<ProjectionDTO> retValue = new ArrayList<ProjectionDTO>();
-		for(Projection proj : movie.getProjections()) {
-			if(proj.getActive()==0) {
-				continue;
-			}
-			lista = proj.getDate().split(" ");
-			if(lista[0].equals(comp)) {
-				retValue.add(new ProjectionDTO(proj));
-			}
-		}
-		return retValue;
-	}
-	
 	public AuditoriumDTO getAuditorium(Long id) {
 		Auditorium aud = audRep.findOne(id);
 		AuditoriumDTO retValue = new AuditoriumDTO(aud);
-		return retValue;
-	}
-	
-	//needed
-	public List<RegisteredUserDTO> getFriends(String email){
-		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
-		RegisteredUser current = (RegisteredUser) userRep.findOne(email);
-		
-		for(Friendship friendship : current.getFriendsAccepted()) {
-			System.out.println(friendship.getSender().getEmail());
-			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
-				retValue.add(new RegisteredUserDTO(friendship.getSender()));
-			}
-		}
-		for(Friendship friendship : current.getFriendsAdded()) {
-			System.out.println(friendship.getFriend().getEmail());
-			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
-				retValue.add(new RegisteredUserDTO(friendship.getFriend()));
-			}
-		}
 		return retValue;
 	}
 	
@@ -359,6 +310,58 @@ public class RegisteredUserService {
 			discount=ps.getGolden_discount();
 		}
 		return discount;
+	}
+	
+	
+	
+	public List<SeatDTO> getSeatsFromReservation(Long id) {
+		Reservation reserv = reservRep.findOne(id);
+		List<SeatDTO> retValue = new ArrayList<SeatDTO>();
+		for(Ticket tick : reserv.getTickets()) {
+			if(tick.getState()==Ticket.TicketState.Active || tick.getState()==Ticket.TicketState.Requested) {
+				retValue.add(new SeatDTO(tick.getSeat()));
+			}
+		}
+		return retValue;
+	}
+	
+	//needed
+	public List<ProjectionDTO> getProjectionsFromMovie(Long id, String date){
+		Movie movie = movieRep.findOne(id);
+		String[] lista = null;
+		String comp = date.replace(",", "/");
+		List<ProjectionDTO> retValue = new ArrayList<ProjectionDTO>();
+		for(Projection proj : movie.getProjections()) {
+			if(proj.getActive()==0) {
+				continue;
+			}
+			lista = proj.getDate().split(" ");
+			if(lista[0].equals(comp)) {
+				retValue.add(new ProjectionDTO(proj));
+			}
+		}
+		return retValue;
+	}
+	
+	
+	//needed
+	public List<RegisteredUserDTO> getFriends(String email){
+		List<RegisteredUserDTO> retValue = new ArrayList<RegisteredUserDTO>();
+		RegisteredUser current = (RegisteredUser) userRep.findOne(email);
+		
+		for(Friendship friendship : current.getFriendsAccepted()) {
+			System.out.println(friendship.getSender().getEmail());
+			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
+				retValue.add(new RegisteredUserDTO(friendship.getSender()));
+			}
+		}
+		for(Friendship friendship : current.getFriendsAdded()) {
+			System.out.println(friendship.getFriend().getEmail());
+			if(friendship.getState()==Friendship.FriendshipState.Accepted) {
+				retValue.add(new RegisteredUserDTO(friendship.getFriend()));
+			}
+		}
+		return retValue;
 	}
 	
 	//needed
