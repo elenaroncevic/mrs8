@@ -133,7 +133,7 @@ public class RegistrationService {
         SimpleMailMessage eMail = new SimpleMailMessage();
         eMail.setTo(email);
         eMail.setSubject(subject);
-        eMail.setText("http://localhost:8181" + confirmationUrl);
+        eMail.setText(confirmationUrl);
         mailSender.send(eMail);
         
 		return true;

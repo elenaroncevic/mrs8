@@ -23,6 +23,9 @@ angular.module('Application').controller(
 					$rootScope.alert("You don't have privilege to see this account");
 					$location.path(path).replace();
 				}else{
+					$rootScope.home_btn=true;
+					$rootScope.log_out_btn=true;
+					
 					if ($scope.currentUser.first_time){
 						$scope.show_div = {"div1":false, "div2":true, "div3":false, "div4":false, "div5":false};
 					}else{
