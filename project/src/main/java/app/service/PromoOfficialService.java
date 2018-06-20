@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.dto.PromoOfficialDTO;
 import app.model.PromoOfficial;
@@ -12,6 +14,7 @@ import app.model.RegisteredUser;
 import app.repository.PromoOfficialRepository;
 import app.repository.UserRepository;
 
+@Transactional
 @Service
 public class PromoOfficialService {
 	@Autowired 
@@ -49,6 +52,7 @@ public class PromoOfficialService {
 		
 	}
 
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public boolean reservePromoOfficial(Long poId, String currentUser) {
 		PromoOfficial po = promoOfficialRepository.findOne(poId);
 		po.setActivity("reserved");
@@ -90,6 +94,7 @@ public class PromoOfficialService {
 		return listOfReservedPromosOfficialDTO;
 	}
 
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public boolean unreservePromoOfficial(Long id) {
 		PromoOfficial po = promoOfficialRepository.findOne(id);
 		po.setBuyer(null);

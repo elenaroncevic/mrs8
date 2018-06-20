@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.WebRequest;
 
 import app.dto.BidDTO;
@@ -19,6 +21,7 @@ import app.repository.BidRepository;
 import app.repository.PromoUsedRepository;
 import app.repository.UserRepository;
 
+@Transactional
 @Service
 public class PromoUsedService {
 	@Autowired 
@@ -69,7 +72,7 @@ public class PromoUsedService {
 		
 	}
 	
-	
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public boolean approvePromoUsed(Long id) {
 		PromoUsed pu = promoUsedRepository.findOne(id);
 		pu.setActivity("approved");
@@ -324,7 +327,7 @@ public class PromoUsedService {
 		return true;
 	}
 
-
+	@Transactional(readOnly=false, propagation=Propagation.REQUIRES_NEW)
 	public boolean chooseWinnerPromoUsed(Long bid) {	
 		Bid b = bidRepository.findOne(bid);
 		PromoUsed pu = b.getPromo();

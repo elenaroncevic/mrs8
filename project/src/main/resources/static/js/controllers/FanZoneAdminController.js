@@ -343,6 +343,9 @@ angular.module('Application').controller(
 					};
 					
 					$scope.cancel_changes_user=function(){
+						document.getElementById("new_pass").value="";
+						document.getElementById("old_pass").value="";
+						document.getElementById("changing_user_image").value="";
 						$scope.currentUser=JSON.parse(localStorage.getItem("currentUser"));
 					};
 				}
