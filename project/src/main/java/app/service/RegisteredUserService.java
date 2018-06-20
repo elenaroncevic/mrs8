@@ -56,7 +56,7 @@ import app.repository.VisitationRepository;
 @Service
 public class RegisteredUserService {
 	
-	private List<Visitation> visits= new ArrayList<Visitation>();
+	public static List<Visitation> visits= new ArrayList<Visitation>();
 	
 	@Autowired
 	ProjectionRepository projRep;
@@ -144,94 +144,14 @@ public class RegisteredUserService {
 		}
 	}
 	
-
-	
-	//needed
-	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
-		Projection proj = getProjection(id);
-		List<SeatDTO> listSeats = new ArrayList<SeatDTO>();
-		List<SeatDTO> unavailableSeats = new ArrayList<SeatDTO>();
-		
-		//all and sectored seats
-		for(Row r : proj.getAuditorium().getRows()) {
-			if(r.getActive()==0) {
-				continue;
-			}
-			for(Seat s : r.getSeats()) {
-				listSeats.add(new SeatDTO(s));
-				if(s.getActive().equals(Seat.SeatState.Active)) {
-					if(s.getSector()!=null) {
-						unavailableSeats.add(new SeatDTO(s));
-					}	
-				}else {
-					unavailableSeats.add(new SeatDTO(s));
-				}
-			}
-		}
-
-		
-		//reserved seats
-		for(Ticket tick : proj.getTickets()) {
-			if(tick.getState()==Ticket.TicketState.Active || tick.getState()==Ticket.TicketState.Requested) {
-				unavailableSeats.add(new SeatDTO(tick.getSeat()));
-			}
-		}
-		
-		List<List<SeatDTO>> retValue=new ArrayList<List<SeatDTO>>();
-		retValue.add(listSeats);
-		retValue.add(unavailableSeats);
-		return retValue;
-	}
-	
 	public AuditoriumDTO getAuditorium(Long id) {
 		Auditorium aud = audRep.findOne(id);
 		AuditoriumDTO retValue = new AuditoriumDTO(aud);
 		return retValue;
 	}
 	
-	//needed
-	public Long makeReservation(String email) {
-		RegisteredUser user = (RegisteredUser) userRep.findOne(email);
-		Reservation reserv = new Reservation();
-		reserv.setState(Reservation.ReservationState.Active);
-		reserv.setBuyer(user);
-		Integer i = user.getNumOfReservations()+1;
-		user.setNumOfReservations(i);
-		String id="1";
-		PointScale ps = pointScaleRepository.findOne(Long.parseLong(id));
-		user.setUserMedal(ps.getCopper(), ps.getSilver(), ps.getGolden());
-		
-		userRep.save(user);
-		
-		Reservation saved = reservRep.save(reserv);
-		return saved.getId();
-	}
 	
-	//needed
-	public boolean makeTicket(Long resId, Long projId, String seats, int num) {
-		String[] seatsList = seats.split(",");
-		Reservation r = reservRep.findOne(resId);
-		Ticket.TicketState state = Ticket.TicketState.Requested;
-		for(int i = 0;i<seatsList.length;i++) {
-			if(i==num) {
-				state = Ticket.TicketState.Active;
-			}
-			Ticket tick = new Ticket();
-			tick.setState(state);
-			
-			//add for later;will be sent with the emails
-			if(tick.getState().equals(Ticket.TicketState.Requested) || i==num) {
-				Visitation visit = new Visitation(tick, Visitation.VisitationType.Wait);
-				visits.add(visit);
-			}
-			
-			tick.setProjection(projRep.findOne(projId));
-			tick.setReservation(r);
-			tick.setSeat(seatRep.findOne(Long.parseLong(seatsList[i])));
-			ticketRep.save(tick);	
-		}
-		return true;
-	}
+	
 	
 	//needed
 	public ReservationDTO sendEmails(Long reservId, String emails, HttpServletRequest request) {

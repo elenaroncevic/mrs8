@@ -51,7 +51,7 @@ angular.module('Application').controller(
 					myEl.empty();
 					projId = chosenProjection.id;
 					
-					$http.get('/reguser/seats/'+chosenProjection.id).success(function(data,status){
+					$http.get('/seatreserv/seats/'+chosenProjection.id).success(function(data,status){
 						$scope.seatovi=data[0];
 						$scope.takenSeatovi=data[1];
 						$http.get('/reguser/auditorium/'+chosenProjection.audId).success(function(data, status){
@@ -157,7 +157,7 @@ angular.module('Application').controller(
 					} 
 					
 					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
-					$http.post('/reguser/makeReservation/'+currentUser.email).success(function(data, status){
+					$http.post('/seatreserv/makeReservation/'+currentUser.email).success(function(data, status){
 						$scope.reservId=data;
 						saveTickets();
 					});
@@ -172,7 +172,7 @@ angular.module('Application').controller(
 						}
 						seatsStr = seatsStr+','+selectedSeats[s].id;
 					};
-					$http.post('/reguser/makeTicket/'+projId+'/'+$scope.reservId+'/'+seatsStr+'/'+friendsSelected.length).success(function(data, status){
+					$http.post('/seatreserv/makeTicket/'+projId+'/'+$scope.reservId+'/'+seatsStr+'/'+friendsSelected.length).success(function(data, status){
 							sendEmails();
 					});									
 				};				

@@ -66,11 +66,6 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(auds, HttpStatus.OK);
 	}*/
 	
-	@RequestMapping("/seats/{id}")
-	public ResponseEntity<List<List<SeatDTO>>> getSeatsFromProjection(@PathVariable Long id){
-		List<List<SeatDTO>> seats = regUserService.getSeatsFromProjection(id);
-		return new ResponseEntity<>(seats, HttpStatus.OK);
-	}
 	
 	@RequestMapping("/reservseats/{id}")
 	public ResponseEntity<List<SeatDTO>> getSeatsFromReservation(@PathVariable Long id){
@@ -106,19 +101,6 @@ public class RegisteredUserController {
 		return new ResponseEntity<>(friends, HttpStatus.OK);
 	}
 	
-	//needed
-	@RequestMapping(value="/makeReservation/{email:.+}", method=RequestMethod.POST)
-	public ResponseEntity<Long> makeReservation(@PathVariable("email") String email){
-		Long reserv = regUserService.makeReservation(email);
-		return new ResponseEntity<>(reserv, HttpStatus.OK);
-	}
-	
-	//needed
-	@RequestMapping(value="/makeTicket/{projId}/{resId}/{seats}/{num}", method=RequestMethod.POST)
-	public ResponseEntity<Void> makeTicket(@PathVariable("projId") Long projId, @PathVariable("resId") Long resId, @PathVariable("seats") String seats, @PathVariable("num") int num){
-		regUserService.makeTicket(resId, projId, seats, num);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
 
 	//needed
 	@RequestMapping(value="/sendEmails/{emails}/{resId}", method=RequestMethod.POST)
