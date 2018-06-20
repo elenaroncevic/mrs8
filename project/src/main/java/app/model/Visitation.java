@@ -60,6 +60,12 @@ public class Visitation {
 		this.ticket = ticket;
 		this.active = active;
 	}
+	
+	public Visitation( Ticket ticket, VisitationType active) {
+		super();
+		this.ticket = ticket;
+		this.active = active;
+	}
 
 	public Long getId() {
 		return id;

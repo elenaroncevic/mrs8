@@ -1,6 +1,7 @@
 package app.dto;
 
 import app.model.Projection;
+import app.model.QuickTicket;
 import app.model.Reservation;
 import app.model.Ticket;
 
@@ -12,7 +13,31 @@ public class ReservationDTO {
 	private String seats;
 	private double totalPrice;
 	private double discountPrice;
+	private boolean isQT;
 	
+	
+	
+	public ReservationDTO(Long id, String title, String date, int ticketNum, String seats, double totalPrice,
+			double discountPrice, boolean isQT) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.date = date;
+		this.ticketNum = ticketNum;
+		this.seats = seats;
+		this.totalPrice = totalPrice;
+		this.discountPrice = discountPrice;
+		this.isQT = isQT;
+	}
+
+	public boolean isQT() {
+		return isQT;
+	}
+
+	public void setQT(boolean isQT) {
+		this.isQT = isQT;
+	}
+
 	public double getDiscountPrice() {
 		return discountPrice;
 	}
@@ -23,6 +48,17 @@ public class ReservationDTO {
 
 	public ReservationDTO() {
 		
+	}
+	
+	public ReservationDTO(Reservation reservation, QuickTicket qt) {
+		this.id = reservation.getId();
+		this.title=qt.getProjection().getMovie().getTitle();
+		this.date=qt.getProjection().getDate();
+		this.ticketNum=1;
+		this.seats=qt.getSeat().getRow().getNumber()+""+qt.getSeat().getNumber();
+		this.totalPrice=qt.getProjection().getPrice();
+		this.discountPrice=this.totalPrice-this.totalPrice*0.01*qt.getDiscount();
+		this.isQT=true;
 	}
 	
 	public ReservationDTO(Reservation reservation, int discount) {
@@ -42,15 +78,18 @@ public class ReservationDTO {
 			}
 			
 		}
+		this.isQT=false;
+		if(reservation.getTickets().size()==1 && reservation.getTickets().iterator().next() instanceof QuickTicket) {
+			this.isQT=true;
+		}
 		this.id = reservation.getId();
 		this.title = proj.getMovie().getTitle();
 		this.date = proj.getDate();
 		this.ticketNum = reservation.getTickets().size();
 		this.seats=seats;
-
 		
 		this.totalPrice = counter*proj.getPrice();
-		this.discountPrice=this.totalPrice-this.totalPrice*discount;
+		this.discountPrice=this.totalPrice-this.totalPrice*discount*0.01;
 	}
 
 

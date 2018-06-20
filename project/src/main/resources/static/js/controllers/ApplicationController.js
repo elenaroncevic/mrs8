@@ -9,6 +9,7 @@ var app = angular.module('Application').controller(
 				'$window',
 				
 				function($rootScope, $scope, $http, $routeParams, $location, $window) {
+
 					$rootScope.home_btn=false;
 					$rootScope.log_out_btn=false;
 					$rootScope.return_home=function(){

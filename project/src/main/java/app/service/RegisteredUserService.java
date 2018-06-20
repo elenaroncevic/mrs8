@@ -56,6 +56,8 @@ import app.repository.VisitationRepository;
 @Service
 public class RegisteredUserService {
 	
+	private List<Visitation> visits= new ArrayList<Visitation>();
+	
 	@Autowired
 	ProjectionRepository projRep;
 	
@@ -142,6 +144,8 @@ public class RegisteredUserService {
 		}
 	}
 	
+
+	
 	//needed
 	public List<List<SeatDTO>> getSeatsFromProjection(Long id){
 		Projection proj = getProjection(id);
@@ -215,6 +219,12 @@ public class RegisteredUserService {
 			Ticket tick = new Ticket();
 			tick.setState(state);
 			
+			//add for later;will be sent with the emails
+			if(tick.getState().equals(Ticket.TicketState.Requested) || i==num) {
+				Visitation visit = new Visitation(tick, Visitation.VisitationType.Wait);
+				visits.add(visit);
+			}
+			
 			tick.setProjection(projRep.findOne(projId));
 			tick.setReservation(r);
 			tick.setSeat(seatRep.findOne(Long.parseLong(seatsList[i])));
@@ -250,12 +260,18 @@ public class RegisteredUserService {
 		        
 		        SimpleMailMessage eMail = new SimpleMailMessage();
 		        eMail.setTo(emailsList[emailCounter]);
+		        
+		        Visitation visit = visits.get(emailCounter);
+		        visit.setVisitor((RegisteredUser)userRep.findOne(emailsList[emailCounter]));
+		        visitationRepository.save(visit);
+		        
 		        emailCounter++;
 		        eMail.setSubject(subject);
 		        eMail.setText(text+"\n\n"+confirmationUrl+"\nIf you don't want to go see this movie, click this link: \n\n"+declinationUrl+"\n\n\nBest regards, \\nTheCinTeam");
 		        mailSender.send(eMail);
 			}
 		}
+		visits = new ArrayList<Visitation>();
         return sendEmail(reservId);
 		
 	}
@@ -286,7 +302,7 @@ public class RegisteredUserService {
         
         double price = r.getPrice();
 		int discount = getDiscount(r.getBuyer().getUserMedal());
-		double discountPrice = price-price*discount;
+		double discountPrice = price-price*discount*0.01;
 		
         
         text=text+"\nPrice: " + price+" (with discount: "+discountPrice+")";
@@ -382,7 +398,6 @@ public class RegisteredUserService {
 	
 	//needed
 	public boolean declineInvitation(String token) {
-		System.out.println("opa");
 		ConfirmationToken ct = ctRep.findByToken(token);
 		if(ct==null) {
 			return false;
@@ -593,10 +608,13 @@ public class RegisteredUserService {
 		return true;
 	}
 
-	public boolean qtBuy(Long qtId, String userId) {
+	public ReservationDTO qtBuy(Long qtId, String userId) {
+		
+		
 		RegisteredUser user = (RegisteredUser)userRep.findOne(userId);
 		Reservation res = new Reservation(user, Reservation.ReservationState.Active);
 		Reservation saved =reservRep.save(res);
+
 		QuickTicket qt = (QuickTicket)ticketRep.findOne(qtId);
 		qt.setState(Ticket.TicketState.Active);
 		qt.setReservation(res);
@@ -605,7 +623,9 @@ public class RegisteredUserService {
 		visitationRepository.save(visit);
 		//visi
 		//reservRep.s
-		return true;
+		ReservationDTO rdto = new ReservationDTO(saved, qt);
+		return rdto;
+		
 		
 	}
 	

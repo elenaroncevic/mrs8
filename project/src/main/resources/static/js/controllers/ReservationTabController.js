@@ -23,6 +23,7 @@ angular.module('Application').controller(
 					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 					$http.get('/reguser/reservations/'+currentUser.email).success(function(data, status){
 						$rootScope.reservationsShow=data;
+						$rootScope.h=data;
 					});
 				};
 			}

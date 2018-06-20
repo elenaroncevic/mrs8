@@ -7,7 +7,6 @@ angular.module('Application').controller(
 			'$http',
 			'$location', 
 			function($rootScope, $scope, $window, $http, $location) {
-			
 				$rootScope.home_btn=true;
 				$rootScope.log_out_btn=true;
 				

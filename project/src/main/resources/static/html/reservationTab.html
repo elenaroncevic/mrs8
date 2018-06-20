@@ -18,7 +18,7 @@
 					<td>{{reservation.seats}}</td>
 					<td>{{reservation.totalPrice}}</td>
 					<td>{{reservation.discountPrice}}</td>
-					<td><button type="button" class="table_button" ng-click="cancelReservation(reservation)">Cancel this reservation</button></td>
+					<td><button type="button" class="table_button" ng-click="cancelReservation(reservation)" ng-disabled="reservation.qt">Cancel this reservation</button></td>
 				</tr>
 			
 			</tbody>

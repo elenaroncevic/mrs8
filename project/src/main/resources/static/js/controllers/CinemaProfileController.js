@@ -302,6 +302,7 @@ angular.module('Application').controller(
 				$scope.qtBuy= function(qt){
 					$http.post("/reguser/qtBuy/"+qt.id+"/"+$rootScope.currentUser.email ).success(function(data, status){
 						$scope.refreshUserQT();
+						$rootScope.reservationsShow.push(data);
 					}).error(function(){
 						$rootScope.alert("nesto je fejl u kupovini qt");
 

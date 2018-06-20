@@ -170,6 +170,7 @@ public class RegisteredUserController {
 		List<ReservationDTO> reservs = regUserService.getReservations(email);
 		return new ResponseEntity<>(reservs, HttpStatus.OK);
 	}
+
 	
 	//needed
 	@RequestMapping("/history/{email:.+}")
@@ -199,12 +200,12 @@ public class RegisteredUserController {
 	}
 	
 	@RequestMapping(value="/qtBuy/{qtId}/{email:.+}", method=RequestMethod.POST)
-	public ResponseEntity<Void> qtBuy(@PathVariable("qtId") Long qtId, @PathVariable("email") String email){
-		boolean ok = regUserService.qtBuy(qtId, email);
-		if(ok)
-			return new ResponseEntity<>( HttpStatus.OK);
+	public ResponseEntity<ReservationDTO> qtBuy(@PathVariable("qtId") Long qtId, @PathVariable("email") String email){
+		ReservationDTO ok = regUserService.qtBuy(qtId, email);
+		if(ok!=null)
+			return new ResponseEntity<>(HttpStatus.OK);
 		else
-			return new ResponseEntity<>( HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 	}
 	
 	//needed
@@ -248,3 +249,11 @@ public class RegisteredUserController {
 
 	
 }
+
+
+
+
+
+
+
+

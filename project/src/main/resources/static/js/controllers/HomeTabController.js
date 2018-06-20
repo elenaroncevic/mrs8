@@ -9,6 +9,9 @@ angular.module('Application').controller(
 			function($rootScope, $scope, $window, $location, $http) {
 				$scope.currentUser = JSON.parse(localStorage.getItem("currentUser"));
 				
+
+				
+				
 				$scope.loadHistory=function(){
 					var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 					$http.get('/reguser/history/'+currentUser.email).success(function(data, status){

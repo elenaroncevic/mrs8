@@ -9,6 +9,9 @@ var app = angular.module('Application').controller(
 				'$window',
 				
 				function($rootScope, $scope, $http, $routeParams, $location, $window) {
+					
+					
+					
 					$scope.oldPass="";
 					$scope.newPass="";
 					$scope.newPass2="";
