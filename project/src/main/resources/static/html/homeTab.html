@@ -1,5 +1,5 @@
 <div ng-controller="HomeTabController" class="homeTab">
-	<div ng-show="home" class="profile_info">
+	<div class="profile_info">
 		<h3><b>{{currentUser.firstName}} {{currentUser.lastName}}</b></h3>
 
 		<div class="profile-photo">
@@ -12,7 +12,7 @@
 		<button type="button" class="profile-btn" ng-click="editInfo()">Edit info</button>
 		<button type="button" class="profile-btn" ng-click="changePassword()">Change password</button>
 	</div>
-	<div ng-show="home" class="history">
+	<div class="history">
 		<table ng-init="loadHistory()" id="history_table">
 			<thead>
 				<th>Movie/Play name</th>
@@ -32,42 +32,14 @@
 			</tbody>
 		</table>
 	</div>
-	<div ng-show="edit"> 
-    	
-    	First name: 
-		<input type="text" ng-model="currentUser.firstName">
-		</br>
-		
-		Last name: 
-		<input type="text" ng-model="currentUser.lastName">
-		</br>
-		
-		City: 
-		<input type="text" ng-model="currentUser.city">
-		</br>
-		
-		Phone number: 
-		<input type="text" ng-model="currentUser.phone">
-		</br>
-		
-		<button type="button" class="profile-btn" ng-click="finishEdit()">Save changes</button>
+	
+	<div>
+		<modal-update-info show-update="showUpd"/>
 	</div>
 	
-	<div ng-show="passChange">
-		Input old password:
-		<input type="password" ng-model="oldPass">
-		</br>
-		
-		Input new password:
-		<input type="password" ng-model="newPass">
-		</br>
-		
-		Repeat new password:
-		<input type="password" ng-model="newPass2">
-		</br>
-		
-		<button type="button" class="profile-btn" ng-click="finishPass()">Save new password</button>
-		
+	<div>
+		<modal-change-pass show-change="showChng"/>
 	</div>
+	
 	
 </div>

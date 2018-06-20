@@ -1,0 +1,23 @@
+<div class='modal-backdrop' ng-show='showUpdate'></div>
+<div class='modal' ng-show='showUpdate'>
+	<div class="registration"> 
+    	
+    	<p>First name: 			</p>
+		<input type="text" ng-model="currentUser.firstName">
+		</br>
+		
+		<p>Last name: 			</p>
+		<input type="text" ng-model="currentUser.lastName">
+		</br>
+		
+		<p>City: 				</p>
+		<input type="text" ng-model="currentUser.city">
+		</br>
+		
+		<p>Phone number: 		</p>
+		<input type="text" ng-model="currentUser.phone">
+		</br>
+		
+		<button type="button" class="profile-btn" ng-click="finishEdit()">Save changes</button>
+		<button class="profile-btn" ng-click="close()">Cancel</button>
+	</div>

@@ -95,3 +95,31 @@ app.directive('modalRegister', function () {
 
   }
 });
+
+app.directive('modalChangePass', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showChange: '='
+    },
+    templateUrl: 'html/changePass.html',
+    controller: 'ChangePassController' ,
+
+  }
+});
+
+app.directive('modalUpdateInfo', function () {
+  
+  return {
+    restrict: 'E',
+    transclude: true,
+    scope: {
+      showUpdate: '='
+    },
+    templateUrl: 'html/updateInfo.html',
+    controller: 'UpdateInfoController' ,
+
+  }
+});

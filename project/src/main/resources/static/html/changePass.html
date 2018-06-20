@@ -1,0 +1,20 @@
+<div class='modal-backdrop' ng-show='showChange'></div>
+<div class='modal' ng-show='showChange'>
+	<div class="registration">
+		<p>Input old password:			</p>
+		<input type="password" ng-model="oldPass">
+		</br>
+		
+		<p>Input new password:			</p>
+		<input type="password" ng-model="newPass">
+		</br>
+		
+		<p>Repeat new password:		</p>
+		<input type="password" ng-model="newPass2">
+		</br>
+		
+		<button type="button" class="profile-btn" ng-click="finishPass()">Save new password</button>
+		<button class="profile-btn" ng-click="close()">Cancel</button>
+		
+	</div>
+</div>
