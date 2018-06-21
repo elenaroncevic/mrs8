@@ -350,7 +350,7 @@ angular.module('Application').controller(
 					$rootScope.chartType=br;
 					$location.path("/show_attendance").replace();
 				}
-				$rootScope.chartType=1;
+				//$rootScope.chartType=1;
 				google.charts.load('current', {packages: ['corechart', 'bar']});
 				google.charts.setOnLoadCallback(drawMultSeries($rootScope.chartType));
 				
